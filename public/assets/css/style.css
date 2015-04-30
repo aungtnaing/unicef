@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+body {
+
+font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+color: #000000;	
+
+font-size: 12px;
+
+margin: 0;
+
+padding: 0;
+
+}
+
+input[type="text"], input[type="submit"], input[type="reset"], input[type="button"], input[type="password"], input[type="file"], textarea, select, a, button, table { 
+
+font-family: Zawgyi-One, Myanmar3, MyanmarText, "Times New Roman", Times, serif !important;
+
+}
+
+input[type="file"], input[type="text"], input[type="password"], select, button, textarea {
+
+width: 200px;
+
+border: 0;
+
+border: 1px solid #CCC;
+
+}
+
+h2 { font-size: 20px !important; border-bottom: 1px solid #333; }
+
+img { border: 0; }
+
+a { text-decoration: none; }
+
+
+
+#main-content {
+
+width: 97%;
+
+/*height: 900px;*/
+
+margin: 0 auto;
+
+}
+
+#header {
+
+height: 20px;	
+
+}
+
+#header > h1 { font-size: 22px; margin:0; padding:0; }
+
+#header > h1 > a { color: #9E6728 !important; }
+
+#header > h1 > a:hover, #header > h1 > a:active { color: #F90 !important; text-decoration:none; }
+
+#header > p { color: #666; }
+
+
+
+/*--- footer ---*/
+
+#footer {
+
+width: 100%;
+
+background-color: #E5E6F3;
+
+padding: 4px 0 0 0;
+
+color: #333;
+
+position: fixed;
+
+bottom:  0;
+
+margin: 0;
+
+}

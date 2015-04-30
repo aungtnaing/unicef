@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+input[type="file"], input[type="text"], input[type="password"], select {
+
+width: 900px;	
+
+}
+
+
+.inner-content {
+
+padding: 20px !important;	
+
+}
+
+.portfolio, .client_portfolio {
+
+margin: 0 auto;
+
+}
+
+.portfolio > div, .client_portfolio > div { margin-bottom: 20px; padding: 0; margin-right: 10px; border-bottom: 2px solid #333; }
+
+.portfolio > div > img {
+
+height: 200px;	
+
+}
+
+.client_portfolio > div > img {
+
+	width: 50px; height:  50px;
+
+}
+
+.my_menu {
+	position: relative;
+	right: 10px; 
+	float: left;
+}
+
+.my_menu > a {
+	display: inline-block;
+	padding: 4px 6px;
+	
+	cursor: pointer;
+	color: #000;
+	border-radius: 4px;
+}
+
+.my_menu > a:hover {
+	color: #282828;
+}	
+/***********************************************/
+
