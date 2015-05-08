@@ -91,7 +91,7 @@
 	
 	
 	<script type="text/javascript">
-		var base_url = "http://localhost:8000/";
+		var base_url = "http://localhost/";
 	</script>
     		
 </head>
