@@ -91,7 +91,7 @@
 	
 	
 	<script type="text/javascript">
-		var base_url = "http://localhost";
+		var base_url = "http://50.116.48.97/";
 	</script>
     		
 </head>
