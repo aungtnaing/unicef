@@ -171,8 +171,8 @@
 						<li><a class="ajax-link" href="{{ URL::route('PromotionRate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> (Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</span></a></li>
 						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Promotion Rate for Grade 5 or 9 or 11 of Year "t" </span></a></li>
 						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Completion Rate: Primary, Middle and High School Level </span></a></li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Primary to Middle School Level(TRPMS) </span></a></li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Middle to High School Level(TRMHS) </span></a></li>
+						<li><a class="ajax-link" href="{{ URL::route('transition_rate_primary_to_middle') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Primary to Middle School Level(TRPMS) </span></a></li><li><a class="ajax-link" href="{{ URL::route('transition_rate_middle_to_high') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Middle to High School Level(TRMHS) </span></a></li>
+
 						 
 						<!-- Public class ratio Report -->
 						<li class="nav-header hidden-tablet"> Pupil-Class Ratio Reports</li>
@@ -180,7 +180,7 @@
 
 						<!--General Rate Reports -->
 						<li class="nav-header hidden-tablet"> General Rate Reports</li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Retention Rate of High School Level</span></a></li>
+						<li><a class="ajax-link" href="{{ URL::route('high_school_level_retention_rate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Retention Rate</span></a></li>
 
 						<!-- Oversized Classes -->
 						<li class="nav-header hidden-tablet"> Percentage of Classes, Classroom, School Libraray Reports</li>

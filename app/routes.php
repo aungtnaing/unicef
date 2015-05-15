@@ -103,3 +103,18 @@ Route::post('public_teacher_ratio', array('as' => 'PublicTeacherRatioLevels','us
 Route::get('promotion_rate', array('as' => 'PromotionRate','uses' => 'PromotionRateGradeController@create'));
 
 Route::post('promotion_rate', array('as' => 'PromotionRateGrade','uses' => 'PromotionRateGradeController@search'));
+
+/** Transition rate from primary to middle **/
+Route::get('transition_rate_primary_middle', array('as' => 'transition_rate_primary_to_middle', 'uses' => 'TransitionRatePrimaryToMiddleController@create'));
+
+Route::post('transition_rate_primary_middle', array('as' => 'transition_rate_primary_to_middle_list', 'uses' => 'TransitionRatePrimaryToMiddleController@index'));
+
+/** Transition rate from middle to high **/
+Route::get('transition_rate_middle_to_high', array('as' => 'transition_rate_middle_to_high', 'uses' => 'TransitionRateMiddleToHighController@create'));
+
+Route::post('transition_rate_middle_to_high', array('as' => 'transition_rate_midlle_to_high_list', 'uses' => 'TransitionRateMiddleToHighController@index'));
+
+/** high school level retention rate **/
+Route::get('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate', 'uses' => 'HighSchoolLevelController@create'));
+
+Route::post('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate_list', 'uses' => 'HighSchoolLevelController@index'));
