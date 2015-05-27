@@ -118,3 +118,23 @@ Route::post('transition_rate_middle_to_high', array('as' => 'transition_rate_mid
 Route::get('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate', 'uses' => 'HighSchoolLevelController@create'));
 
 Route::post('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate_list', 'uses' => 'HighSchoolLevelController@index'));
+
+/** Transition rate from primary to middle **/
+Route::get('transition_rate_primary_middle', array('as' => 'transition_rate_primary_to_middle', 'uses' => 'TransitionRatePrimaryToMiddleController@create'));
+
+Route::post('transition_rate_primary_middle', array('as' => 'transition_rate_primary_to_middle_list', 'uses' => 'TransitionRatePrimaryToMiddleController@index'));
+
+/** Transition rate from middle to high **/
+Route::get('transition_rate_middle_to_high', array('as' => 'transition_rate_middle_to_high', 'uses' => 'TransitionRateMiddleToHighController@create'));
+
+Route::post('transition_rate_middle_to_high', array('as' => 'transition_rate_midlle_to_high_list', 'uses' => 'TransitionRateMiddleToHighController@index'));
+
+/** high school level retention rate **/
+Route::get('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate', 'uses' => 'HighSchoolLevelController@create'));
+
+Route::post('high_school_level_retention_rate', array('as' => 'high_school_level_retention_rate_list', 'uses' => 'HighSchoolLevelController@index'));
+
+/** completion rate high school level **/
+Route::get('high_school_level_completion_rate', array('as' => 'high_school_level_completion_rate', 'uses' => 'HighSchoolLevelCompletionRateController@create'));
+
+Route::post('high_school_level_completion_rate', array('as' => 'high_school_level_completion_rate_list', 'uses' => 'HighSchoolLevelCompletionRateController@index'));

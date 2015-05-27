@@ -99,7 +99,7 @@
 	
 	
 	<script type="text/javascript">
-		var base_url = "http://50.116.48.97/";//"http://localhost/unicef/public/";
+		var base_url = "http://50.116.48.97/";
 	</script>
     		
 </head>
