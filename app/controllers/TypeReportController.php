@@ -9,7 +9,8 @@ class TypeReportController extends \BaseController {
 	 */
 	public function index()
 	{
-		if(Input::get('township_id')) {
+		try {
+			if(Input::get('township_id')) {
 
 			$q = "SELECT state_division, township_name";
 		
@@ -19,13 +20,19 @@ class TypeReportController extends \BaseController {
 		
 		}
 
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
 
-		$region = DB::select(DB::raw($q));
+			$region = DB::select(DB::raw($q));
 
-		$type_report = DB::select(DB::raw("SELECT location, school_level, count(school_level) AS TotalSchools FROM v_school WHERE state_divsion_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND school_year = '".Input::get('academic_year')."' GROUP BY location, school_level ORDER BY location, sort_code"));
-
-		return View::make('students.type_report', compact('type_report', 'region'));
+			$type_report = DB::select(DB::raw("SELECT location, school_level, count(school_level) AS TotalSchools FROM v_school WHERE state_divsion_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND school_year = '".Input::get('academic_year')."' GROUP BY location, school_level ORDER BY location, sort_code"));
+			//print_r($type_report);
+			return View::make('students.type_report', compact('type_report', 'region'));
+		} 
+		catch (Exception $e) {
+			$record="There is no records";
+			return View::make('students.type_report',compact('region','record'));
+		}
+		
 	}
 
 

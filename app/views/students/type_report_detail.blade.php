@@ -52,8 +52,8 @@
 	</table>
 
 	<?php 
-
-		for($i = 0; $i < count($type_report_detail); $i++) {
+		if (count($type_report_detail)>0) {
+			for($i = 0; $i < count($type_report_detail); $i++) {
 
 			if($type_report_detail[$i]->location == "Rural") {
 				$rural_level[] = $type_report_detail[$i]->school_level;
@@ -136,8 +136,16 @@
 		@endforeach
 
 	</table>
+		
+		
 
-<?php }} ?>
+<?php }}
+	else{
+
+		echo "<h4> There is no data record.</h4>";
+	}
+
+} ?>
 
 </div>	
 

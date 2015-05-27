@@ -49,8 +49,10 @@
 	@endif
 		
 	<?php 
-		if(isset($tStudents)){
-		for($i = 0; $i < count($tStudents); $i++) {
+
+		 if(Input::get('btn_search')) { 
+		 	try{
+		 		for($i = 0; $i < count($tStudents); $i++) {
 
 			if($tStudents[$i]->location == "Rural") {
 				$rural_level[] = $tStudents[$i]->school_level;
@@ -172,9 +174,23 @@
 
 	</table>
 
-<?php } ?>
+<?php } 
 
-<?php  } ?>
+	}
+		 	catch(Exception $ex){
+		 		if(isset($record))
+	{
+		echo $record;
+	}
+	else
+	{
+		echo "<h4>There is no Data Records!</h4>";
+	} }
+		 	}
+?>
+
+
+		
 
 </div>
 

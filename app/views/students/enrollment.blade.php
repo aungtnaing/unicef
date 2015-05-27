@@ -43,25 +43,33 @@
 	@endforeach
 	
 	</table>
-	<?php } ?>
-	@if(isset($r_sLevel))
-	<?php  for ($n=0; $n < count($r_sLevel); $n++) {
+	<?php } 
+	if(isset($dtSchool)){
+		for($i = 0; $i < count($dtSchool); $i++) {
 
-			$sch_level[]=$r_sLevel[$n]->school_level;
+			if($dtSchool[$i]->location == "Rural") {
+				$rural_level[] = $dtSchool[$i]->school_level;
+			}
 
-		} 
-		$levels=array_values(array_unique($sch_level));
+			if($dtSchool[$i]->location == "Urban") {
+				$urban_level[] = $dtSchool[$i]->school_level;
+			}
+
+		}
+
+		$rural_levels = array_values(array_unique($rural_level));
+		$urban_levels = array_values(array_unique($urban_level));
 		
 	?>
 	
 	<table class="table table-bordered">
 		<tr>
-			<th><center>Location : {{$r_sLevel[0]->location}}</center></th>
+			<th><center>Location : Rural</center></th>
 		</tr>
 		<?php $i=0; $j=0; $k=0; $l=0; ?>
-		<?php for($row=0;$row<count($levels);$row++){ ?>
+		<?php for($row=0;$row<count($rural_levels);$row++){ ?>
 		<tr style="background:#FCF8E3;">
-			<th>School Level:&nbsp;<?php echo $levels[$row]; ?></th>
+			<th>School Level:&nbsp;<?php echo $rural_levels[$row]; ?></th>
 		</tr>
 		<tr>
 			<td>
@@ -76,8 +84,8 @@
 		</tr>
 		
 		
-	@foreach($r_sLevel as $School)
-	<?php if($School->school_level == $levels[$row]) { ?>
+	@foreach($dtSchool as $School)
+	<?php if($School->school_level == $rural_levels[$row]) { ?>
 		<tr>
 			<td>
 				{{ $School->school_no}}
@@ -86,19 +94,46 @@
 				{{ $School->school_name}}
 			</td>
 			<td>
-				{{ isset($dtG1Stds[$l][0]->total_students)? $dtG1Stds[$l][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtG1Stds[$l]->school_id)// && $dtG1Stds[$l]->total_students!=0)
+					{
+						echo $dtG1Stds[$l]->total_students;
+						$l++;
+					}
+				?>
 			</td>
 			<td>
-				{{ isset($dtPStds[$i][0]->total_students)? $dtPStds[$i][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtPStds[$i]->school_id)// && $dtPStds[$i]->total_students!=0)
+					{
+						echo $dtPStds[$i]->total_students;
+						$i++;
+					}
+				?>
+				
 			</td>
 			<td>
-				{{ isset($dtMStds[$j][0]->total_students)? $dtMStds[$j][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtMStds[$j]->school_id)// && $dtMStds[$j]->total_students!=0)
+					{
+						echo $dtMStds[$j]->total_students;
+						$j++;
+					}
+				?>
+				
 			</td>
 			<td>
-				{{ isset($dtHStds[$k][0]->total_students)? $dtHStds[$k][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtHStds[$k]->school_id)// && $dtHStds[$k]->total_students!=0)
+					{
+						echo $dtHStds[$k]->total_students;
+						$k++;	
+					}
+				?>
+				
 			</td>
 		</tr>
-		<?php $i++; $j++; $k++;$l++; }?>
+		<?php } ?>
 	@endforeach
 	
 	</table>
@@ -107,26 +142,17 @@
 		
 	<?php }  ?>	
 	</table>
-	@endif
 
-	@if(isset($u_sLevel))
-	<?php for ($n=0; $n < count($u_sLevel); $n++) {
-
-			$sch_levels[]=$u_sLevel[$n]->school_level;
-
-		} 
-		$levels_u=array_values(array_unique($sch_levels));
-		
-
-	?>
+	
 	<table class="table table-bordered">
 		<tr>
-			<th><center>Location:&nbsp;{{isset($u_sLevel[0]->location)? $u_sLevel[0]->location:''}}</center></th>
+			<th><center>Location:&nbsp;Urban</center></th>
 		</tr>
+		@if(isset($urban_levels))
 		<?php $i=0; $j=0; $k=0; $l=0; ?>
-		<?php for($row=0;$row<count($levels_u);$row++){ ?>
+		<?php for($row=0;$row<count($urban_levels);$row++){ ?>
 		<tr style="background:#FCF8E3;">
-			<th>School Level:&nbsp;<?php echo $levels_u[$row]; ?></th>
+			<th>School Level:&nbsp;<?php echo $urban_levels[$row]; ?></th>
 		</tr>
 		
 		<tr>
@@ -142,8 +168,8 @@
 		</tr>
 		
 		
-	@foreach($u_sLevel as $School)
-	<?php if($School->school_level == $levels_u[$row]) { ?>
+	@foreach($dtSchool as $School)
+	<?php if($School->school_level == $urban_levels[$row]) { ?>
 		<tr>
 			
 			<td>
@@ -153,29 +179,60 @@
 				{{ $School->school_name}}
 			</td>
 			<td>
-				{{ isset($dtuG1Stds[$l][0]->total_students)? $dtuG1Stds[$l][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtG1Stds[$l]->school_id)// && $dtG1Stds[$l]->total_students!=0)
+					{
+						echo $dtG1Stds[$l]->total_students;
+						$l++;
+					}
+				?>
 			</td>
 			<td>
-				{{ isset($dtuPStds[$i][0]->total_students)? $dtuPStds[$i][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtPStds[$i]->school_id)// && $dtPStds[$i]->total_students!=0)
+					{
+						echo $dtPStds[$i]->total_students;
+						$i++;
+					}
+				?>
+				
 			</td>
 			<td>
-				{{ isset($dtuMStds[$j][0]->total_students)? $dtuMStds[$j][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtMStds[$j]->school_id)// && $dtMStds[$j]->total_students!=0)
+					{
+						echo $dtMStds[$j]->total_students;
+						$j++;
+					}
+				?>
+				
 			</td>
 			<td>
-				{{ isset($dtuHStds[$k][0]->total_students)? $dtuHStds[$k][0]->total_students:'-'}}
+				<?php 
+					if($School->school_id==$dtHStds[$k]->school_id)// && $dtHStds[$k]->total_students!=0)
+					{
+						echo $dtHStds[$k]->total_students;
+						$k++;	
+					}
+				?>
+				
 			</td>
 		</tr>
-		<?php $i++; $j++; $k++;$l++; }?>
+		<?php } ?>
 	@endforeach
 	
 	</table>
 		</td>
 		</tr>
 		<?php } ?>
+		@endif
 	</table>
-		
-	@endif
-	
+	<?php }
+		if (isset($record)) {
+			echo $record;
+		}
+
+	 ?>
 </div>
 
 {{ HTML::script('assets/js/backend_script.js')}}

@@ -185,7 +185,16 @@
 
 <?php } ?>
 
-<?php  } ?>
+<?php  } 
+	else{
+		if(isset($record)){
+			echo $record;
+		}
+		else{
+			echo "Please Check!";
+		}
+	}
+?>
 
 </div>
 

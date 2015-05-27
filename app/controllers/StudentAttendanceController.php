@@ -24,12 +24,19 @@ class StudentAttendanceController extends \BaseController {
 
 		$region = DB::select(DB::raw($q));
 
-					
-		$attendance = DB::select(DB::raw("SELECT sd.location, sl.school_level, s.school_no, s.school_name, SUM(atts.lessthan_75boy) AS boys, SUM(atts.lessthan_75girl) AS girls FROM school AS s INNER JOIN school_details AS sd ON sd.school_id = s.id INNER JOIN student_attendance AS att ON att.school_id = s.id INNER JOIN student_attendance_details AS atts ON atts.student_attendance_id = att.id INNER JOIN grade AS g ON g.id = atts.grade INNER JOIN school_level AS sl ON sl.id = sd.school_level_id AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND sd.school_year = '".Input::get('academic_year')."' GROUP BY sl.school_level, atts.student_attendance_id ORDER BY sl.id ASC"));
+		try {
+			
+			$attendance = DB::select(DB::raw("SELECT sd.location, sl.school_level, s.school_no, s.school_name, SUM(atts.lessthan_75boy) AS boys, SUM(atts.lessthan_75girl) AS girls FROM school AS s INNER JOIN school_details AS sd ON sd.school_id = s.id INNER JOIN student_attendance AS att ON att.school_id = s.id INNER JOIN student_attendance_details AS atts ON atts.student_attendance_id = att.id INNER JOIN grade AS g ON g.id = atts.grade INNER JOIN school_level AS sl ON sl.id = sd.school_level_id AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND sd.school_year = '".Input::get('academic_year')."' GROUP BY sl.school_level, atts.student_attendance_id ORDER BY sl.id ASC"));
 		
 		//GROUP BY sd.location, sl.school_level, s.school_no, s.school_name 
 
-		return View::make('students.attendance', compact('attendance', 'region'));
+			return View::make('students.attendance', compact('attendance', 'region'));		
+		}
+		catch (Exception $e) {
+			$record="<h4>Please check for searching!</h4>";
+			return View::make('students.attendance', compact('record', 'region'));	
+		}				
+		
 	
 	}
 

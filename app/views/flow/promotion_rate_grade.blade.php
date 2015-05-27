@@ -54,12 +54,12 @@
 	</table>
 	@endif
 
-	@if(isset($new_total))
+	@if(isset($new_total) && count($new_total)>0)
 	<?php
 
 		$total = ""; 
-
-		for($i = 0; $i < count($new_total); $i++) {
+		try{
+			for($i = 0; $i < count($new_total); $i++) {
 
 			if($new_total[$i]->location == "Rural" && $pre_total[$i]->location=="Rural") {
 				$grade_rural[]=$new_total[$i]->grade;
@@ -118,6 +118,11 @@
 			</tr>
 		@endfor
 	</table>
+	<?php	}
+		catch(Exception $ex){
+			echo "<h4>There is no Data Records. Please Check Searching!</h4>";
+		} ?>	
+		
 	@endif	
 </div>
 

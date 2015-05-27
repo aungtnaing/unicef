@@ -217,7 +217,13 @@
 
 <?php } ?>
 
-<?php  } ?>
+<?php  } 
+	if(isset($record))
+	{
+		echo $record;
+	}
+
+?>
 
 </div>
 

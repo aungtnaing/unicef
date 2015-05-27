@@ -48,7 +48,7 @@
 	</table>
 	@endif
 
-	@if(isset($total_intake_pri))
+	@if(isset($total_intake_pri) && count($total_intake_pri)>0)
 	<?php
 
 		$total = ""; 
@@ -125,6 +125,10 @@
 			<td>{{ $high_urban[0] ."%"}}</td>
 		</tr>
 	</table>
+	@else
+		@if(isset($record))
+		{{ $record }}
+		@endif
 	@endif	
 	
 

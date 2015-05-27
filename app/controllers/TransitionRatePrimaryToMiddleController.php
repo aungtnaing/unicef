@@ -9,25 +9,36 @@ class TransitionRatePrimaryToMiddleController extends \BaseController {
 	 */
 	public function index()
 	{
-		if(Input::get('township_id')) {
 
-			$q = "SELECT state_division, township_name";
-		
-		} else {
-		
-			$q = "SELECT state_division";
-		
+		try {
+			
+			if(Input::get('township_id')) {
+
+				$q = "SELECT state_division, township_name";
+			
+			} else {
+			
+				$q = "SELECT state_division";
+			
+			}
+
+			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+
+			$region = DB::select(DB::raw($q));
+
+			$current_year = DB::select(DB::raw("SELECT SUM(a.new_boy + a.new_girl) AS current_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade='06' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+
+			$previous_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS previous_total_std, t.township_name, t.id, s.location FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('previous_year')."' AND a.grade='05' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+
+			return View::make('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region'));
+
+		} catch (Exception $e) {
+			
+			$record = "There is no data.";
+			return View::make('student_flow_rate.transition_rate_primary_to_middle', compact('record','region'));
+			 
 		}
-
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
-		$region = DB::select(DB::raw($q));
-
-		$current_year = DB::select(DB::raw("SELECT a.boy_pass, a.girl_pass, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='06' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
-
-		$previous_year = DB::select(DB::raw("SELECT a.boy_pass, a.girl_pass, t.township_name, t.id, s.location FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('previous_year')."' and a.grade='05' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
-
-		return View::make('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region'));
+		
 	
 	}
 

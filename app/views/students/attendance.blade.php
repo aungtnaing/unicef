@@ -54,8 +54,8 @@
 	</table>
 		
 	<?php 
-
-		for($i = 0; $i < count($attendance); $i++) {
+		if (count($attendance)>0) {
+			for($i = 0; $i < count($attendance); $i++) {
 
 			if($attendance[$i]->location == "Rural") {
 				$rural_level[] = $attendance[$i]->school_level;
@@ -146,8 +146,15 @@
 		@endforeach
 
 	</table>
+		
+		
 
-<?php }} ?>
+<?php }}
+	else {
+		echo "<h4>There is no Data Record!</h4>";
+	}
+	}
+ ?>
 
 </div>
 

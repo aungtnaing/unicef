@@ -50,8 +50,8 @@
 	</table>
 
 	<?php
-
-		$total = ""; 
+		if (count($type_report)>0) {
+			$total = ""; 
 
 		for($i = 0; $i < count($type_report); $i++) {
 
@@ -130,8 +130,16 @@
 			<th><?php echo $total; ?></th>
 		</tr>
 	</table>	
+
+		
 	
-<?php } ?>
+<?php 
+	}
+	else{
+		echo "<h4>There is no Record.</h4>";
+	}
+	}
+ ?>
 </div>	
 
 {{ HTML::script('assets/js/backend_script.js')}}

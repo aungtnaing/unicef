@@ -83,6 +83,8 @@
 	<table class="table table-bordered">
 		<tr>
 			<th>Township Name</th>
+			<th><p>Successful completers in Grade 9</p><p>in the previous school-year</p></th>
+			<th><p>New entrants to Grade 10</p><p>in current school-year</p></th>
 			<th>Total</th>
 		</tr>
 
@@ -94,7 +96,9 @@
 			?>
 					<tr>
 						<td><?php echo $current_year[$c]->township_name; ?></td>
-						<td><?php echo ($current_year[$c]->boy_pass + $current_year[$c]->girl_pass/$previous_year[$p]->boy_pass + $previous_year[$p]->girl_pass) * 100; ?></td>
+						<td><?php echo $previous_year[$p]->previous_total_std; ?></td>
+						<td><?php echo $current_year[$c]->current_total_std; ?></td>
+						<td><?php echo ($current_year[$c]->current_total_std/$previous_year[$p]->previous_total_std) * 100; ?></td>
 					</tr>	
 			<?php 
 							}
@@ -115,6 +119,8 @@
 	<table class="table table-bordered">
 		<tr>
 			<th>Township Name</th>
+			<th><p>Successful completers in Grade 9</p><p>in the previous school-year</p></th>
+			<th><p>New entrants to Grade 10</p><p>in current school-year</p></th>
 			<th>Total</th>
 		</tr>
 
@@ -126,7 +132,9 @@
 			?>
 					<tr>
 						<td><?php echo $current_year[$c]->township_name; ?></td>
-						<td><?php echo ($current_year[$c]->boy_pass + $current_year[$c]->girl_pass/$previous_year[$p]->boy_pass + $previous_year[$p]->girl_pass) * 100; ?></td>
+						<td><?php echo $previous_year[$p]->previous_total_std; ?></td>
+						<td><?php echo $current_year[$c]->current_total_std; ?></td>
+						<td><?php echo ($current_year[$c]->current_total_std/$previous_year[$p]->previous_total_std) * 100; ?></td>
 					</tr>	
 			<?php 
 							}

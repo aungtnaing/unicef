@@ -12,6 +12,14 @@
 	  .sidebar-nav {
 		padding: 9px 0;
 	  }
+	  .finished {
+	  	border: 1px solid #F00 !important;
+	  	margin: 2px;
+	  }
+	  .pending {
+	  	border: 1px solid #0F0 !important;
+	  	margin: 2px;
+	  }
 	</style>
   
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -91,7 +99,7 @@
 	
 	
 	<script type="text/javascript">
-		var base_url = "http://50.116.48.97/";
+		var base_url = "http://50.116.48.97/";//"http://localhost/unicef/public/";
 	</script>
     		
 </head>
@@ -136,6 +144,7 @@
 	<!-- topbar ends -->
 		<div class="container-fluid">
 		<a href="javascript:void(0)" id='clickme'><img src="{{ URL::TO('/') }}/assets/img/s_fulltext.png" /></a>
+		
 		<div class="row-fluid">
 			<!-- left menu starts -->
 			<div class="span3 main-menu-span" id="left_panel">
@@ -145,52 +154,62 @@
 						<li><a class="ajax-link" href="dashboard"><i class="icon icon-color icon-home"></i><span class="hidden-tablet"> Home</span></a></li>
 
 						<li class="nav-header hidden-tablet">School Info</li>
-						<li><a class="ajax-link" href="{{ URL::route('TypeReport') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Type Report</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('TypeReportDetail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Type Report Detail</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('StdSanitation') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Sanitation</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('TypeReport') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Type Report</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('TypeReportDetail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Type Report Detail</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('StdSanitation') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Sanitation</span></a></li>
 												
 						<li class="nav-header hidden-tablet">Students</li>
-						<li><a class="ajax-link" href="{{ URL::route('calssroom') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Perminent/Temporary Classroom</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('calssroom_detail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Perminent/Temporary Classroom Detail</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('StdEnrollment') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Enrollment</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('StdAttendance') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Attendance < 75%</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('calssroom') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Perminent/Temporary Classroom</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('calssroom_detail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Perminent/Temporary Classroom Detail</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('StdEnrollment') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Enrollment</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('StdAttendance') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Attendance < 75%</span></a></li>
 						                        
                         <li class="nav-header hidden-tablet">Gross Enrolment Ratio Reports</li>
                         
-						<li><a class="ajax-link" href="{{ URL::route('GradeOnePer')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Grade 1 intakes With Pre-Primary / Preschool (ECCE) Experiences</span></a></li>
-                    	<li><a class="ajax-link" href="{{URL::route('NetIntakeRate')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Net Intake Rate(NIR) </span></a></li>
-                    	<li><a class="ajax-link" href="{{ URL::route('GrossEnrollmentRation') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Gross Enrolment Ratio: Primary,Middle and High School Level</span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('CombinedGrossEnrollmentRatio') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Combined (Primary and Middle School Levels) Gross Enrolment Ratio</span></a></li>
-						<li><a class="ajax-link" href="{{URL::route('PercentGrilLevel')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Girls in Primary, Middle, High and 9-Year Basic Education Enrolment</span></a></li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Gross Enrolment Ratio in Pre-primary/Preschool (ECCE) Programs</a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('GradeOnePer')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Grade 1 intakes With Pre-Primary / Preschool (ECCE) Experiences</span></a></li>
+                    	<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Gross Intake Rate or Apparent Intake Rate(AIR) </span></a></li>
+                    	<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Net Intake Rate (NIR)</span></a></li>
+                    	<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Gross Enrolment Ratio: Primary,Middle and High School Level</span></a></li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Combined (Primary and Middle School Levels) Gross Enrolment Ratio</span></a></li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Net Enrolment Ratio Primary,Middle and High School Level</span></a></li>
+						<li><a class="ajax-link finished" href="{{URL::route('PercentGrilLevel')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Girls in Primary, Middle, High and 9-Year Basic Education Enrolment</span></a></li>
 
-						<li class="nav-header hidden-tablet"> Percentage of Teachers With School Level Reports</li>						
-						<li><a class="ajax-link" href="{{ URL::route('PublicTeacherRatio') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Public Teacher Ratio: Primary, Middle and High School Level</span></a></li>						
+						
+						
+
+						<li class="nav-header hidden-tablet"> Percentage of Teachers With School Level Reports</li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Teachers Having Required Academic Qualification : Primary Level and Middle School Level</span></a></li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentag of Certified (Professionally Trained) Teachers: Primary Level and Middle School Level </span></a></li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Public Teacher Ratio: Primary, Middle and High School Level</span></a></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Female Teachers: Primary, Middle and High School Level</span></a></li>
 
 						<!-- Student flow rates -->	
 						<li class="nav-header hidden-tablet"> Student Flow Rate Reports</li>
-						<li><a class="ajax-link" href="{{ URL::route('PromotionRate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> (Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</span></a></li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Promotion Rate for Grade 5 or 9 or 11 of Year "t" </span></a></li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Completion Rate: Primary, Middle and High School Level </span></a></li>
-						<li><a class="ajax-link" href="{{ URL::route('transition_rate_primary_to_middle') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Primary to Middle School Level(TRPMS) </span></a></li><li><a class="ajax-link" href="{{ URL::route('transition_rate_middle_to_high') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Middle to High School Level(TRMHS) </span></a></li>
-
-						 
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> (Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</span></a></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Promotion Rate for Grade 5 or 9 or 11 of Year "t" </span></ae></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Repetition Rate for Grade "g" of Year "t"</span></a></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Dropout Rate for Grade "g" of Year "t"</span></a></li><li><a class="ajax-link finished" href="{{ URL::route('high_school_level_completion_rate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Completion Rate: High School Level</span></a></li><li><a class="ajax-link finished" href="{{ URL::route('transition_rate_primary_to_middle') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Primary to Middle School Level(TRPMS) </span></a></li><li><a class="ajax-link finished" href="{{ URL::route('transition_rate_middle_to_high') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Middle to High School Level(TRMHS) </span></a></li><li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Coefficient of Efficiency: Primary, Middle and High School Level Reports</span></a></li><li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Literacy Rate of 15-45 Years Old </span></a></li><li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Adult Literacy Rate (Aged 15+)</span></a></li>
+ 
 						<!-- Public class ratio Report -->
-						<li class="nav-header hidden-tablet"> Pupil-Class Ratio Reports</li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Pupil-Class Ratio by Grade</span></a></li>
+						<li class="nav-header hidden-tablet"> Pupil Class Ratio Reports</li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Pupil Class Ratio by Grade</span></a></li><li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Public Class Ratio by Level </span></a></li>
 
 						<!--General Rate Reports -->
 						<li class="nav-header hidden-tablet"> General Rate Reports</li>
-						<li><a class="ajax-link" href="{{ URL::route('high_school_level_retention_rate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Retention Rate</span></a></li>
+						<li><a class="ajax-link finished" href="{{ URL::route('high_school_level_retention_rate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Retention Rate</span></a></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Teacher Attrition Rate </span></a></li>
 
 						<!-- Oversized Classes -->
 						<li class="nav-header hidden-tablet"> Percentage of Classes, Classroom, School Libraray Reports</li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Oversized Classes (Sections with Over 40 Pupils) </span></a></li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Schools with Library </span></a></li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Oversized Classes (Sections with Over 40 Pupils) </span></a></li><li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green
+						 icon-document"></i><span class="hidden-tablet"> Percentage of Classrooms with Minimum Standard Quality Level </span></a></li><li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of School with Library </span></a></li><li>
 
 
 						<!-- Percentage with water and Sanitation -->	
 						<li class="nav-header hidden-tablet">Percentage of Schools with Proper Water & Sanitation Facilities Reports</li>
-						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Sanitation Facilities </span></a></li>
+						<li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Sanitation Facilities </span></a></li><li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green
+						 icon-document"></i><span class="hidden-tablet"> Proper Water </span></a></li><li>
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Proper Water and Sanitation Facitilites </span></a></li><li> 
+						<li><a class="ajax-link" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Oversized Classes (Sections with Over 40 Pupils) </span></a></li><li>
 
                  </ul>
 				</div><!--/.well -->

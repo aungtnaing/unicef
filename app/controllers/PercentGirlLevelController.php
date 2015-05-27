@@ -34,8 +34,9 @@ class PercentGirlLevelController extends \BaseController
 
 		$region = DB::select(DB::raw($q));
 
-		
-		$dtSchool = DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."')  ORDER BY sort_code,school_id ASC");
+		try
+		{
+			$dtSchool = DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."')  ORDER BY sort_code,school_id ASC");
 		//print_r($dtSchool);
 
 		foreach ($dtSchool as $class) {
@@ -57,6 +58,14 @@ class PercentGirlLevelController extends \BaseController
 			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$year."' OR ''='".$year."') GROUP BY school_id"));
 		}
 		return View::make('gross.percent_girls_levels',compact('region','dtSchool','tStudents','school_level'));
+		}
+		catch(Exception $ex)
+		{
+			$record="<h4>There is no Data Record. Please Check in Searching.</h4>";
+			return View::make('gross.percent_girls_levels',compact('region','record','school_level'));
+		}
+		
+		
 	}
 }
  

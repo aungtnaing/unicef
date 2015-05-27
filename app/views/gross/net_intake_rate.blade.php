@@ -47,6 +47,13 @@
 	@endforeach
 	</table>
 	@endif
+	<?php 
+		if (isset($record)) {
+			echo $record;
+		}
+
+	 ?>
+
 		
 </div>
 

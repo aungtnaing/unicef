@@ -9,7 +9,9 @@ class StudentEnrollmentController extends \BaseController
 
 	public function search()
 	{
-		$state=Input::get('state_id');
+		try
+		{
+			$state=Input::get('state_id');
 		$town=Input::get('township_id');
 		$year=Input::get('academic_year');
 
@@ -27,39 +29,32 @@ class StudentEnrollmentController extends \BaseController
 
 		$region = DB::select(DB::raw($q));
 
-		
-		$school_level=DB::select(DB::raw("SELECT id,school_level FROM school_level ORDER BY sort_code"));
+		$dtSchool = DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') GROUP BY school_id ORDER BY school_level ASC ") ;
 
-		$r_sLevel = DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND location='Rural' GROUP BY school_id ORDER BY sort_code ASC");
+		foreach ($dtSchool as $class) {
+			
+			$school_id[] = $class->school_id;
 
-		
-		for($i=0;$i<count($r_sLevel);$i++)
-		{
-			$dtG1Stds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students,school_no,school_name FROM v_StudentAttendance WHERE (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND grade='01' AND Location='Rural' AND school_id=".$r_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtPStds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students,school_no,school_name FROM v_StudentAttendance WHERE (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=1 AND Location='Rural'  AND school_id=".$r_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtMStds[] = DB::select("SELECT school_id ,SUM(total_boy+total_girl) AS total_students FROM v_StudentAttendance WHERE   (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=2 AND Location='Rural'  AND school_id=".$r_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtHStds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students FROM v_StudentAttendance WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=3 AND Location='Rural'  AND school_id=".$r_sLevel[$i]->school_id." GROUP BY school_id");
-		}
-		
-		
-		$u_sLevel=DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND location='Urban' GROUP BY school_id ORDER BY sort_code ASC");
-		
-		
-		for($i=0;$i<count($u_sLevel);$i++)
-		{
-			$dtuG1Stds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students,school_no,school_name FROM v_StudentAttendance WHERE (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND grade='01' AND location='Urban' AND school_id=".$u_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtuPStds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students,school_no,school_name FROM v_StudentAttendance WHERE (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=1 AND location='Urban'  AND school_id=".$u_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtuMStds[] = DB::select("SELECT school_id ,SUM(total_boy+total_girl) AS total_students FROM v_StudentAttendance WHERE   (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=2 AND location='Urban'  AND school_id=".$u_sLevel[$i]->school_id." GROUP BY school_id");
-
-		$dtuHStds[] = DB::select("SELECT school_id,SUM(total_boy+total_girl) AS total_students FROM v_StudentAttendance WHERE  (state_divsion_id = '".$state."' OR ''='".$state."') AND (township_id ='".$town."' OR ''='".$town."') AND (school_year='".$year."' OR ''='".$year."') AND level=3 AND location='Urban'  AND school_id=".$u_sLevel[$i]->school_id." GROUP BY school_id");
 		}
 
-		return View::make('students.enrollment',compact('r_sLevel','dtG1Stds', 'dtPStds','dtMStds','dtHStds','u_sLevel','dtuG1Stds','dtuPStds','dtuMStds','dtuHStds','region'));
+		$schools_id = "'".implode("','", $school_id)."'";
+
+		$dtG1Stds = DB::select("SELECT SUM(student_attendance_details.total_boy)+SUM(student_attendance_details.total_girl) AS total_students,school_id FROM `student_attendance_details` INNER JOIN student_attendance ON student_attendance.id=student_attendance_details.student_attendance_id WHERE student_attendance.school_id IN ({$schools_id}) AND student_attendance_details.grade='01' AND (student_attendance.school_year='".$year."' OR ''='".$year."') GROUP BY student_attendance.school_id");
+
+		$dtPStds = DB::select("SELECT SUM(student_attendance_details.total_boy)+SUM(student_attendance_details.total_girl) AS total_students,school_id FROM `student_attendance_details` INNER JOIN student_attendance ON student_attendance.id=student_attendance_details.student_attendance_id WHERE student_attendance.school_id IN ({$schools_id}) AND (student_attendance_details.grade='01' OR student_attendance_details.grade='02' OR student_attendance_details.grade='03' OR student_attendance_details.grade='04' OR student_attendance_details.grade='05')  AND (student_attendance.school_year='".$year."' OR ''='".$year."') GROUP BY student_attendance.school_id");
+
+		$dtMStds = DB::select("SELECT SUM(student_attendance_details.total_boy)+SUM(student_attendance_details.total_girl) AS total_students,school_id FROM `student_attendance_details` INNER JOIN student_attendance ON student_attendance.id=student_attendance_details.student_attendance_id WHERE student_attendance.school_id IN ({$schools_id}) AND (student_attendance_details.grade='06' OR student_attendance_details.grade='07' OR student_attendance_details.grade='08' OR student_attendance_details.grade='09')  AND (student_attendance.school_year='".$year."' OR ''='".$year."') GROUP BY student_attendance.school_id");
+
+		$dtHStds = DB::select("SELECT SUM(student_attendance_details.total_boy)+SUM(student_attendance_details.total_girl) AS total_students,school_id FROM `student_attendance_details` INNER JOIN student_attendance ON student_attendance.id=student_attendance_details.student_attendance_id WHERE student_attendance.school_id IN ({$schools_id}) AND (student_attendance_details.grade='10' OR student_attendance_details.grade='11')  AND (student_attendance.school_year='".$year."' OR ''='".$year."') GROUP BY student_attendance.school_id");
+
+		return View::make('students.enrollment',compact('region','dtSchool','dtG1Stds', 'dtPStds','dtMStds','dtHStds'));
+		}
+		catch(\Exception $ex)
+		{
+			$record="There is no data record.";
+			return View::make('students.enrollment',compact('region','record'));
+
+		}
 		
 	}
 }
