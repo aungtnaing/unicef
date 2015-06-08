@@ -13,6 +13,8 @@ namespace Symfony\Component\Console;
 
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Descriptor\XmlDescriptor;
+use Symfony\Component\Console\Helper\DebugFormatterHelper;
+use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -249,24 +251,7 @@ class Application
      */
     public function getHelp()
     {
-        $messages = array(
-            $this->getLongVersion(),
-            '',
-            '<comment>Usage:</comment>',
-            '  [options] command [arguments]',
-            '',
-            '<comment>Options:</comment>',
-        );
-
-        foreach ($this->getDefinition()->getOptions() as $option) {
-            $messages[] = sprintf('  %-29s %s %s',
-                '<info>--'.$option->getName().'</info>',
-                $option->getShortcut() ? '<info>-'.$option->getShortcut().'</info>' : '  ',
-                $option->getDescription()
-            );
-        }
-
-        return implode(PHP_EOL, $messages);
+        return $this->getLongVersion();
     }
 
     /**
@@ -728,7 +713,7 @@ class Application
                     'args' => array(),
                 ));
 
-                for ($i = 0, $count = count($trace); $i < $count; $i++) {
+                for ($i = 0, $count = count($trace); $i < $count; ++$i) {
                     $class = isset($trace[$i]['class']) ? $trace[$i]['class'] : '';
                     $type = isset($trace[$i]['type']) ? $trace[$i]['type'] : '';
                     $function = $trace[$i]['function'];
@@ -738,15 +723,15 @@ class Application
                     $output->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line));
                 }
 
-                $output->writeln("");
-                $output->writeln("");
+                $output->writeln('');
+                $output->writeln('');
             }
         } while ($e = $e->getPrevious());
 
         if (null !== $this->runningCommand) {
             $output->writeln(sprintf('<info>%s</info>', sprintf($this->runningCommand->getSynopsis(), $this->getName())));
-            $output->writeln("");
-            $output->writeln("");
+            $output->writeln('');
+            $output->writeln('');
         }
     }
 
@@ -845,7 +830,7 @@ class Application
             $input->setInteractive(false);
         } elseif (function_exists('posix_isatty') && $this->getHelperSet()->has('question')) {
             $inputStream = $this->getHelperSet()->get('question')->getInputStream();
-            if (!@posix_isatty($inputStream)) {
+            if (!@posix_isatty($inputStream) && false === getenv('SHELL_INTERACTIVE')) {
                 $input->setInteractive(false);
             }
         }
@@ -892,16 +877,20 @@ class Application
         $event = new ConsoleCommandEvent($command, $input, $output);
         $this->dispatcher->dispatch(ConsoleEvents::COMMAND, $event);
 
-        try {
-            $exitCode = $command->run($input, $output);
-        } catch (\Exception $e) {
-            $event = new ConsoleTerminateEvent($command, $input, $output, $e->getCode());
-            $this->dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
+        if ($event->commandShouldRun()) {
+            try {
+                $exitCode = $command->run($input, $output);
+            } catch (\Exception $e) {
+                $event = new ConsoleTerminateEvent($command, $input, $output, $e->getCode());
+                $this->dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
 
-            $event = new ConsoleExceptionEvent($command, $input, $output, $e, $event->getExitCode());
-            $this->dispatcher->dispatch(ConsoleEvents::EXCEPTION, $event);
+                $event = new ConsoleExceptionEvent($command, $input, $output, $e, $event->getExitCode());
+                $this->dispatcher->dispatch(ConsoleEvents::EXCEPTION, $event);
 
-            throw $event->getException();
+                throw $event->getException();
+            }
+        } else {
+            $exitCode = ConsoleCommandEvent::RETURN_CODE_DISABLED;
         }
 
         $event = new ConsoleTerminateEvent($command, $input, $output, $exitCode);
@@ -932,12 +921,12 @@ class Application
         return new InputDefinition(array(
             new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
 
-            new InputOption('--help',           '-h', InputOption::VALUE_NONE, 'Display this help message'),
-            new InputOption('--quiet',          '-q', InputOption::VALUE_NONE, 'Do not output any message'),
-            new InputOption('--verbose',        '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
-            new InputOption('--version',        '-V', InputOption::VALUE_NONE, 'Display this application version'),
-            new InputOption('--ansi',           '',   InputOption::VALUE_NONE, 'Force ANSI output'),
-            new InputOption('--no-ansi',        '',   InputOption::VALUE_NONE, 'Disable ANSI output'),
+            new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message'),
+            new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
+            new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this application version'),
+            new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
+            new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question'),
         ));
     }
@@ -964,6 +953,8 @@ class Application
             new DialogHelper(),
             new ProgressHelper(),
             new TableHelper(),
+            new DebugFormatterHelper(),
+            new ProcessHelper(),
             new QuestionHelper(),
         ));
     }

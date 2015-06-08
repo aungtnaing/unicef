@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use PHPExcel_Cell;
+use PHPExcel_Exception;
 use PHPExcel_Shared_Date;
 use Illuminate\Support\Str;
 use PHPExcel_Style_NumberFormat;
@@ -94,7 +95,7 @@ class ExcelParser {
         $this->reader = $reader;
         $this->excel = $reader->excel;
 
-        $this->defaultStartRow = $this->currentRow = Config::get('excel::import.startRow', 1);
+        $this->defaultStartRow = $this->currentRow = Config::get('excel.import.startRow', 1);
 
         // Reset
         $this->reset();
@@ -163,7 +164,7 @@ class ExcelParser {
     protected function parseAsMultiple()
     {
         return ($this->excel->getSheetCount() > 1 && count($this->reader->getSelectedSheetIndices()) !== 1)
-        || Config::get('excel::import.force_sheets_collection', false);
+        || Config::get('excel.import.force_sheets_collection', false);
     }
 
     /**
@@ -212,7 +213,7 @@ class ExcelParser {
     protected function getIndex($cell)
     {
         // Get heading type
-        $config = Config::get('excel::import.heading', true);
+        $config = Config::get('excel.import.heading', true);
         $config = $config === true ? 'slugged' : $config;
 
         // Get value
@@ -221,7 +222,7 @@ class ExcelParser {
         switch ($config)
         {
             case 'slugged':
-                return $this->getSluggedIndex($value, Config::get('excel::import.to_ascii', true));
+                return $this->getSluggedIndex($value, Config::get('excel.import.to_ascii', true));
                 break;
 
             case 'ascii':
@@ -325,8 +326,14 @@ class ExcelParser {
         // Get the start row
         $startRow = $this->getStartRow();
 
+        try {
+            $rows = $this->worksheet->getRowIterator($startRow);
+        } catch(PHPExcel_Exception $e) {
+            $rows = [];
+        }
+
         // Loop through the rows inside the worksheet
-        foreach ($this->worksheet->getRowIterator($startRow) as $this->row)
+        foreach ($rows as $this->row)
         {
             // Limit the results when needed
             if ( $this->hasReachedLimit() )
@@ -472,7 +479,7 @@ class ExcelParser {
     protected function encode($value)
     {
         // Get input and output encoding
-        list($input, $output) = array_values(Config::get('excel::import.encoding', array('UTF-8', 'UTF-8')));
+        list($input, $output) = array_values(Config::get('excel.import.encoding', array('UTF-8', 'UTF-8')));
 
         // If they are the same, return the value
         if ( $input == $output )

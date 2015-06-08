@@ -22,7 +22,7 @@ $('#region_id').change(function() {
 					for(var i = 0; i < v.length; i++) {
 
 						options += '<option value="' + v[i].id + '" >' + v[i].township_name + '</option>';
-						
+
 					}
 
 				})
@@ -37,8 +37,13 @@ $('#region_id').change(function() {
 
 /** selected index for academic year **/
 $("#academic_year").change(function () {
+		
 	var idx = this.selectedIndex;
 	var pre_idx = idx - 1;
+		
+	/*alert($('#academic_year option').eq(idx).val());
+	alert($('#academic_year option').eq(pre_idx).val());*/
+
 	$("#previous_year").val($('#academic_year option').eq(pre_idx).val());
     		
 });

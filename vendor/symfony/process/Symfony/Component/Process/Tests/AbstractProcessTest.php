@@ -13,9 +13,9 @@ namespace Symfony\Component\Process\Tests;
 
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Exception\LogicException;
+use Symfony\Component\Process\Pipes\PipesInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Process\ProcessPipes;
 
 /**
  * @author Robert Schönthal <seroscho@googlemail.com>
@@ -90,9 +90,9 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         // has terminated so the internal pipes array is already empty. normally
         // the call to start() will not read any data as the process will not have
         // generated output, but this is non-deterministic so we must count it as
-        // a possibility.  therefore we need 2 * ProcessPipes::CHUNK_SIZE plus
+        // a possibility.  therefore we need 2 * PipesInterface::CHUNK_SIZE plus
         // another byte which will never be read.
-        $expectedOutputSize = ProcessPipes::CHUNK_SIZE * 2 + 2;
+        $expectedOutputSize = PipesInterface::CHUNK_SIZE * 2 + 2;
 
         $code = sprintf('echo str_repeat(\'*\', %d);', $expectedOutputSize);
         $p = $this->getProcess(sprintf('php -r %s', escapeshellarg($code)));
@@ -158,6 +158,28 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedLength, strlen($p->getErrorOutput()));
     }
 
+    /**
+     * @dataProvider pipesCodeProvider
+     */
+    public function testSetStreamAsInput($code, $size)
+    {
+        $expected = str_repeat(str_repeat('*', 1024), $size).'!';
+        $expectedLength = (1024 * $size) + 1;
+
+        $stream = fopen('php://temporary', 'w+');
+        fwrite($stream, $expected);
+        rewind($stream);
+
+        $p = $this->getProcess(sprintf('php -r %s', escapeshellarg($code)));
+        $p->setInput($stream);
+        $p->run();
+
+        fclose($stream);
+
+        $this->assertEquals($expectedLength, strlen($p->getOutput()));
+        $this->assertEquals($expectedLength, strlen($p->getErrorOutput()));
+    }
+
     public function testSetInputWhileRunningThrowsAnException()
     {
         $process = $this->getProcess('php -r "usleep(500000);"');
@@ -175,7 +197,7 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideInvalidInputValues
      * @expectedException \Symfony\Component\Process\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Symfony\Component\Process\Process::setInput only accepts strings.
+     * @expectedExceptionMessage Symfony\Component\Process\Process::setInput only accepts strings or stream resources.
      */
     public function testInvalidInput($value)
     {
@@ -188,7 +210,6 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         return array(
             array(array()),
             array(new NonStringifiable()),
-            array(fopen('php://temporary', 'w')),
         );
     }
 
@@ -779,9 +800,6 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($process->isSuccessful());
     }
 
-    /**
-     * @group idle-timeout
-     */
     public function testIdleTimeout()
     {
         $process = $this->getProcess('php -r "sleep(3);"');
@@ -799,34 +817,31 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @group idle-timeout
-     */
     public function testIdleTimeoutNotExceededWhenOutputIsSent()
     {
-        $process = $this->getProcess('php -r "echo \'foo\'; sleep(1); echo \'foo\'; sleep(1); echo \'foo\'; sleep(1); "');
+        $process = $this->getProcess(sprintf('php -r %s', escapeshellarg('$n = 30; while ($n--) {echo "foo\n"; usleep(100000); }')));
         $process->setTimeout(2);
-        $process->setIdleTimeout(1.5);
+        $process->setIdleTimeout(1);
 
         try {
             $process->run();
             $this->fail('A timeout exception was expected.');
         } catch (ProcessTimedOutException $ex) {
-            $this->assertTrue($ex->isGeneralTimeout());
-            $this->assertFalse($ex->isIdleTimeout());
+            $this->assertTrue($ex->isGeneralTimeout(), 'A general timeout is expected.');
+            $this->assertFalse($ex->isIdleTimeout(), 'No idle timeout is expected.');
             $this->assertEquals(2, $ex->getExceededTimeout());
         }
     }
 
     public function testStartAfterATimeout()
     {
-        $process = $this->getProcess('php -r "$n = 1000; while ($n--) {echo \'\'; usleep(1000); }"');
+        $process = $this->getProcess(sprintf('php -r %s', escapeshellarg('$n = 1000; while ($n--) {echo \'\'; usleep(1000); }')));
         $process->setTimeout(0.1);
 
         try {
             $process->run();
-            $this->fail('An exception should have been raised.');
-        } catch (\Exception $e) {
+            $this->fail('A RuntimeException should have been raised.');
+        } catch (RuntimeException $e) {
         }
         $process->start();
         usleep(1000);

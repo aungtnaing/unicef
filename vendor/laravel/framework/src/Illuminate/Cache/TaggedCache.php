@@ -3,13 +3,14 @@
 use Closure;
 use DateTime;
 use Carbon\Carbon;
+use Illuminate\Contracts\Cache\Store;
 
-class TaggedCache implements StoreInterface {
+class TaggedCache implements Store {
 
 	/**
 	 * The cache store implementation.
 	 *
-	 * @var \Illuminate\Cache\StoreInterface
+	 * @var \Illuminate\Contracts\Cache\Store
 	 */
 	protected $store;
 
@@ -23,11 +24,11 @@ class TaggedCache implements StoreInterface {
 	/**
 	 * Create a new tagged cache instance.
 	 *
-	 * @param  \Illuminate\Cache\StoreInterface  $store
+	 * @param  \Illuminate\Contracts\Cache\Store  $store
 	 * @param  \Illuminate\Cache\TagSet  $tags
 	 * @return void
 	 */
-	public function __construct(StoreInterface $store, TagSet $tags)
+	public function __construct(Store $store, TagSet $tags)
 	{
 		$this->tags = $tags;
 		$this->store = $store;
@@ -88,7 +89,9 @@ class TaggedCache implements StoreInterface {
 	{
 		if (is_null($this->get($key)))
 		{
-			$this->put($key, $value, $minutes); return true;
+			$this->put($key, $value, $minutes);
+
+			return true;
 		}
 
 		return false;
