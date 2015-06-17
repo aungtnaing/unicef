@@ -27,6 +27,8 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('StdAttendanceList') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')
+						<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('StdAttendanceList') }}'" />
+
 		</form>
 	</div><br/>
 

@@ -21,6 +21,7 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchStdSanitation') }}'" />
 		</form>&nbsp;<!-- <a href="#">View All</a> -->
 	</div><br/>
 
