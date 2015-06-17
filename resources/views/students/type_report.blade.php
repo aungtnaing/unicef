@@ -23,8 +23,11 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('TypeReportList') }}" method="post" style="display:inline;" class="form-horizontal">
-			@include('students.search_form')
+		<form action="{{ URL::route('TypeReportExport') }}" method="post" id="TypeReportForm" style="display:inline;" class="form-horizontal">
+			@include('students.search_form')&nbsp;
+			<!-- <a href="{{ URL::route('TypeReportExport') }}" class="btn btn-default" >Export Excel</a> -->
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportList') }}'" />
 		</form>
 	</div><br/>
 

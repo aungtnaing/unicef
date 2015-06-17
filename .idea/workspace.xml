@@ -23,19 +23,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="composer.json" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="composer.json" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/composer.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="6" selection-start="508" selection-end="508" vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="780">
+            <state line="27" column="6" selection-start="508" selection-end="508" vertical-scroll-proportion="0.648" vertical-offset="0" max-vertical-offset="780">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="search_form.blade.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="search_form.blade.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/students/search_form.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="30" selection-start="250" selection-end="250" vertical-scroll-proportion="0.24" vertical-offset="0" max-vertical-offset="625">
+            <state line="10" column="30" selection-start="250" selection-end="250" vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="585">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".env" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="255">
               <folding />
             </state>
           </provider>
@@ -44,7 +53,7 @@
       <file leaf-file-name="database.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/database.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="59" selection-start="1875" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="675" max-vertical-offset="1965">
+            <state line="59" column="59" selection-start="1875" selection-end="1875" vertical-scroll-proportion="-8.75" vertical-offset="675" max-vertical-offset="1965">
               <folding />
             </state>
           </provider>
@@ -131,6 +140,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unicef" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="unicef" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -155,14 +178,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24980783" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24980783" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -306,23 +329,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
+    <entry file="file://$PROJECT_DIR$/resources/views/students/search_form.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="6" selection-start="508" selection-end="508" vertical-scroll-proportion="0.0" vertical-offset="155" max-vertical-offset="780">
+        <state line="10" column="30" selection-start="250" selection-end="250" vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="585">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="649">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/database.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="59" selection-start="1875" selection-end="1875" vertical-scroll-proportion="0.0" vertical-offset="675" max-vertical-offset="1965">
+        <state line="59" column="59" selection-start="1875" selection-end="1875" vertical-scroll-proportion="-8.75" vertical-offset="675" max-vertical-offset="1965">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/students/search_form.blade.php">
+    <entry file="file://$PROJECT_DIR$/composer.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="30" selection-start="250" selection-end="250" vertical-scroll-proportion="0.24" vertical-offset="0" max-vertical-offset="625">
+        <state line="27" column="6" selection-start="508" selection-end="508" vertical-scroll-proportion="0.648" vertical-offset="0" max-vertical-offset="780">
           <folding />
         </state>
       </provider>

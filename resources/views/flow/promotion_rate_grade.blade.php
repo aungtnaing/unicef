@@ -19,21 +19,22 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('PromotionRateGradeExport') }}" method="post" style="display:inline;" class="form-horizontal">
 			<div>
 			<input type="hidden" id="previous_year" name="previous_year" />			
 			</div>
 			
 			<br/>
 			@include('students.search_form')
-
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('high_school_level_completion_rate_list') }}'" />
 		</form>&nbsp; <!-- <a href="#">View All</a> -->
 	</div><br/>
 
 
 
 	@if(isset($region))	
-	<table class="table table-bordered">
+	<table cl') }}ass="table table-bordered">
 		<tr>
 			<th colspan="2" ><center>Township Education Management System</center></th>
 		</tr>
@@ -57,7 +58,6 @@
 	@if(isset($new_total) && count($new_total)>0)
 	<?php
 
-		$total = ""; 
 		try{
 			for($i = 0; $i < count($new_total); $i++) {
 

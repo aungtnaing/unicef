@@ -30,5 +30,7 @@
 			    @endforeach
 
 			</select>
-			
-			<input type="submit" value="Search" name="btn_search" class="btn btn-success">	
+			<!-- <input type="text" id="txtStateId" name="txtStateId" /> -->
+
+<!-- <input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" />
+ -->

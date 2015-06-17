@@ -23,7 +23,7 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('pupil_class_ratio_by_grade') }}" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('pupil_class_ratio_by_grade_exports') }}" method="post" style="display:inline;" class="form-horizontal">
 			Grade&nbsp;
 			<select name = "grade" style="width:9%;">
 				<option><?php echo Input::get('grade'); ?></option>
@@ -40,6 +40,8 @@
 				<option value="11">Grade 11</option>
 			</select>
 			@include('students.search_form')
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('pupil_class_ratio_by_grade_list') }}'" />
 		</form>
 	</div><br/>
 

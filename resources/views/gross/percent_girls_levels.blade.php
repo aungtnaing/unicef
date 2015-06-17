@@ -18,7 +18,7 @@
 
 <div class="box inner-content">
 
-	<form action="" method="post" style="display:inline;" class="form-horizontal">	
+	<form action="{{ URL::route('ExportPercentGrilLevel') }}" method="post" style="display:inline;" class="form-horizontal">	
 		<div class="row" style='margin:15px auto;'>
 		
 			State/Region&nbsp;
@@ -61,8 +61,8 @@
 			<option value="High">High</option>
 			</select>	
 			
-			<input type="submit" value="Search" name="btn_search" class="btn btn-success">
-		<!--&nbsp; <a href="#">View All</a> -->
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchPercentGrilLevel') }}'" />
 	</div>
 	</form>
 	<br/>
@@ -189,7 +189,7 @@
 		</tr>
 
 		@for($j=0;$j<count($tStudents);$j++)
-		<?php if($dtSchool[$j]->location == "Urban" && $dtSchool[$j]->school_level == $rural_levels[$k]) { ?>
+		<?php if($dtSchool[$j]->location == "Urban" && $dtSchool[$j]->school_level == $urban_levels[$k]) { ?>
 			<tr>
 				<td>{{ $dtSchool[$j]->school_no }}</td>
 				<td>{{ $dtSchool[$j]->school_name }}</td>

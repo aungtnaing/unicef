@@ -122,7 +122,7 @@
 					<!-- start menu -->
 					<div class="my_menu">
 						<a class="ajax-link" href="dashboard"><i class="icon icon-green icon-home"></i><span class="hidden-tablet"> Home</span></a> 
-						<a class="ajax-link" href="#"><i class="icon icon-green icon-edit"></i><span class="hidden-tablet"> Import</span></a> 
+						<!-- <a class="ajax-link" href="#"><i class="icon icon-green icon-edit"></i><span class="hidden-tablet"> Import</span></a>  -->
 					</div> 
 					<!-- end menu -->
 
@@ -197,7 +197,7 @@
 
                         <!-- Percentage with water and Sanitation -->   
                        
-                        <li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Sanitation Facilities </span></a></li>
+                        <li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Schools with Library </span></a></li>
 
                         
 

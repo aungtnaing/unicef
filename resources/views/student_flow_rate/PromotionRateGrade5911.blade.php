@@ -23,14 +23,16 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('promotion_rate_for_grade_5_or_9_or_11') }}" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list_exports') }}" method="post" style="display:inline;" class="form-horizontal">
 			Grade&nbsp;
 			<select name = "grade" style="width:9%;">
 				<option value="05">Grade 5</option>
 				<option value="09">Grade 9</option>
 				<option value="11">Grade 11</option>
 			</select>
-			@include('students.search_form')
+			@include('students.search_form')&nbsp;
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list') }}'" />
 		</form>
 	</div><br/>
 

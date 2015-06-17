@@ -19,8 +19,11 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('ExcelGradeOnePer') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchGradeOnePer') }}'" />
+
 		</form>&nbsp;<!-- <a href="#">View All</a> -->
 	</div><br/>
 
@@ -148,7 +151,7 @@
 		</tr>
 
 		@for($j=0;$j<count($tStudents);$j++)
-		<?php if($tStudents[$j]->location == "Urban" && $tStudents[$j]->school_level == $rural_levels[$k]) { ?>
+		<?php if($tStudents[$j]->location == "Urban" && $tStudents[$j]->school_level == $urban_levels[$k]) { ?>
 			<tr>
 				<td>{{ $tStudents[$j]->school_no }}</td>
 				<td>{{ $tStudents[$j]->school_name }}</td>

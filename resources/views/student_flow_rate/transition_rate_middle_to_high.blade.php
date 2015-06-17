@@ -23,9 +23,13 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
+
 		<form action="{{ URL::route('transition_rate_midlle_to_high_list') }}" method="post" style="display:inline;" class="form-horizontal">
 			<input type = "hidden" name = "previous_year" id = "previous_year" />
 			@include('students.search_form')
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('transition_rate_midlle_to_high_list') }}'" />
+
 		</form>
 	</div><br/>
 
@@ -85,7 +89,7 @@
 			<th>Township Name</th>
 			<th><p>Successful completers in Grade 9</p><p>in the previous school-year</p></th>
 			<th><p>New entrants to Grade 10</p><p>in current school-year</p></th>
-			<th>Total</th>
+			<th>Transition Rate</th>
 		</tr>
 
 			<?php

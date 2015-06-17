@@ -23,9 +23,12 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('high_school_level_completion_rate') }}" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('high_school_level_completion_rate_list_export_excel') }}" method="post" style="display:inline;" class="form-horizontal">
 			<input type = "hidden" name = "previous_year" id = "previous_year" />
 			@include('students.search_form')
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('high_school_level_completion_rate_list') }}'" /><i class="glyphicon glyphicon-search"></i>
+
 		</form>
 	</div><br/>
 
@@ -36,7 +39,7 @@
 			<th colspan="2" ><center>Township Education Management System</center></th>
 		</tr>
 		<tr>
-			<th colspan='2' ><center>No of School by School Type, Urban/Rual Report</center></th>
+			<th colspan='2' ><center>Completion Rate: High School Level</center></th>
 		</tr>
 	@foreach($region as $r)
 		<tr>
@@ -85,7 +88,7 @@
 			<th>Township Name</th>
 			<th align="center"><p>Enrolment in Grade 10</p><p>in previous year</p></th>
 			<th align="center"><p>Successful completers in Grade 11</p><p>in current year</p></th>
-			<th>Total</th>
+			<th>Completion Rate</th>
 		</tr>
 
 			<?php
@@ -121,7 +124,7 @@
 			<th>Township Name</th>
 			<th align="center"><p>Enrolment in Grade 10</p><p>in previous year</p></th>
 			<th align="center"><p>Successful completers in Grade 11</p><p>in current year</p></th>
-			<th>Total</th>
+			<th>Completion Rate</th>
 		</tr>
 
 		<?php
@@ -134,7 +137,7 @@
 						<td><?php echo $current_year[$c]->township_name; ?></td>
 						<td><?php echo $previous_year[$p]->previous_total_std; ?></td>
 						<td><?php echo $current_year[$c]->current_total_std; ?></td>
-						<td><?php echo (current_total_std/previous_total_std) * 100; ?></td>
+						<td><?php echo ($current_year[$c]->current_total_std/$previous_year[$p]->previous_total_std) * 100; ?></td>
 					</tr>	
 			<?php 
 							}
