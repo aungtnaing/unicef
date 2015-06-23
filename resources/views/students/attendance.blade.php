@@ -25,15 +25,15 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('StdAttendanceList') }}" method="post" style="display:inline;" class="form-horizontal">
-			@include('students.search_form')
-						<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('StdAttendanceList') }}'" />
-
+		<form action="" method="post" style="display:inline;" class="form-horizontal">
+			@include('students.search_form')&nbsp;
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('StdAttendanceList') }}'" />
+			<!--  <input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />  -->
 		</form>
 	</div><br/>
 
 
-<?php try{ if(Input::get('btn_search')) { ?>
+<?php try{ //if(Input::get('btn_search')) { ?>
 
 	<table class="table table-bordered">
 		<tr>
@@ -46,7 +46,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -155,7 +155,7 @@
 	else {
 		echo "<h4>There is no Data Record!</h4>";
 	}
-	}
+	//}
 }
 catch(\Exception $e)
 {

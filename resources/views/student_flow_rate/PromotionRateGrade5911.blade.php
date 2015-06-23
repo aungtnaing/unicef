@@ -30,13 +30,17 @@
 				<option value="09">Grade 9</option>
 				<option value="11">Grade 11</option>
 			</select>
-			@include('students.search_form')&nbsp;
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list') }}'" />
+			@include('students.search_form')&nbsp;<br/><br/>
+			
+			<div class="row" align="right">
+				<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list') }}'" />
+				<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			</div>
+				
 		</form>
 	</div><br/>
 
-<?php if(Input::get('btn_search')) { ?>
+<
 
 	<table class="table table-bordered">
 		<tr>
@@ -48,7 +52,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -125,7 +129,13 @@
 				<td><?php echo $se[$p]->students_enrollment; ?></td>
 				<td>
 					<?php
-						echo ($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100;
+						if ($sc[$c]->successful_completers!=0 && $se[$p]->students_enrollment!=0) {
+							echo ($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100;
+						}
+						else {
+							echo "-";
+						}
+						
 					?>
 				</td>
 						
@@ -191,7 +201,7 @@
 <?php 
 	}} 
 		if(isset($record)) echo $record;
-	} 
+	//} 
 ?>
 </div>
 

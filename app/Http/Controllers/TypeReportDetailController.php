@@ -1,10 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
-use Input;
 use Redirect;
-use Illuminate\Support\Facades\DB;
+use Input;
+use Session;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TypeReportDetailController extends Controller {
 
@@ -16,66 +20,50 @@ class TypeReportDetailController extends Controller {
 	public function index()
 	{
 		
-		if(Input::get('state_id') || Input::get('township_id')) {
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		{
+			$state_id=Session::get('state_id');
+			$township_id=Session::get('township_id');
+			$academic_year=Session::get('academic_year');
+		}
+		else
+		{
+			$state_id=Input::get('state_id');
+			$township_id=Input::get('township_id');
+			$academic_year=Input::get('academic_year');
 			
-			if(Input::get('township_id')) {
+		}
 
-				$q = "SELECT state_division, township_name";
+		if(isset($state_id) || isset($township_id)) {
+			
+			if(isset($township_id)) {
+
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE (state_id = '".Input::get('state_id')."' OR '' = '".Input::get('state_id')."') AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+			$q .= " FROM v_state_township WHERE (state_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
 			$region = DB::select(DB::raw($q));
 
 		} else {
 			$region = "";
 		}
-		
 
-		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".Input::get('state_id')."' OR '' = '".Input::get('state_id')."') AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND school_year = '".Input::get('academic_year')."' ORDER BY location, sort_code"));
-
+		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
 		
 		return view('students.type_report_detail', compact('type_report_detail', 'region'));
 	
 	}
 
-	
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//return View::make('students.type_report_detail');
-		return view('students.type_report_detail');
-	}
-
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+	public function export()
 	{
 		
-	}
-
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show()
-	{
+		//try{
 		if(Input::get('state_id') || Input::get('township_id')) {
 			
 			if(Input::get('township_id')) {
@@ -104,10 +92,8 @@ class TypeReportDetailController extends Controller {
 			$post[]=get_object_vars($report);
 		}
 		$state_naem=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
-		if(Input::get('township_id')){
-			$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".Input::get('township_id')));	
-		}		
-		$request_input=array($state_naem[0]->state_division,isset($township_name[0]->township_name)? $township_name[0]->township_name:'ALL',Input::get('academic_year'));
+		$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".Input::get('township_id')));
+		$request_input=array($state_naem[0]->state_division,$township_name[0]->township_name,Input::get('academic_year'));
 		Excel::create('Type Report Detail', function($excel) use($post,$request_input){
 
     	$excel->sheet('Type Report Detail', function($sheet) use($post,$request_input){
@@ -211,6 +197,7 @@ class TypeReportDetailController extends Controller {
     		$sheet->appendRow(array($post[$j]['school_no'],$post[$j]['school_name']));
     	}
     	}	
+	
 		}		// print_r($rural_levels);
 		
 		
@@ -218,7 +205,51 @@ class TypeReportDetailController extends Controller {
 
     	});
 
-		 })->download('xlsx');
+		 })->export('xls');
+		
+		//}
+		/*catch(\Exception $ex){
+			echo "<script type='text/javascript'>alert('Please Choose State/Division At First')</script>";
+			return Redirect::route('TypeReportDetail');
+		}*/	
+	}
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+		
+		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+			return Redirect::action('TypeReportDetailController@index');
+		} else {
+			return view('students.type_report_detail');
+		}
+	
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		//
+	}
+
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		//
 	}
 
 

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Input;
+use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,33 +15,45 @@ class PromotionRateGradeController extends Controller
 
 	public function search()
 	{
-		
-		$state=Input::get('state_id');
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+			$pre_year=Session::get('previous_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			$pre_year=Session::get('previous_year');	
+		}
+		/*$state=Input::get('state_id');
 		$town=Input::get('township_id');
-		$year=Input::get('academic_year');
-		$pre_year=Input::get('previous_year');
-		$grade=Input::get('grade_id');
-		$pre_grade=Input::get('grade_id')-1;
-		$pre_grade="0".$pre_grade;
+		$year=Input::get('academic_year');*/
+		//$pre_year=Input::get('previous_year');
+		/*$grade=Input::get('grade_id');*/
+		//$pre_grade=Input::get('grade_id')-1;
+		//$pre_grade="0".$pre_grade;
 		
 
-		if(Input::get('township_id')) {
+		if(isset($township_id)) {
 
-			$q = "SELECT state_division, township_name";
+			$q = "SELECT *";
 		
 		} else {
 		
-			$q = "SELECT state_division";
+			$q = "SELECT state_id,state_division";
 		
 		}
 
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 		$region = DB::select(DB::raw($q));
 		try{
-			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (student_intake.school_year='".$year."' OR ''='".$year."') AND student_intake.grade!='01' GROUP BY student_intake.grade,v_school.location"));
+			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$academic_year."' OR ''='".$academic_year."') AND student_intake.grade!='01' GROUP BY student_intake.grade,v_school.location"));
 
-		$pre_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state."' OR ''='".$state."') AND  (v_school.township_id ='".$town."' OR ''='".$town."') AND (student_intake.school_year='".$pre_year."' OR ''='".$pre_year."') AND student_intake.grade!='11' GROUP BY student_intake.grade,v_school.location"));		
+		$pre_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$pre_year."' OR ''='".$pre_year."') AND student_intake.grade!='11' GROUP BY student_intake.grade,v_school.location"));		
 		 
 		return view('flow.promotion_rate_grade',compact('region','new_total','pre_total'));		
 		}
@@ -54,13 +67,20 @@ class PromotionRateGradeController extends Controller
 
 	public function show()
 	{
-		$state=Input::get('state_id');
-		$town=Input::get('township_id');
-		$year=Input::get('academic_year');
-		$pre_year=Input::get('previous_year');
-		$grade=Input::get('grade_id');
-		$pre_grade=Input::get('grade_id')-1;
-		$pre_grade="0".$pre_grade;
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+			$pre_year=Session::get('previous_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			$pre_year=Session::get('previous_year');	
+		}
 		
 
 		if(Input::get('township_id')) {
@@ -77,9 +97,9 @@ class PromotionRateGradeController extends Controller
 
 		$region = DB::select(DB::raw($q));
 		try{
-			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (student_intake.school_year='".$year."' OR ''='".$year."') AND student_intake.grade!='01' GROUP BY student_intake.grade,v_school.location"));
+			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$academic_year."' OR ''='".$academic_year."') AND student_intake.grade!='01' GROUP BY student_intake.grade,v_school.location"));
 
-			$pre_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state."' OR ''='".$state."') AND  (v_school.township_id ='".$town."' OR ''='".$town."') AND (student_intake.school_year='".$pre_year."' OR ''='".$pre_year."') AND student_intake.grade!='11' GROUP BY student_intake.grade,v_school.location"));		
+			$pre_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$pre_year."' OR ''='".$pre_year."') AND student_intake.grade!='11' GROUP BY student_intake.grade,v_school.location"));		
 		 
 			for($i = 0; $i < count($new_total); $i++) {
 
@@ -97,12 +117,12 @@ class PromotionRateGradeController extends Controller
 			if(count($new_total)>0 && count($pre_total)>0){
 			
 			
-			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
+			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".$state_id));
 
-			if(Input::get('township_id')){
-				$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".Input::get('township_id')));	
+			if(isset($township_id)){
+				$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".$township_id));	
 			}
-			$request_input=array($state_name[0]->state_division,isset($township_name[0]->township_name)? $township_name[0]->township_name:'ALL',Input::get('academic_year'));
+			$request_input=array($state_name[0]->state_division,isset($township_name[0]->township_name)? $township_name[0]->township_name:'ALL',$academic_year);
 
 			Excel::create('GradeOneToTenPro', function($excel) use($grade_rural,$percent_rural,$grade_urban,$percent_urban,$request_input){
 

@@ -14,17 +14,15 @@
 
 </div>
 
-
-
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('ExcelGradeOnePer') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchGradeOnePer') }}'" />
-
-		</form>&nbsp;<!-- <a href="#">View All</a> -->
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			
+		</form>
 	</div><br/>
 
 
@@ -42,7 +40,7 @@
 
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -53,7 +51,7 @@
 		
 	<?php 
 
-		 if(Input::get('btn_search')) { 
+		 if(isset($tStudents)) { 
 		 	try{
 		 		for($i = 0; $i < count($tStudents); $i++) {
 

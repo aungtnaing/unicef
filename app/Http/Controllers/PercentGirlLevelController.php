@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use Input;
+use Redirect;
+use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -9,39 +11,50 @@ class PercentGirlLevelController extends Controller
 {
 	public function create()
 	{
-
-		$state = DB::select(DB::raw("SELECT * FROM state_division ORDER BY id DESC"));
-	
-		$academic = DB::select(DB::raw("SELECT * FROM academicyear"));
-
-		// //$view->with(compact('state', 'academic'));
-		return view('gross.percent_girls_levels',compact('state','academic'));
+		
+		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+			return Redirect::action('PercentGirlLevelController@search');
+		} else {
+			return view('gross.percent_girls_levels');
+		}
+		
 	}
 
 	public function search()
 	{
 		$school_level=Input::get('school_level');
-		$state = DB::select(DB::raw("SELECT * FROM state_division ORDER BY id DESC"));
-	
-		$academic = DB::select(DB::raw("SELECT * FROM academicyear"));
+		
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			
+		}
+		
+		if($township_id) {
 
-		if(Input::get('township_id')) {
-
-			$q = "SELECT state_division, township_name";
+			$q = "SELECT *";
 		
 		} else {
 		
-			$q = "SELECT state_division";
+			$q = "SELECT state_id, state_division";
 		
 		}
-
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+	
+		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+		
 		$region = DB::select(DB::raw($q));
 
 		try
 		{
-			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".Input::get('state_id')."' OR ''='".Input::get('state_id')."') AND (township_id ='".Input::get('township_id')."' OR ''='".Input::get('township_id')."') AND (school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."')  ORDER BY sort_code,school_id ASC"));
+			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."' OR ''='".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."' OR ''='".$academic_year."')  ORDER BY sort_code,school_id ASC"));
 
 		foreach ($dtSchool as $class) {
 			
@@ -50,22 +63,22 @@ class PercentGirlLevelController extends Controller
 		}
 		$schools_id = "'".implode("','", $school_id)."'";
 		if(Input::get('school_level')=="Primary"){
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."') and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
 		}			
 		elseif (Input::get('school_level')=="Middle") {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
 		}
 		elseif (Input::get('school_level')=="High") {
-		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."') and (grade='10' OR grade='11') GROUP BY school_id"));
+		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='10' OR grade='11') GROUP BY school_id"));
 		 }
 		 else {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') GROUP BY school_id"));
 		}
 		return view('gross.percent_girls_levels',compact('region','dtSchool','tStudents','school_level','state','academic'));
 		}
 		catch(Exception $ex)
 		{
-			$record="<h4>There is no Data Record. Please Check in Searching.</h4>";
+			$record="<h4>There is no Data Record.</h4>";
 			return view('gross.percent_girls_levels',compact('region','record','school_level','state','academic'));
 		}
 		

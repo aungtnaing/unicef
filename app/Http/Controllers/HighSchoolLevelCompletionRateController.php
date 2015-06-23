@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers;
-
 use Input;
+use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 class HighSchoolLevelCompletionRateController extends Controller {
 	/**
@@ -13,26 +14,39 @@ class HighSchoolLevelCompletionRateController extends Controller {
 	 */
 	public function index()
 	{
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+			$pre_year=Session::get('previous_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			$pre_year=Session::get('previous_year');	
+		}
 		try {
 			
-			if(Input::get('township_id')) {
+			if(isset($township_id)) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 
 			$region = DB::select(DB::raw($q));
-			//echo "SELECT SUM(a.boy_pass + a.girl_pass) AS current_total_std, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id";
 
-			$current_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS current_total_std, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$current_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS current_total_std, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' and a.grade='11' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.township_id"));
 			
-			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' and a.grade='10' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.township_id"));
 			
 			return view('student_flow_rate.high_school_level_completion_rate', compact('current_year','previous_year','region'));
 		
@@ -53,7 +67,11 @@ class HighSchoolLevelCompletionRateController extends Controller {
 	 */
 	public function create()
 	{
+		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+			return Redirect::action('HighSchoolLevelCompletionRateController@index');
+		} else {
 		return view('student_flow_rate.high_school_level_completion_rate');
+		}
 	}
 
 
@@ -64,7 +82,7 @@ class HighSchoolLevelCompletionRateController extends Controller {
 	 */
 	public function store()
 	{
-		
+		//
 	}
 
 
@@ -78,23 +96,38 @@ class HighSchoolLevelCompletionRateController extends Controller {
 	{
 		try {
 			
-			if(Input::get('township_id')) {
+			if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+			$pre_year=Session::get('previous_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			$pre_year=Session::get('previous_year');	
+		}
+				
+			if(isset($township_id)) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 
 			$region = DB::select(DB::raw($q));
 
-			$current_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS current_total_std, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$current_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS current_total_std, t.township_name, s.location, t.id FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' and a.grade='11' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.township_id"));
 			
-			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$pre_year."' and a.grade='10' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.township_id"));
 
 			foreach ($current_year as $current) 
 			{
@@ -104,13 +137,13 @@ class HighSchoolLevelCompletionRateController extends Controller {
 			foreach ($previous_year as $previous) {
 				$previous_years[]=get_object_vars($previous);
 			}
+			
+			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".$state_id));
 
-			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
-
-			if(Input::get('township_id')){
-				$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".Input::get('township_id')));	
+			if(isset($township_id)){
+				$township_name=DB::select(DB::raw("SELECT township_name FROM township WHERE id=".$township_id));	
 			}
-			$request_input=array($state_name[0]->state_division,isset($township_name[0]->township_name)? $township_name[0]->township_name:'ALL',Input::get('academic_year'));
+			$request_input=array($state_name[0]->state_division,isset($township_name[0]->township_name)? $township_name[0]->township_name:'ALL',$academic_year);
 
 			Excel::create('HighSchoolCompletionRate', function($excel) use($current_years,$previous_years,$request_input){
 
@@ -186,7 +219,14 @@ class HighSchoolLevelCompletionRateController extends Controller {
 				    			$cell->setValignment('middle');
 				    		});
 				    		$sheet->cell('D'.$count,function($cell) use($current_years,$previous_years,$p,$c){
-		    					$cell->setValue($current_years[$c]['current_total_std']/$previous_years[$p]['previous_total_std'] * 100);
+				    			if ($current_years[$c]['current_total_std']!=0 && $previous_years[$p]['previous_total_std']!=0) {
+				    				$ratio=$current_years[$c]['current_total_std']/$previous_years[$p]['previous_total_std'] * 100;
+				    			}
+				    			else
+				    			{
+				    				$ratio='-';
+				    			}
+		    					$cell->setValue($ratio[0]);
 				    			$cell->setFontSize(12);
 				    			$cell->setAlignment('left');
 				    			$cell->setValignment('middle');
@@ -237,7 +277,14 @@ class HighSchoolLevelCompletionRateController extends Controller {
 				    			$cell->setValignment('middle');
 				    		});
 				    		$sheet->cell('D'.$count,function($cell) use($current_years,$previous_years,$p,$c){
-		    					$cell->setValue($current_years[$c]['current_total_std']/$previous_year[$p]['previous_total_std'] * 100);
+				    			if($current_years[$c]['current_total_std']!=0 && $previous_years[$p]['previous_total_std']!=0){
+				    				$ratio=$current_years[$c]['current_total_std']/$previous_year[$p]['previous_total_std'] * 100;
+				    			}
+				    			else
+				    			{
+				    				$ratio='-';
+				    			}
+		    					$cell->setValue($ratio[0]);
 				    			$cell->setFontSize(12);
 				    			$cell->setAlignment('left');
 				    			$cell->setValignment('middle');

@@ -18,11 +18,11 @@ class PupilClassRatioByGradeController extends Controller {
 			
 			if(Input::get('township_id')) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
@@ -30,7 +30,7 @@ class PupilClassRatioByGradeController extends Controller {
 
 			$region = DB::select(DB::raw($q));
 
-			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS pupil_no FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$sc = DB::select(DB::raw("SELECT a.grade, s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS pupil_no FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
 			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, COUNT(a.class) AS total_class FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 

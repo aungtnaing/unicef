@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 
 use Input;
+use Redirect;
+use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -9,35 +11,55 @@ class PercentGradeOneIntakeController extends Controller
 {
 	public function create()
 	{
-		return view('gross.gradeonepercent');
+		
+		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+			return Redirect::action('PercentGradeOneIntakeController@search');
+		} else {
+			return view('gross.gradeonepercent');
+		}
+	
 	}
 
 	public function search()
 	{
 
-		$state=Input::get('state_id');
-		$town=Input::get('township_id');
-		$year=Input::get('academic_year');
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		{
+			$state = Session::get('state_id');
+			$town = Session::get('township_id');
+			$year = Session::get('academic_year');
+		}
+		else
+		{
+			$state = Input::get('state_id');
+			$town = Input::get('township_id');
+			$year = Input::get('academic_year');
+			
+		}
+		
+		if($town) {
 
-		if(Input::get('township_id')) {
-
-			$q = "SELECT state_division, township_name";
+			$q = "SELECT *";
 		
 		} else {
 		
-			$q = "SELECT state_division";
+			$q = "SELECT state_id, state_division";
 		
 		}
-
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+	
+		$q .= " FROM v_state_township WHERE state_id = ".$state." AND (township_id = '".$town."' OR '' = '".$town."') GROUP BY state_id";
+		
 		$region = DB::select(DB::raw($q));
+		
 		try {
-			$tStudents=DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."' OR ''='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
+			
+			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."' OR ''='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
 
 			return view('gross.gradeonepercent',compact('region','tStudents'));
+		
 		} catch (Exception $e) {
-			$record="<h4>Please check for searching!</h4>";
+		
+			$record="<h4>There is no data.</h4>";
 			return view('gross.gradeonepercent',compact('region','record'));
 		}
 		

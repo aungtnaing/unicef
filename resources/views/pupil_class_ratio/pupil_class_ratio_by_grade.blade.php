@@ -26,7 +26,9 @@
 		<form action="{{ URL::route('pupil_class_ratio_by_grade_exports') }}" method="post" style="display:inline;" class="form-horizontal">
 			Grade&nbsp;
 			<select name = "grade" style="width:9%;">
-				<option><?php echo Input::get('grade'); ?></option>
+			<?php if(isset($sc[0]->grade)) { ?>
+				<option value="<?php echo Input::get('grade'); ?>"><?php echo $sc[0]->grade; ?></option>
+			<?php } ?>
 				<option value="01">Grade 1</option>
 				<option value="02">Grade 2</option>
 				<option value="03">Grade 3</option>
@@ -40,8 +42,11 @@
 				<option value="11">Grade 11</option>
 			</select>
 			@include('students.search_form')
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('pupil_class_ratio_by_grade_list') }}'" />
+			<br/><br/>
+			<div class="row" align="right">
+				<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('pupil_class_ratio_by_grade_list') }}'" />
+				<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			</div>
 		</form>
 	</div><br/>
 
@@ -57,7 +62,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>

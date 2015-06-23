@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class TypeReportController extends Controller {
+class TypeReportsController extends Controller {
 
 	/**
 	 * Display a listing of the resource.
@@ -18,7 +18,7 @@ class TypeReportController extends Controller {
 	 */
 	public function index()
 	{
-		/*if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
 		{
 			$state_id = Session::get('state_id');
 			$township_id = Session::get('township_id');
@@ -48,7 +48,7 @@ class TypeReportController extends Controller {
 
 		$type_report = DB::select(DB::raw("SELECT location, school_level, count(school_level) AS TotalSchools FROM v_school WHERE state_divsion_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' GROUP BY location, school_level ORDER BY location, sort_code"));
 	
-		return view('students.type_report', compact('type_report', 'region'));*/
+		return view('students.type_report', compact('type_report', 'region'));
 	
 	}
 
@@ -61,7 +61,7 @@ class TypeReportController extends Controller {
 	{
 		
 		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
-			return Redirect::action('TypeReportController@index');
+			return Redirect::action('TypeReportsController@index');
 		} else {
 			return view('students.type_report');
 		}

@@ -17,11 +17,11 @@ class HighSchoolLevelController extends Controller {
 			
 			if(Input::get('township_id')) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 

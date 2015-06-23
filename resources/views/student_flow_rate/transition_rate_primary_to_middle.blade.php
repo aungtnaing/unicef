@@ -24,10 +24,12 @@
 
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('transition_rate_primary_to_middle_list_export') }}" method="post" style="display:inline;" class="form-horizontal">
-			<input type = "hidden" name = "previous_year" id = "previous_year" />
+			<input type = "hidden" name = "previous_year" id = "previous_year"  />
 			@include('students.search_form')
-						<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('transition_rate_primary_to_middle_list') }}'" />
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			
 
 		</form>
 	</div><br/>

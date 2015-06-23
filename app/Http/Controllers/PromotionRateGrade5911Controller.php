@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Input;
+use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,26 +14,39 @@ class PromotionRateGrade5911Controller extends Controller {
 	 */
 	public function index()
 	{
-		
+		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
+		{
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+			$pre_year=Session::get('previous_year');
+		}
+		else
+		{
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+			$pre_year=Session::get('previous_year');	
+		}
 		try {
 			
-			if(Input::get('township_id')) {
+			if(isset($township_id)) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 
 			$region = DB::select(DB::raw($q));
 
-			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.boy_pass + a.girl_pass) AS successful_completers FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.boy_pass + a.girl_pass) AS successful_completers FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
-			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
 			return view('student_flow_rate.PromotionRateGrade5911', compact('sc','se','region'));
 
@@ -53,7 +67,12 @@ class PromotionRateGrade5911Controller extends Controller {
 	 */
 	public function create()
 	{
-		return view('student_flow_rate.PromotionRateGrade5911');
+		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+			return Redirect::action('PromotionRateGrade5911Controller@index');
+		} else {
+			return view('student_flow_rate.PromotionRateGrade5911');
+		}
+		
 	}
 
 
@@ -236,7 +255,14 @@ class PromotionRateGrade5911Controller extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($se_posts,$p,$sc_posts,$c){
-		    				$cell->setValue(($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100);
+							if ($sc_posts[$c]['successful_completers']!=0 && $se_posts[$p]['students_enrollment']!=0) {
+								$ratio=($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100;
+							}
+							else
+							{
+								$ratio="-";
+							}
+		    				$cell->setValue($ratio[0]);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -306,7 +332,14 @@ class PromotionRateGrade5911Controller extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($se_posts,$p,$sc_posts,$c){
-		    				$cell->setValue(($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100);
+							if($sc_posts[$c]['successful_completers']!=0 && $se_posts[$p]['students_enrollment']!=0){
+								$ratio=($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100;
+							}
+							else
+							{
+								$ratio='-';
+							}
+		    				$cell->setValue($ratio[0]);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');

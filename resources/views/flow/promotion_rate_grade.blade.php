@@ -21,20 +21,21 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('PromotionRateGradeExport') }}" method="post" style="display:inline;" class="form-horizontal">
 			<div>
-			<input type="hidden" id="previous_year" name="previous_year" />			
-			</div>
+<!-- 			<input type="hidden" id="previous_year" name="previous_year" />			
+ -->			</div>
 			
 			<br/>
 			@include('students.search_form')
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('PromotionRateGrade') }}'" />
 			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('high_school_level_completion_rate_list') }}'" />
+			
 		</form>&nbsp; <!-- <a href="#">View All</a> -->
 	</div><br/>
 
 
 
 	@if(isset($region))	
-	<table cl') }}ass="table table-bordered">
+	<table class="table table-bordered">
 		<tr>
 			<th colspan="2" ><center>Township Education Management System</center></th>
 		</tr>
@@ -46,7 +47,7 @@
 
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>

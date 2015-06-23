@@ -105,6 +105,17 @@
     		
 </head>
 <body>
+	
+	<?php 
+		if(Input::get('btn_search')) {
+			Session::put('state_id', Input::get('state_id'));
+			Session::put('township_id', Input::get('township_id'));
+			Session::put('academic_year', Input::get('academic_year'));
+			Session::put('previous_year', Input::get('previous_year'));
+
+		} 
+	?>
+	
 	<!-- topbar starts -->
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -179,7 +190,7 @@
                         
                         <!-- Student flow rates --> 
                         
-                        <li><a class="ajax-link pending" href="{{URL::route('PromotionRate')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> (Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</span></a></li>
+                        <li><a class="ajax-link finished" href="{{URL::route('PromotionRate')}}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> (Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</span></a></li>
                         <li><a class="ajax-link finished" href="{{ URL::route('promotion_rate_for_grade_5_or_9_or_11') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Promotion Rate for Grade 5 or 9 or 11 of Year "t" </span></ae></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Repetition Rate for Grade "g" of Year "t"</span></a></li><li><a class="ajax-link pending" href="#"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Dropout Rate for Grade "g" of Year "t"</span></a></li><li><a class="ajax-link finished" href="{{ URL::route('high_school_level_completion_rate') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Completion Rate: High School Level</span></a></li><li><a class="ajax-link finished" href="{{ URL::route('transition_rate_primary_to_middle') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Primary to Middle School Level(TRPMS) </span></a></li><li><a class="ajax-link finished" href="{{ URL::route('transition_rate_middle_to_high') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Transition Rate from Middle to High School Level(TRMHS) </span></a></li>
  
                         <!-- Public class ratio Report -->

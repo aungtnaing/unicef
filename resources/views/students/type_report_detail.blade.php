@@ -25,13 +25,12 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('TypeReportDetailListExport') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportDetailList') }}'" />
-
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
 		</form>
 	</div><br/>
 
-<?php if(Input::get('btn_search')) { ?>
+<?php if(isset($type_report_detail)) { ?>
 
 	<table class="table table-bordered">
 		<tr>
@@ -44,7 +43,7 @@
 		@foreach($region as $r)
 			<tr>
 				<th>Division:&nbsp;{{ $r->state_division }}</th>
-				<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+				<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 			</tr>
 			<tr>
 				<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>

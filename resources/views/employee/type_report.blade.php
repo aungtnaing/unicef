@@ -21,7 +21,7 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('TypeReportList') }}" method="post" style="display:inline;">
 			@include('students.search_form')
-		</form>&nbsp;<a href="#">View All</a>
+		</form
 	</div><br/>
 </div>
 
@@ -32,7 +32,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>

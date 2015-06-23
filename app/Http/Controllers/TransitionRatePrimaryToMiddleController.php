@@ -18,23 +18,24 @@ class TransitionRatePrimaryToMiddleController extends Controller {
 			
 			if(Input::get('township_id')) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id,state_division";
 			
 			}
 
 			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
 
 			$region = DB::select(DB::raw($q));
+			$acaedmic=DB::select(DB::raw("SELECT * FROM academicyear WHERE academic_year='".Input::get('academic_year')."'"));
 
 			$current_year = DB::select(DB::raw("SELECT SUM(a.new_boy + a.new_girl) AS current_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade='06' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
 			$previous_year = DB::select(DB::raw("SELECT SUM(a.boy_pass + a.girl_pass) AS previous_total_std, t.township_name, t.id, s.location FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('previous_year')."' AND a.grade='05' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
-			return view('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region'));
+			return view('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region','acaedmic'));
 
 		} catch (Exception $e) {
 			
@@ -81,11 +82,11 @@ class TransitionRatePrimaryToMiddleController extends Controller {
 			
 			if(Input::get('township_id')) {
 
-				$q = "SELECT state_division, township_name";
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id,state_division";
 			
 			}
 
