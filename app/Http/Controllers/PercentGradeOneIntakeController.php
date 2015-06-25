@@ -11,10 +11,11 @@ class PercentGradeOneIntakeController extends Controller
 {
 	public function create()
 	{
-		
-		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+
+		if(!Input::get('btn_search')){	
+		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
 			return Redirect::action('PercentGradeOneIntakeController@search');
-		} else {
+		}} else {
 			return view('gross.gradeonepercent');
 		}
 	
@@ -22,13 +23,13 @@ class PercentGradeOneIntakeController extends Controller
 
 	public function search()
 	{
-
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		if (!Input::get('btn_search')) {
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
 			$state = Session::get('state_id');
 			$town = Session::get('township_id');
 			$year = Session::get('academic_year');
-		}
+		}}
 		else
 		{
 			$state = Input::get('state_id');
@@ -67,21 +68,37 @@ class PercentGradeOneIntakeController extends Controller
 
 	public function show()
 	{
-		if(Input::get('township_id')) {
 
-			$q = "SELECT state_division, township_name";
+		if (!Input::get('btn_search')) {
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
+		{
+			$state = Session::get('state_id');
+			$town = Session::get('township_id');
+			$year = Session::get('academic_year');
+		}}
+		else
+		{
+			$state = Input::get('state_id');
+			$town = Input::get('township_id');
+			$year = Input::get('academic_year');
+			
+		}
+		
+		if($town) {
+
+			$q = "SELECT *";
 		
 		} else {
 		
-			$q = "SELECT state_division";
+			$q = "SELECT state_id, state_division";
 		
 		}
-
-		$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+	
+		$q .= " FROM v_state_township WHERE state_id = ".$state." AND (township_id = '".$town."' OR '' = '".$town."') GROUP BY state_id";
+		
 		$region = DB::select(DB::raw($q));
 		
-		$tStudents=DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".Input::get('state_id')."' OR ''='".Input::get('state_id')."') AND (v_school.township_id ='".Input::get('township_id')."' OR ''='".Input::get('township_id')."') AND (intake.school_year='".Input::get('academic_year')."' OR ''='".Input::get('academic_year')."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC "));
+			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."' OR ''='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
 
 		foreach ($tStudents as $students) 
 		{

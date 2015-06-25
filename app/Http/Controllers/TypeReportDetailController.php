@@ -19,13 +19,15 @@ class TypeReportDetailController extends Controller {
 	 */
 	public function index()
 	{
+		if((!Input::get('btn_search'))) {
+
+		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
+
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
 		
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
-		{
-			$state_id=Session::get('state_id');
-			$township_id=Session::get('township_id');
-			$academic_year=Session::get('academic_year');
-		}
+		}}
 		else
 		{
 			$state_id=Input::get('state_id');
@@ -64,29 +66,44 @@ class TypeReportDetailController extends Controller {
 	{
 		
 		//try{
-		if(Input::get('state_id') || Input::get('township_id')) {
-			
-			if(Input::get('township_id')) {
+		if((!Input::get('btn_search'))) {
 
-				$q = "SELECT state_division, township_name";
+		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
+
+			$state_id = Session::get('state_id');
+			$township_id = Session::get('township_id');
+			$academic_year = Session::get('academic_year');
+		
+		}}
+		else
+		{
+			$state_id=Input::get('state_id');
+			$township_id=Input::get('township_id');
+			$academic_year=Input::get('academic_year');
+			
+		}
+
+		if(isset($state_id) || isset($township_id)) {
+			
+			if(isset($township_id)) {
+
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE (state_id = '".Input::get('state_id')."' OR '' = '".Input::get('state_id')."') AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
-
+			$q .= " FROM v_state_township WHERE (state_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
 			$region = DB::select(DB::raw($q));
 
 		} else {
 			$region = "";
 		}
-		
 
-		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".Input::get('state_id')."' OR '' = '".Input::get('state_id')."') AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND school_year = '".Input::get('academic_year')."' ORDER BY location, sort_code"));
-
+		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
 		
 		foreach ($type_report_detail as $report) {
 			$post[]=get_object_vars($report);
@@ -221,10 +238,10 @@ class TypeReportDetailController extends Controller {
 	 */
 	public function create()
 	{
-		
-		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+		if(!Input::get('btn_search')){
+		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
 			return Redirect::action('TypeReportDetailController@index');
-		} else {
+		}} else {
 			return view('students.type_report_detail');
 		}
 	

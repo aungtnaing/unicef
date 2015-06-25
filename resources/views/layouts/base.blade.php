@@ -108,10 +108,17 @@
 	
 	<?php 
 		if(Input::get('btn_search')) {
+
+			Session::forget('state_id');
+			Session::forget('township_id');
+			Session::forget('academic_year');
+			Session::forget('academic_year');
+
 			Session::put('state_id', Input::get('state_id'));
 			Session::put('township_id', Input::get('township_id'));
 			Session::put('academic_year', Input::get('academic_year'));
 			Session::put('previous_year', Input::get('previous_year'));
+			//echo $value=Session::get('township_id')."base";
 
 		} 
 	?>

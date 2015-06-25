@@ -17,6 +17,7 @@
 
 				    @endforeach
 
+
 			</select>
 
 		Township&nbsp;
@@ -25,9 +26,12 @@
 			<?php if(isset($region[0]->township_id)) { ?>
 				
 				<option value="<?php echo $region[0]->township_id; ?>"><?php echo $region[0]->township_name; ?></option>
+				 				
+			
 			<?php } else { ?>
 				
 				<option value="">--- Select One ---</option>
+
 				
 			<?php } ?>
 				

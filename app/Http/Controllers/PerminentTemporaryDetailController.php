@@ -17,12 +17,13 @@ class PerminentTemporaryDetailController extends Controller {
 	 */
 	public function index()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		if (!Input::get('btn_search')) {
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
 			$state_id = Session::get('state_id');
 			$township_id = Session::get('township_id');
 			$academic_year = Session::get('academic_year');
-		}
+		}}
 		else
 		{
 			$state_id = Input::get('state_id');
@@ -59,10 +60,10 @@ class PerminentTemporaryDetailController extends Controller {
 	 */
 	public function create()
 	{
-		
-		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+		if (!Input::get('btn_search')) {
+		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
 			return Redirect::action('PerminentTemporaryDetailController@index');
-		} else {
+		}} else {
 			return View::make('students.classroom_detail');
 		}
 		
@@ -88,12 +89,13 @@ class PerminentTemporaryDetailController extends Controller {
 	 */
 	public function show()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		if (!Input::get('btn_search')) {
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
 			$state_id = Session::get('state_id');
 			$township_id = Session::get('township_id');
 			$academic_year = Session::get('academic_year');
-		}
+		}}
 		else
 		{
 			$state_id = Input::get('state_id');

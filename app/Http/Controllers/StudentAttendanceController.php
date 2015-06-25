@@ -17,11 +17,14 @@ class StudentAttendanceController extends Controller
 	 */
 	public function index()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
+		if (!Input::get('btn_search')) {
+
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
 			$state_id = Session::get('state_id');
 			$township_id = Session::get('township_id');
 			$academic_year = Session::get('academic_year');
+		}
 		}
 		else
 		{
@@ -67,9 +70,10 @@ class StudentAttendanceController extends Controller
 	 */
 	public function create()
 	{
-		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
+		if(!Input::get('btn_search')){
+		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
 			return Redirect::action('StudentAttendanceController@index');
-		} else {
+		}} else {
 			return view('students.attendance');
 		}
 	}

@@ -21,7 +21,7 @@
 </div>
 
 <div class="box inner-content">
-
+<?php echo "blade".Session::get('township_id'); ?>
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('type_report_export') }}" method="post" id="TypeReportForm" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
