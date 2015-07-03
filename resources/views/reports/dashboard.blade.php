@@ -5,27 +5,26 @@
 					<li>
 						School Info
 					</li>
-					
 				</ul>
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="{{ URL::route('TypeReport') }}">
+				<a data-rel="tooltip" title="School Type Report" class="well span3 top-block" href="{{ URL::route('TypeReport') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Type Report</div>
+					<div>School Type Report</div>
 				</a>
 
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="{{ URL::route('TypeReportDetail') }}">
+				<a data-rel="tooltip" title="School Type Report Detail" class="well span3 top-block" href="{{ URL::route('TypeReportDetail') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Type Report Detail</div>
+					<div>School Type Report Detail</div>
 				</a>
 
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="{{ URL::route('StdSanitation') }}">
+				<a data-rel="tooltip" title="Sanitation Reports" class="well span3 top-block" href="{{ URL::route('StdSanitation') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Sanitation</div>
+					<div>Sanitation Reports</div>
 				</a>
 			</div>
 			<br/>
@@ -33,57 +32,46 @@
 			<div>
 				<ul class="breadcrumb">
 					<li>
-						Teacher Info
+						Students/Teacher
 					</li>
-					
 				</ul>
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="{{ URL::route('TeacherRatio') }}">
+				<a data-rel="tooltip" title="Student/Permanent Classroom ratio" class="well span3 top-block" href="{{ URL::route('calssroom') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Teacher Ratio Report</div>
+					<div>Student/Permanent Classroom ratio</div>
 				</a>
 
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="{{ URL::route('TeacherRatioByTownship') }}">
+				<a data-rel="tooltip" title="Student/Temporary Classroom ratio" class="well span3 top-block" href="{{ URL::route('calssroom_detail') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Teacher Ratio By Township Report</div>
+					<div>Student/Temporary Classroom ratio</div>
 				</a>
-
+				
+				<a data-rel="tooltip" title="Percentage of Oversize Classes (Over 40 Pupils)" class="well span3 top-block" href="{{ URL::route('percentage_of_oversized_classes') }}">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>Percentage of Oversize Classes (Over 40 Pupils)</div>
+				</a>
+								
+				<a data-rel="tooltip" title="Pupil/Teacher Ratio" class="well span3 top-block" href="{{ URL::route('TeacherRatio') }}">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>Pupil/Teacher Ratio</div>
+					<div>&nbsp;</div>
+				</a>
 				</div>
-			<br/>
-                
-            <div>
-				<ul class="breadcrumb">
-					<li>
-						Students
-					</li>
-				</ul>
-			</div>
-
-			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="{{ URL::route('calssroom') }}">
+				
+				<div class="sortable row-fluid">	
+				<a data-rel="tooltip" title="Pupil/Teacher Ratio By Township" class="well span3 top-block" href="{{ URL::route('TeacherRatioByTownship') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Perminent/Temporary Classroom</div>
+					<div>Pupil/Teacher Ratio By Township</div>
 				</a>
-
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="{{ URL::route('calssroom_detail') }}">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Perminent/Temporary Classroom Detail</div>
-				</a>
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="{{ URL::route('StdEnrollment') }}">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Enrollment</div>
-					<div>&nbsp;</div>
-				</a>
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="{{ URL::route('StdAttendance') }}">
+				
+				<a data-rel="tooltip" title="Attendance < 75%" class="well span3 top-block" href="{{ URL::route('StdAttendance') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Attendance < 75%</div>
@@ -91,8 +79,32 @@
 				</a>
 			</div>
             <br/>
-            	
-            <div>
+                
+                <div>
+				<ul class="breadcrumb">
+					<li>
+						Intake
+					</li>
+				</ul>
+			</div>
+
+			<div class="sortable row-fluid">
+				<a data-rel="tooltip" title="Net Intake Rate (NIR)" class="well span3 top-block" href="{{ URL::route('GradeOnePer') }}">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>% of Grade 1 intakes With Preschool Experiences</div>
+				</a>
+				
+				<a data-rel="tooltip" title="Net Intake Rate (NIR)" class="well span3 top-block" href="{{ URL::route('NetIntakeRate')}}">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>Net Intake Rate (NIR)</div>
+					<div>&nbsp;</div>
+				</a>
+			</div>
+		<br/>
+			
+                  <div>
 				<ul class="breadcrumb">
 					<li>
 						Gross Enrolment Ratio Reports
@@ -102,45 +114,26 @@
 
 			<div class="sortable row-fluid">
 				
-
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="{{ URL::route('GradeOnePer')}}">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Percentage of Grade 1 intakes With Pre-Primary / Preschool (ECCE) Experiences</div>
-				</a>
-
-				
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Gross Enrolment Ratio: Primary,Middle and High School Level" class="well span3 top-block" href="{{ URL::route('GrossEnrollmentRation') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Gross Enrolment Ratio: Primary,Middle and High School Level</div>
 				</a>
-			</div>
-
-			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				
+				<a data-rel="tooltip" title="Gross Enrollment Ratio: Combined (Primary and Middle School Levels)" class="well span3 top-block" href="{{ URL::route('CombinedGrossEnrollmentRatio') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Combined (Primary and Middle School Levels) Gross Enrolment Ratio</div>
+					<div>Gross Enrollment Ratio: Combined (Primary and Middle School Levels)</div>
 				</a>
-
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="#">
+				
+				<a data-rel="tooltip" title="Percentage of Girls in Primary, Middle, High level" class="well span3 top-block" href="{{ URL::route('PercentGrilLevel') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Net Enrolment Ratio Primary,Middle and High School Level</div>
-				</a>
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="{{ URL::route('PercentGrilLevel') }}">
-					<span class="icon32 icon-green icon-copy"></span>
+					<div>Percentage of Girls in Primary, Middle, High level</div>
 					<div>&nbsp;</div>
-					<div>Percentage of Girls in Primary, Middle, High and 9-Year Basic Education Enrolment</div>
 				</a>
 			</div>
 			<br/>
-
-			<br/>
-
 
 			<div>
 				<ul class="breadcrumb">
@@ -151,79 +144,53 @@
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Promotion Rate for Grade (Grade 1 to Grade 10)" class="well span3 top-block" href="{{URL::route('PromotionRate')}}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>(Grade 1 to Grade 10) Promotion Rate for Grade "g" of Year "t"</div>
+					<div>Promotion Rate for Grade (Grade 1 to Grade 10)</div>
 				</a>
 
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Promotion Rate for Grade 5 or 9 or 11" class="well span3 top-block" href="{{ URL::route('promotion_rate_for_grade_5_or_9_or_11') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Promotion Rate for Grade 5 or 9 or 11 of Year "t"</div>
+					<div>Promotion Rate for Grade 5 or 9 or 11</div>
+				</a>
+
+				<a data-rel="tooltip" title="Repetition Rate" class="well span3 top-block" href="#">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>Repetition Rate</div>
 					<div>&nbsp;</div>
 				</a>
 
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Dropout Rate" class="well span3 top-block" href="#">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Repetition Rate for Grade "g" of Year "t"</div>
-					<div>&nbsp;</div>
-				</a>
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="#">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Dropout Rate for Grade "g" of Year "t"</div>
+					<div>Dropout Rate</div>
 					<div>&nbsp;</div>
 				</a>
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Completion Rate: High School Level" class="well span3 top-block" href="{{ URL::route('high_school_level_completion_rate') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Completion Rate: Primary, Middle and High School</div>
+					<div>Completion Rate: High School Level</div>
 					<div>&nbsp;</div>
 				</a>
 
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Transition Rate from Primary to Middle School Level" class="well span3 top-block" href="{{ URL::route('transition_rate_primary_to_middle') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Transition Rate from Primary to Middle School Level(TRPMS)</div>
+					<div>Transition Rate from Primary to Middle School Level</div>
 				</a>
 
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Transition Rate from Middle to High School Level" class="well span3 top-block" href="{{ URL::route('transition_rate_middle_to_high') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Transition Rate from Middle to High School Level(TRMHS)</div>
-					<div>&nbsp;</div>
+					<div>Transition Rate from Middle to High School Level</div>
 				</a>
-
-				<a data-rel="tooltip" title="Sanitation" class="well span3 top-block" href="#">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Coefficient of Efficiency: Primary, Middle and High School Level Reports</div>
-				</a>
-			</div>
-
-			<div>
-				<ul class="breadcrumb">
-					<li>
-						Public Class Ratio Reports
-					</li>
-				</ul>
-			</div>
-
-			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Pupil Class Ratio by Grade</div>
-				</a>
-			</div>
-				
-			<br/>
+			</div><br/>
 
 			<div>
 				<ul class="breadcrumb">
@@ -234,13 +201,11 @@
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Retention Rate" class="well span3 top-block" href="{{ URL::route('high_school_level_retention_rate') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Retention Rate</div>
 				</a>
-
-				
 			</div>
 			<br/>
 
@@ -253,38 +218,19 @@
 			</div>
 
 			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				
+				<a data-rel="tooltip" title="Percentage of Schools with Library" class="well span3 top-block" href="{{ URL::route('pupil_class_ratio_by_grade') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
-					<div>Percentage of Oversized Classes (Sections with Over 40 Pupils)</div>
+					<div>Percentage of Schools with Library</div>
 				</a>
-
-				<a data-rel="tooltip" title="Type Report Detail" class="well span3 top-block" href="#">
-					<span class="icon32 icon-green icon-copy"></span>
-					<div>&nbsp;</div>
-					<div>Percentage of School with Library</div>
-					<div>&nbsp;</div>
-				</a>
-			</div>
-			<br/>
-
-			<div>
-				<ul class="breadcrumb">
-					<li>
-						Percentage of Schools with Proper Water & Sanitation Facilities Reports
-					</li>
-				</ul>
-			</div>
-
-			<div class="sortable row-fluid">
-				<a data-rel="tooltip" title="Type Report" class="well span3 top-block" href="#">
+				
+				<a data-rel="tooltip" title="Sanitation Facilities" class="well span3 top-block" href="#">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Sanitation Facilities</div>
 					<div>&nbsp;</div>
-					<div>&nbsp;</div>
 				</a>
-
-			
 			</div>
+			<br/>
 @stop			

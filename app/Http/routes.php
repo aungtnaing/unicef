@@ -23,7 +23,7 @@ Route::controllers([
 /** Student Attendacne **/
 Route::get('attendancelist', array('as' => 'StdAttendance', 'uses' => 'StudentAttendanceController@create'));
 
-Route::any('attendancelist', array('as' => 'StdAttendanceList', 'uses' => 'StudentAttendanceController@index'));
+Route::post('attendancelist', array('as' => 'StdAttendanceList', 'uses' => 'StudentAttendanceController@index'));
 
 /** School Type Report **/
 Route::any('type_report_list',array('as' => 'TypeReportList', 'uses' => 'TypeReportsController@index'));
@@ -37,12 +37,12 @@ Route::get('school_information_detail', array('as' => 'TypeReportDetail', 'uses'
 
 Route::any('school_information_detail', array('as' => 'TypeReportDetailList', 'uses' => 'TypeReportDetailController@index'));
 
-Route::post('school_information_detail_export', array('as' => 'TypeReportDetailListExport', 'uses' => 'TypeReportDetailController@export'));
+Route::post('school_information_detail_export', array('as' => 'TypeReportDetailListExport', 'uses' => 'TypeReportDetailController@show'));
 
 /** Perminent/Temporary Classroom **/
 Route::get('perminent_temporary_classroom', array('as' => 'calssroom', 'uses' => 'PermenantTemporaryController@create'));
 
-Route::any('perminent_temporary_classroom', array('as' => 'calssroom_list', 'uses' => 'PermenantTemporaryController@index'));
+Route::any('perminent_temporary_classroom_list', array('as' => 'calssroom_list', 'uses' => 'PermenantTemporaryController@index'));
 
 Route::post('perminent_temporary_classroom_export', array('as' => 'calssroom_list_export', 'uses' => 'PermenantTemporaryController@show'));
 
@@ -80,14 +80,14 @@ Route::post('high_school_level_retention_rate_excel', array('as' => 'high_school
 /** completion rate high school level **/
 Route::get('high_school_level_completion_rate', array('as' => 'high_school_level_completion_rate', 'uses' => 'HighSchoolLevelCompletionRateController@create'));
 
-Route::any('high_school_level_completion_rate', array('as' => 'high_school_level_completion_rate_list', 'uses' => 'HighSchoolLevelCompletionRateController@index'));
+Route::post('high_school_level_completion_rate', array('as' => 'high_school_level_completion_rate_list', 'uses' => 'HighSchoolLevelCompletionRateController@index'));
 
 Route::post('high_school_level_completion_rate_export', array('as' => 'high_school_level_completion_rate_list_export_excel', 'uses' => 'HighSchoolLevelCompletionRateController@show'));
 
 /** Promotion Rate for Grade 5, 9, 11 **/
 Route::get('promotion_rate_for_grade_5_or_9_or_11', array('as' => 'promotion_rate_for_grade_5_or_9_or_11', 'uses' => 'PromotionRateGrade5911Controller@create'));
 
-Route::any('promotion_rate_for_grade_5_or_9_or_11', array('as' => 'promotion_rate_for_grade_5_or_9_or_11_list', 'uses' => 'PromotionRateGrade5911Controller@index'));
+Route::post('promotion_rate_for_grade_5_or_9_or_11', array('as' => 'promotion_rate_for_grade_5_or_9_or_11_list', 'uses' => 'PromotionRateGrade5911Controller@index'));
 
 Route::post('promotion_rate_for_grade_5_or_9_or_11_export', array('as' => 'promotion_rate_for_grade_5_or_9_or_11_list_exports', 'uses' => 'PromotionRateGrade5911Controller@show'));
 
@@ -112,6 +112,8 @@ Route::post('sanitationfrm', array('as' => 'SearchStdSanitation', 'uses' => 'San
 Route::get('enrollmentfrm', array('as' => 'StdEnrollment', 'uses' => 'StudentEnrollmentController@create'));
 
 Route::post('enrollmentfrm', array('as' => 'SearchStdEnrollment', 'uses' => 'StudentEnrollmentController@search'));
+
+Route::post('enrollmentfrm_excel',array('as' => 'ExportStdEnrollment', 'uses' => 'StudentEnrollmentController@export'));
 
 /** get township **/
 Route::post('townships', 'SearchFormController@index');
@@ -149,7 +151,7 @@ Route::post('combined_enrollment_ratio', array('as' => 'CombinedGrossEnrollmentR
 /*** Student Flow Rates ***/
 Route::get('promotion_rate', array('as' => 'PromotionRate','uses' => 'PromotionRateGradeController@create'));
 
-Route::any('promotion_rate', array('as' => 'PromotionRateGrade','uses' => 'PromotionRateGradeController@search'));
+Route::post('promotion_rate', array('as' => 'PromotionRateGrade','uses' => 'PromotionRateGradeController@search'));
 
 Route::post('promotion_rate_export', array('as' => 'PromotionRateGradeExport','uses' => 'PromotionRateGradeController@show'));
 

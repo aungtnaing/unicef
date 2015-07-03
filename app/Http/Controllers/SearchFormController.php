@@ -14,7 +14,6 @@ class SearchFormController extends Controller {
 	{
 
 		$townships = DB::select(DB::raw("SELECT * FROM township WHERE state_divsion_id=".Request::input('id')));		
-
 		$response = array(
 		   	'township' => $townships
 		);
@@ -22,6 +21,7 @@ class SearchFormController extends Controller {
 	   	$response = Response::json($response);
 		$response->header('Content-Type', 'application/json');
 		return $response;
+	
 	}
 
 

@@ -3,6 +3,7 @@
 use Redirect;
 use Input;
 use Session;
+//use Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -10,16 +11,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TypeReportsController extends Controller {
-
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-
-		if((!Input::get('btn_search'))) {
+		$state_id = "";
+		$township_id = "";
+		$academic_year = "";
+		
+		if(!$request->has('btn_search')) {
 
 		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
 
@@ -64,19 +67,11 @@ class TypeReportsController extends Controller {
 	 */
 	public function create(Request $request)
 	{
-	
-		var_dump($request->input('btn_search'));
-		//die();
-		if($request->input('btn_search')!=null)
-		{
-			
-			if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			echo "true";
-			//return Redirect::action('TypeReportsController@index');
-		}
-		}	
+		if(!$request->has('btn_search')) {
+		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
+			return Redirect::action('TypeReportsController@index');
+		}}	
 		else {
-			echo "true";
 			return view('students.type_report');
 		}
 		
@@ -98,11 +93,15 @@ class TypeReportsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show()
+	public function show(Request $request)
 	{
 		try{
-
-			if((!Input::get('btn_search'))) {
+		
+		$state_id = "";
+		$township_id = "";
+		$academic_year = "";
+		
+		if($request->input('btn_search') != NULL) {
 
 		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
 

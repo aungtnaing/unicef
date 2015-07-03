@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 use Redirect;
 use Input;
 use Session;
+//use Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PermenantTemporaryController extends Controller {
@@ -13,18 +17,21 @@ class PermenantTemporaryController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-
-		if (!Input::get('btn_search')) {
-			if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
+		$state_id = "";
+		$township_id = "";
+		$academic_year = "";
+		
+		if(!$request->has('btn_search')) {
+			
+		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
 			$state_id = Session::get('state_id');
 			$township_id = Session::get('township_id');
 			$academic_year = Session::get('academic_year');
 		}
 		}
-		
 		else
 		{
 			$state_id = Input::get('state_id');
@@ -32,8 +39,8 @@ class PermenantTemporaryController extends Controller {
 			$academic_year = Input::get('academic_year');
 			
 		}
-		if (isset($state_id)) {
-
+	
+	if($state_id && $township_id &&	$academic_year) {	
 		if(isset($township_id))
 		{
 			$q = "SELECT *";
@@ -70,26 +77,21 @@ class PermenantTemporaryController extends Controller {
 		$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 		
 		return view('students.classroom', compact('classroom', 'rural_walls', 'urban_walls', 'region'));
-		}
-		else
-		{
-			return Redirect::route('TypeReportList');
-		}
-		
-	}
+	}	
+}
 
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
 	 */
-	public function create()
-	{
-		if (!Input::get('btn_search')) {
+	public function create(Request $request)
+	{ 
+		if($request->input('btn_search') != NULL) {
 		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
 			return Redirect::action('PermenantTemporaryController@index');
 			
-		} }else {
+		} }else { 
 			return view('students.classroom');
 		}
 		
@@ -117,6 +119,10 @@ class PermenantTemporaryController extends Controller {
 	{
 		
 		//try{
+		$state_id = "";
+		$township_id = "";
+		$academic_year = "";
+		
 		if(!Input::get('btn_search')){
 		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
 		{
@@ -130,7 +136,7 @@ class PermenantTemporaryController extends Controller {
 			$township_id = Input::get('township_id');
 			$academic_year = Input::get('academic_year');
 		} 
-
+	
 		if($township_id) {
 
 			$q = "SELECT *";

@@ -18,9 +18,11 @@ class ComposerServiceProvider extends ServiceProvider {
 
 			$state = DB::select('select * from state_division');
 			
+			$town = DB::select('select * from township');
+			
 			$academic = DB::select('select * from academicyear');
 
-			$view->with(compact('state', 'academic'));
+			$view->with(compact('state', 'academic', 'town'));
 		
 		});
 		

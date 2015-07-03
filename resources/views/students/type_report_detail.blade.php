@@ -54,7 +54,7 @@
 	</table>
 
 	<?php 
-		if (count($type_report_detail)>0) {
+		if (isset($type_report_detail) && count($type_report_detail)>0) {
 			for($i = 0; $i < count($type_report_detail); $i++) {
 
 			if($type_report_detail[$i]->location == "Rural") {
