@@ -26,7 +26,7 @@
 		<form action="{{ URL::route('percentage_of_oversized_classes') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.level_form')
 			@include('students.search_form')&nbsp;
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportList') }}'" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('percentage_of_oversized_classes') }}'" />
 			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
 		</form>
 	</div><br/>

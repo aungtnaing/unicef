@@ -14,20 +14,12 @@ class PromotionRateGrade5911Controller extends Controller {
 	 */
 	public function index()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-			$pre_year=Session::get('previous_year');
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			$pre_year=Session::get('previous_year');	
-		}
+		
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+		$pre_year=Session::get('previous_year');	
+		
 		try {
 			
 			if(isset($township_id)) {
@@ -67,11 +59,8 @@ class PromotionRateGrade5911Controller extends Controller {
 	 */
 	public function create()
 	{
-		if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
-			return Redirect::action('PromotionRateGrade5911Controller@index');
-		} else {
-			return view('student_flow_rate.PromotionRateGrade5911');
-		}
+		
+		return view('student_flow_rate.PromotionRateGrade5911');
 		
 	}
 

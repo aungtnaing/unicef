@@ -12,32 +12,17 @@ class PercentGradeOneIntakeController extends Controller
 	public function create()
 	{
 
-		if(!Input::get('btn_search')){	
-		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			return Redirect::action('PercentGradeOneIntakeController@search');
-		}} else {
-			return view('gross.gradeonepercent');
-		}
-	
+		return view('gross.gradeonepercent');
+		
 	}
 
 	public function search()
 	{
-		if (!Input::get('btn_search')) {
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state = Session::get('state_id');
-			$town = Session::get('township_id');
-			$year = Session::get('academic_year');
-		}}
-		else
-		{
-			$state = Input::get('state_id');
-			$town = Input::get('township_id');
-			$year = Input::get('academic_year');
-			
-		}
 		
+		$state = Input::get('state_id');
+		$town = Input::get('township_id');
+		$year = Input::get('academic_year');
+			
 		if($town) {
 
 			$q = "SELECT *";
@@ -69,21 +54,10 @@ class PercentGradeOneIntakeController extends Controller
 	public function show()
 	{
 
-		if (!Input::get('btn_search')) {
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state = Session::get('state_id');
-			$town = Session::get('township_id');
-			$year = Session::get('academic_year');
-		}}
-		else
-		{
-			$state = Input::get('state_id');
-			$town = Input::get('township_id');
-			$year = Input::get('academic_year');
+		$state = Input::get('state_id');
+		$town = Input::get('township_id');
+		$year = Input::get('academic_year');
 			
-		}
-		
 		if($town) {
 
 			$q = "SELECT *";

@@ -26,7 +26,7 @@ Route::get('attendancelist', array('as' => 'StdAttendance', 'uses' => 'StudentAt
 Route::post('attendancelist', array('as' => 'StdAttendanceList', 'uses' => 'StudentAttendanceController@index'));
 
 /** School Type Report **/
-Route::any('type_report_list',array('as' => 'TypeReportList', 'uses' => 'TypeReportsController@index'));
+Route::post('type_report_list',array('as' => 'TypeReportList', 'uses' => 'TypeReportsController@index'));
 
 Route::get('school_informations', array('as' => 'TypeReport', 'uses' => 'TypeReportsController@create'));
 
@@ -35,21 +35,21 @@ Route::post('type_export_excel', array('as' => 'type_report_export', 'uses' => '
 /** School Type Report Detail **/
 Route::get('school_information_detail', array('as' => 'TypeReportDetail', 'uses' => 'TypeReportDetailController@create'));
 
-Route::any('school_information_detail', array('as' => 'TypeReportDetailList', 'uses' => 'TypeReportDetailController@index'));
+Route::post('school_information_detail', array('as' => 'TypeReportDetailList', 'uses' => 'TypeReportDetailController@index'));
 
 Route::post('school_information_detail_export', array('as' => 'TypeReportDetailListExport', 'uses' => 'TypeReportDetailController@show'));
 
 /** Perminent/Temporary Classroom **/
 Route::get('perminent_temporary_classroom', array('as' => 'calssroom', 'uses' => 'PermenantTemporaryController@create'));
 
-Route::any('perminent_temporary_classroom_list', array('as' => 'calssroom_list', 'uses' => 'PermenantTemporaryController@index'));
+Route::post('perminent_temporary_classroom_list', array('as' => 'calssroom_list', 'uses' => 'PermenantTemporaryController@index'));
 
 Route::post('perminent_temporary_classroom_export', array('as' => 'calssroom_list_export', 'uses' => 'PermenantTemporaryController@show'));
 
 /** Perminent/Temporary Classroom Detail **/
 Route::get('perminent_temporary_classroom_detail', array('as' => 'calssroom_detail', 'uses' => 'PerminentTemporaryDetailController@create'));
 
-Route::any('perminent_temporary_classroom_detail', array('as' => 'calssroom_detail_list', 'uses' => 'PerminentTemporaryDetailController@index'));
+Route::post('perminent_temporary_classroom_detail', array('as' => 'calssroom_detail_list', 'uses' => 'PerminentTemporaryDetailController@index'));
 
 Route::post('perminent_temporary_classroom_detail_export', array('as' => 'calssroom_detail_export', 'uses' => 'PerminentTemporaryDetailController@show'));
 
@@ -108,6 +108,8 @@ Route::get('sanitationfrm', array('as' => 'StdSanitation', 'uses' => 'Sanitation
 
 Route::post('sanitationfrm', array('as' => 'SearchStdSanitation', 'uses' => 'SanitationStudentRatioController@search'));
 
+Route::post('sanitationfrm_export', array('as' => 'SearchStdSanitation_excel', 'uses' => 'SanitationStudentRatioController@export'));
+
 /** Student Enrollment **/
 Route::get('enrollmentfrm', array('as' => 'StdEnrollment', 'uses' => 'StudentEnrollmentController@create'));
 
@@ -129,14 +131,14 @@ Route::post('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownshipSe
 /** Gross Enrollment Ratio **/
 Route::get('grade_one_per',array('as' => 'GradeOnePer','uses' => 'PercentGradeOneIntakeController@create'));
 
-Route::any('grade_one_per',array('as' => 'SearchGradeOnePer','uses' => 'PercentGradeOneIntakeController@search'));
+Route::post('grade_one_per',array('as' => 'SearchGradeOnePer','uses' => 'PercentGradeOneIntakeController@search'));
 
 Route::post('grade_one_per_excel',array('as' => 'ExcelGradeOnePer','uses' => 'PercentGradeOneIntakeController@show'));
 
 
 Route::get('percent_girls', array('as' => 'PercentGrilLevel','uses' => 'PercentGirlLevelController@create'));
 
-Route::any('percent_girls', array('as' => 'SearchPercentGrilLevel','uses' => 'PercentGirlLevelController@search'));
+Route::post('percent_girls', array('as' => 'SearchPercentGrilLevel','uses' => 'PercentGirlLevelController@search'));
 
 Route::post('percent_girls_export', array('as' => 'ExportPercentGrilLevel','uses' => 'PercentGirlLevelController@show'));
 

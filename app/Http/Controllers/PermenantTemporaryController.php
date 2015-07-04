@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Redirect;
 use Input;
 use Session;
-//use Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,67 +16,48 @@ class PermenantTemporaryController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index()
 	{
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
 		
-		if(!$request->has('btn_search')) {
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
 			
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			
-		}
-	
-	if($state_id && $township_id &&	$academic_year) {	
-		if(isset($township_id))
-		{
-			$q = "SELECT *";
-		}
-		
-		 else {
-		
-			$q = "SELECT state_id, state_division";
-		
-		}
-	
-		$q .= " FROM v_state_township WHERE (state_id = '".$state_id."' OR ''='".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
-		
-		$region = DB::select(DB::raw($q));
-		
-		$classroom = DB::select(DB::raw("SELECT s.location, s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level, s.location ORDER BY s.sort_code ASC"));
+			if(isset($township_id)) {
 
-		foreach ($classroom as $class) {
+				$q = "SELECT *";
 			
-			if($class->location == "Rural") {
-				$rural_level_id[] = $class->school_level_id;
+			} else {
+			
+				$q = "SELECT state_id, state_division";
+			
 			}
+		
+			$q .= " FROM v_state_township WHERE (state_id = '".$state_id."' OR ''='".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
+			$region = DB::select(DB::raw($q));
+			
+			$classroom = DB::select(DB::raw("SELECT s.location, s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level, s.location ORDER BY s.sort_code ASC"));
 
-			if($class->location == "Urban") {
-				$urban_level_id[] = $class->school_level_id;
+			foreach ($classroom as $class) {
+				
+				if($class->location == "Rural") {
+					$rural_level_id[] = $class->school_level_id;
+				}
+
+				if($class->location == "Urban") {
+					$urban_level_id[] = $class->school_level_id;
+				}
 			}
-		}
-		
-		$rural_levels_id = "'".implode("','", $rural_level_id)."'";
-		$urban_levels_id = "'".implode("','", $urban_level_id)."'";
-		
-		$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$rural_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			
+			$rural_levels_id = "'".implode("','", $rural_level_id)."'";
+			$urban_levels_id = "'".implode("','", $urban_level_id)."'";
+			
+			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$rural_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 
-		$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 		
-		return view('students.classroom', compact('classroom', 'rural_walls', 'urban_walls', 'region'));
-	}	
+		return view('students.classroom', compact('classroom', 'rural_walls', 'urban_walls', 'region'));	
 }
 
 	/**
@@ -85,15 +65,11 @@ class PermenantTemporaryController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create(Request $request)
+	public function create()
 	{ 
-		if($request->input('btn_search') != NULL) {
-		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			return Redirect::action('PermenantTemporaryController@index');
-			
-		} }else { 
-			return view('students.classroom');
-		}
+		
+		return view('students.classroom');
+		
 		
 	}
 
@@ -119,24 +95,11 @@ class PermenantTemporaryController extends Controller {
 	{
 		
 		//try{
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
-		
-		if(!Input::get('btn_search')){
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-		} 
-	
+				
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+		 
 		if($township_id) {
 
 			$q = "SELECT *";

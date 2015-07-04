@@ -11,30 +11,20 @@ class StudentEnrollmentController extends Controller
 {
 	public function create()
 	{
-		/*if((Session::get('state_id') && Session::get('academic_year')) || Session::get('township_id')) {
-			return Redirect::action('StudentEnrollmentController@search');
-		} else {*/
+		
 		return view('students.enrollment');
-		//}
+		
 	}
 
 	public function search()
 	{
 		/*try
 		{*/
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
+		
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
 			
-		}
 		if(isset($township_id)) {
 
 			$q = "SELECT *";
@@ -65,19 +55,11 @@ class StudentEnrollmentController extends Controller
 
 	public function export()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
+		
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
 			
-		}
 		if(isset($township_id)) {
 
 			$q = "SELECT *";

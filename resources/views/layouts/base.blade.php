@@ -179,9 +179,9 @@
                         
                         <li class="nav-header hidden-tablet">Students/Teacher</li>
                                                 
-                        <li><a class="ajax-link finished" href="{{ URL::route('calssroom') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Student/Permanent Classroom ratio</span></a></li>
+                        <li><a class="ajax-link finished" href="{{ URL::route('calssroom') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Permenent/Temporary classroom ratio</span></a></li>
                         
-                        <li><a class="ajax-link finished" href="{{ URL::route('calssroom_detail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Student/Temporary Classroom ratio</span></a></li>
+                        <li><a class="ajax-link finished" href="{{ URL::route('calssroom_detail') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Permenent/Temporary Classroom detail ratio</span></a></li>
                         
                         <!-- Oversized Classes -->
                        <li><a class="ajax-link finished" href="{{ URL::route('percentage_of_oversized_classes') }}" title="(Number of oversized classes (classes with over 40 pupils) at the specified level / Total number of classes or sections at the same level) * 100"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Oversize Classes (Over 40 Pupils) </span></a></li>

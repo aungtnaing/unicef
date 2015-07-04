@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Redirect;
 use Input;
 use Session;
-//use Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -18,78 +17,46 @@ class TypeReportDetailController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index()
 	{
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
 		
-		if(!$request->has('btn_search')) {
-
-		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
-
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		
-		}}
-		else
-		{
-
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
 			
-		}
 		
-	if($state_id && $township_id &&	$academic_year) {
+		if($state_id && $township_id &&	$academic_year) {
 			
-		if($township_id) {
+			if($township_id) {
 
-			$q = "SELECT *";
+				$q = "SELECT *";
+			
+			} else {
+			
+				$q = "SELECT state_id, state_division";
+			
+			}
 		
-		} else {
-		
-			$q = "SELECT state_id, state_division";
-		
-		}
-	
-		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
-		
-		$region = DB::select(DB::raw($q));
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
+			$region = DB::select(DB::raw($q));
 
-		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
-		
-		}
+			$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
+			
+			}
 		
 		return view('students.type_report_detail', compact('type_report_detail', 'region'));
 	
 	}
 
-	public function export(Request $request)
+	public function export()
 	{
 		
-		//try{
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
+		$state_id=Input::get('state_id');
+		$township_id=Input::get('township_id');
+		$academic_year=Input::get('academic_year');
 			
-		if($request->input('btn_search') != NULL) {
-		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
-
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
 		
-		}}
-		else
-		{
-			$state_id=Input::get('state_id');
-			$township_id=Input::get('township_id');
-			$academic_year=Input::get('academic_year');
-			
-		}
-
 		if(isset($state_id) || isset($township_id)) {
 			
 			if(isset($township_id)) {
@@ -243,15 +210,11 @@ class TypeReportDetailController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create(Request $request)
+	public function create()
 	{
-		if($request->input('btn_search') != NULL) {
-		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			return Redirect::action('TypeReportDetailController@index');
-		}} else {
-			return view('students.type_report_detail');
-		}
-	
+		
+		return view('students.type_report_detail');
+		
 	}
 
 	/**

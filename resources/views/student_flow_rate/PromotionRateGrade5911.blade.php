@@ -40,8 +40,9 @@
 		</form>
 	</div><br/>
 
-<
 
+<?php if (isset($region)) { ?>
+	
 	<table class="table table-bordered">
 		<tr>
 			<th colspan="2" ><center>Township Education Management System</center></th>
@@ -199,9 +200,11 @@
 </table>
 
 <?php 
-	}} 
-		if(isset($record)) echo $record;
-	//} 
+	
+	}}} 
+	
+	if(isset($record)) echo $record;
+	
 ?>
 </div>
 

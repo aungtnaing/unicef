@@ -11,33 +11,19 @@ class PercentGirlLevelController extends Controller
 {
 	public function create()
 	{
-		if (!Input::get('btn_search')) {
-		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			return Redirect::action('PercentGirlLevelController@search');
-		}}else {
-			return view('gross.percent_girls_levels');
-		}
 		
+		return view('gross.percent_girls_levels');
+				
 	}
 
 	public function search()
 	{
-		$school_level=Input::get('school_level');
-		if(!Input::get('btn_search')){
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			
-		}
 		
+		$school_level=Input::get('school_level');
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+			
 		if($township_id) {
 
 			$q = "SELECT *";
@@ -87,22 +73,12 @@ class PercentGirlLevelController extends Controller
 
 	public function show()
 	{
-		$school_level=Input::get('school_level');
-		if(!Input::get('btn_search')){
-		if (((Session::has('state_id')) && Session::has('academic_year')) || Session::has('township_id'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		}}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			
-		}
 		
+		$school_level=Input::get('school_level');
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+			
 		if($township_id) {
 
 			$q = "SELECT *";

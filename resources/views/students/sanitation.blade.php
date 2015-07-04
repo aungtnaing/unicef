@@ -21,13 +21,13 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportList') }}'" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchStdSanitation') }}'" />
 			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
 		</form>&nbsp;
 	</div><br/>
 
 
-	<?php try {
+	<?php //try {
 		if(isset($region)) { ?>
 	<table class="table table-bordered">
 		<tr>
@@ -107,19 +107,53 @@
 		</tr>
 
 		@for($row=0;$row<count($dtSchool);$row++)
-		<?php if($dtSchool[$row]->location == "Rural" && $dtSchool[$row]->school_level == $rural_levels[$k]) { ?>
+		<?php if($dtSchool[$row]->location == "Rural" && $dtSchool[$row]->school_level == $rural_levels[$k]) { 
+				$total_latrine=$tLatrine[$row]->latrine_totalboy+$tLatrine[$row]->latrine_totalgirl+$tLatrine[$row]->latrine_totalboth;
+
+				$total_good_latrine=$total_latrine-$tLatrine[$row]->latrine_repair_boy+$tLatrine[$row]->latrine_repair_girl+$tLatrine[$row]->latrine_repair_both;
+
+			?>
 			<tr>
 				<td>{{ $dtSchool[$row]->school_no }}</td>
 				<td>{{ $dtSchool[$row]->school_name }}</td>
-				<td>{{ $tLatrine[$row]->total_latrine }}</td>
-				<td>{{ $tLatrine[$row]->total_good_latrine }}</td>
+				<td>{{ $total_latrine }}</td>
+				<td>{{ $total_good_latrine }}</td>
 				<td>{{ $tStudents[$row]->total_students }}</td>
-				<td style="backgroun-color:#ededed">{{ ($tLatrine[$row]->total_latrine!=0 )? $tStudents[$row]->total_students / $tLatrine[$row]->total_latrine :'0' }}</td>
-				<td style="backgroun-color:#ededed">{{ ($tLatrine[$row]->total_good_latrine)? $tStudents[$row]->total_students / $tLatrine[$row]->total_good_latrine : '0' }} </td>
+				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? $tStudents[$row]->total_students / $total_latrine :'0' }}</td>
+				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? $tStudents[$row]->total_students / $total_good_latrine : '0' }} </td>
 				<td>-</td>
-				<td>{{ $tLatrine[$row]->Availability }}</td>
+				<td>
+					<?php
+						if ($tLatrine[$row]->enough_whole_year + $tLatrine[$row]->enough_other_use ==2) 
+						{
+							echo "A";
+						}
+						elseif ($tLatrine[$row]->enough_whole_year+$tLatrine[$row]->enough_other_use==1) 
+						{
+							echo "B";
+						}
+						else
+						{
+							echo "C";
+						}
+					?>	
+				</td>
 				<td>{{ $tLatrine[$row]->quality }}</td>
-				<td>{{ $tLatrine[$row]->safe_to_drink }}</td>
+				<td>
+					<?php
+						if ($tLatrine[$row]->safe_to_drink=='1') 
+						{
+							echo "Yes";
+						}
+						else
+						{
+							echo "No";
+						}
+						
+					?>
+				
+
+				</td>
 			</tr>	
 		<?php } ?> 
 		@endfor
@@ -166,19 +200,53 @@
 		</tr>
 
 		@for($j=0;$j<count($dtSchool);$j++)
-		<?php if($dtSchool[$j]->location == "Urban" && $dtSchool[$j]->school_level == $rural_levels[$k]) { ?>
+		<?php if($dtSchool[$j]->location == "Urban" && $dtSchool[$j]->school_level == $urban_levels[$k]) { 
+			$total_latrine=$tLatrine[$j]->latrine_totalboy+$tLatrine[$j]->latrine_totalgirl+$tLatrine[$j]->latrine_totalboth;
+
+				$total_good_latrine=$total_latrine-$tLatrine[$j]->latrine_repair_boy+$tLatrine[$j]->latrine_repair_girl+$tLatrine[$j]->latrine_repair_both;
+
+			?>
 			<tr>
 				<td>{{ $dtSchool[$j]->school_no }}</td>
 				<td>{{ $dtSchool[$j]->school_name }}</td>
-				<td>{{ $tLatrine[$j]->total_latrine }}</td>
-				<td>{{ $tLatrine[$j]->total_good_latrine }}</td>
+				<td>{{ $total_latrine }}</td>
+				<td>{{ $total_good_latrine }}</td>
 				<td>{{ $tStudents[$j]->total_students }}</td>
-				<td style="backgroun-color:#ededed">{{ ($tLatrine[$j]->total_latrine!=0 )? $tStudents[$j]->total_students / $tLatrine[$j]->total_latrine :'0' }}</td>
-				<td style="backgroun-color:#ededed">{{ ($tLatrine[$j]->total_good_latrine)? $tStudents[$j]->total_students / $tLatrine[$j]->total_good_latrine : '0' }} </td>
+				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? $tStudents[$j]->total_students / $total_latrine :'0' }}</td>
+				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? $tStudents[$j]->total_students / $total_good_latrine : '0' }} </td>
 				<td>-</td>
-				<td>{{ $tLatrine[$j]->Availability }}</td>
+				<td>
+					<?php
+						if ($tLatrine[$j]->enough_whole_year + $tLatrine[$j]->enough_other_use ==2) 
+						{
+							echo "A";
+						}
+						elseif ($tLatrine[$j]->enough_whole_year+$tLatrine[$j]->enough_other_use==1) 
+						{
+							echo "B";
+						}
+						else
+						{
+							echo "C";
+						}
+					?>	
+				</td>
 				<td>{{ $tLatrine[$j]->quality }}</td>
-				<td>{{ $tLatrine[$j]->safe_to_drink }}</td>
+				<td>
+					<?php
+						if ($tLatrine[$j]->safe_to_drink=='1') 
+						{
+							echo "Yes";
+						}
+						else
+						{
+							echo "No";
+						}
+						
+					?>
+				
+
+				</td>
 			</tr>	
 		<?php } ?> 
 		@endfor
@@ -197,10 +265,10 @@
 		}
 	}
 }
-}
+/*}
 	catch (Exception $e) {
 		echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-	}
+	}*/
 	?>
 </div>
 

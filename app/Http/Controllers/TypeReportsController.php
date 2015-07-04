@@ -3,7 +3,6 @@
 use Redirect;
 use Input;
 use Session;
-//use Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -16,30 +15,13 @@ class TypeReportsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index()
 	{
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
 		
-		if(!$request->has('btn_search')) {
-
-		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
-
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		
-		}}
-		else
-		{
-
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
 			
-		}
-		
 		if($township_id) {
 
 			$q = "SELECT *";
@@ -65,15 +47,10 @@ class TypeReportsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create(Request $request)
+	public function create()
 	{
-		if(!$request->has('btn_search')) {
-		if((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id')) {
-			return Redirect::action('TypeReportsController@index');
-		}}	
-		else {
-			return view('students.type_report');
-		}
+		
+		return view('students.type_report');
 		
 	}
 
@@ -93,32 +70,15 @@ class TypeReportsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Request $request)
+	public function show()
 	{
 		try{
 		
-		$state_id = "";
-		$township_id = "";
-		$academic_year = "";
-		
-		if($request->input('btn_search') != NULL) {
-
-		if(((Session::has('state_id') && Session::has('academic_year')) || Session::has('township_id'))) {
-
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-		
-		}}
-		else
-		{
-
 			$state_id = Input::get('state_id');
 			$township_id = Input::get('township_id');
 			$academic_year = Input::get('academic_year');
 			
-		}
-			if(isset($township_id)) {
+		if(isset($township_id)) {
 
 			$q = "SELECT state_division, township_name";
 		
