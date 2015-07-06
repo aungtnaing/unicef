@@ -1,3 +1,17 @@
+	<?php 
+		if(Input::get('btn_search')) {
+
+			Session::forget('state_id');
+			Session::forget('township_id');
+			Session::forget('academic_year');
+			
+			Session::put('state_id', Input::get('state_id'));
+			Session::put('township_id', Input::get('township_id'));
+			Session::put('academic_year', Input::get('academic_year'));
+
+		} 
+	?>
+		
 
 		State/Region&nbsp;
 			<select name="state_id" id='region_id' style="width:20%;">
@@ -41,7 +55,7 @@
 					
 						<option value="<?php echo $t->id; ?>" <?php echo $t->id == Session::get('township_id') ? ' selected="selected"' : ''; ?>>{{ $t->township_name }}</option>
 				    	
-				    	@endif
+				    @endif
 				@endforeach	
 			
 			<?php } else if(isset($region[0]->township_id)) { ?>
