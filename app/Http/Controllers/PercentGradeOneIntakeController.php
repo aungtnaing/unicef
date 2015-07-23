@@ -39,7 +39,7 @@ class PercentGradeOneIntakeController extends Controller
 		
 		try {
 			
-			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."' OR ''='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
+			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
 
 			return view('gross.gradeonepercent',compact('region','tStudents'));
 		
@@ -53,8 +53,9 @@ class PercentGradeOneIntakeController extends Controller
 
 	public function show()
 	{
-
-		$state = Input::get('state_id');
+		try
+		{
+			$state = Input::get('state_id');
 		$town = Input::get('township_id');
 		$year = Input::get('academic_year');
 			
@@ -72,7 +73,7 @@ class PercentGradeOneIntakeController extends Controller
 		
 		$region = DB::select(DB::raw($q));
 		
-			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."' OR ''='".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."' OR ''='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
+			$tStudents = DB::select(DB::raw("SELECT intake.total_boy,intake.total_girl,intake.ppeg1_boy,intake.ppeg1_girl,intake.school_id,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level FROM student_intake AS intake INNER JOIN v_school ON v_school.school_id=intake.school_id WHERE (v_school.state_divsion_id = '".$state."') AND (v_school.township_id ='".$town."' OR ''='".$town."') AND (intake.school_year='".$year."') AND intake.grade='01' GROUP BY intake.school_id ORDER BY v_school.sort_code ASC"));
 
 		foreach ($tStudents as $students) 
 		{
@@ -202,7 +203,7 @@ class PercentGradeOneIntakeController extends Controller
 							{
 								$percentages[]= "0%";
 							}
-		    				$cell->setValue($percentages[0]);
+		    				$cell->setValue(round($percentages[0],2));
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -266,7 +267,7 @@ class PercentGradeOneIntakeController extends Controller
 							{
 								$percentages[]= "0%";
 							}
-		    				$cell->setValue($percentages[0]);
+		    				$cell->setValue(round($percentages[0],2));
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -283,6 +284,13 @@ class PercentGradeOneIntakeController extends Controller
 	    	});
 
 			 })->download('xlsx');
+		}
+		catch(Exception $ex)
+		{
+			$record="<h4>There is no data.</h4>";
+			return view('gross.gradeonepercent',compact('region','record'));
+		}
+		
 	}
 }
  

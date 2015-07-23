@@ -26,6 +26,12 @@
 					<div>&nbsp;</div>
 					<div>Sanitation Reports</div>
 				</a>
+
+				<a data-rel="tooltip" title="Sanitation Reports" class="well span3 top-block" href="{{ URL::route('sanitation_facilities') }}">
+					<span class="icon32 icon-green icon-copy"></span>
+					<div>&nbsp;</div>
+					<div>Sanitation Facilities</div>
+				</a>
 			</div>
 			<br/>
 			
@@ -95,7 +101,7 @@
 					<div>% of Grade 1 intakes With Preschool Experiences</div>
 				</a>
 				
-				<a data-rel="tooltip" title="Net Intake Rate (NIR)" class="well span3 top-block" href="{{ URL::route('NetIntakeRate')}}">
+				<a data-rel="tooltip" title="Net Intake Rate (NIR)" class="well span3 top-block" href="#">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Net Intake Rate (NIR)</div>
@@ -156,14 +162,14 @@
 					<div>Promotion Rate for Grade 5 or 9 or 11</div>
 				</a>
 
-				<a data-rel="tooltip" title="Repetition Rate" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Repetition Rate" class="well span3 top-block" href="{{ URL::route('repetition_rate') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Repetition Rate</div>
 					<div>&nbsp;</div>
 				</a>
 
-				<a data-rel="tooltip" title="Dropout Rate" class="well span3 top-block" href="#">
+				<a data-rel="tooltip" title="Dropout Rate" class="well span3 top-block" href="{{ URL::route('dropout_rate') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Dropout Rate</div>
@@ -219,7 +225,7 @@
 
 			<div class="sortable row-fluid">
 				
-				<a data-rel="tooltip" title="Percentage of Schools with Library" class="well span3 top-block" href="{{ URL::route('pupil_class_ratio_by_grade') }}">
+				<a data-rel="tooltip" title="Percentage of Schools with Library" class="well span3 top-block" href="{{ URL::route('percentage_school_library') }}">
 					<span class="icon32 icon-green icon-copy"></span>
 					<div>&nbsp;</div>
 					<div>Percentage of Schools with Library</div>

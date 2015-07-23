@@ -37,7 +37,7 @@ class PermenantTemporaryController extends Controller {
 			
 			$region = DB::select(DB::raw($q));
 			
-			$classroom = DB::select(DB::raw("SELECT s.location, s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level, s.location ORDER BY s.sort_code ASC"));
+			$classroom = DB::select(DB::raw("SELECT s.location, s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year WHERE (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level, s.location ORDER BY s.sort_code ASC"));
 
 			foreach ($classroom as $class) {
 				
@@ -53,12 +53,12 @@ class PermenantTemporaryController extends Controller {
 			$rural_levels_id = "'".implode("','", $rural_level_id)."'";
 			$urban_levels_id = "'".implode("','", $urban_level_id)."'";
 			
-			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$rural_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$rural_levels_id}) AND (v.state_divsion_id = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 
-			$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 		
-		return view('students.classroom', compact('classroom', 'rural_walls', 'urban_walls', 'region'));	
-}
+			return view('students.classroom', compact('classroom', 'rural_walls', 'urban_walls', 'region'));	
+	}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -245,7 +245,7 @@ class PermenantTemporaryController extends Controller {
 		    					});	
 																
 								if($rural_building[$w]['rooms']){
-									$ratio=(int)($totalstd/$rural_building[$w]['rooms']);
+									$ratio=round($totalstd/$rural_building[$w]['rooms'],2);
 									$sheet->cell('D'.$count,function($cell)use($ratio) {
 			    					$cell->setValue($ratio);
 			    					$cell->setFontSize(18);
@@ -313,7 +313,7 @@ class PermenantTemporaryController extends Controller {
 		    					});	
 																
 								if($urban_building[$w]['rooms']){
-									$ratio=floor($totalstd/$urban_building[$w]['rooms']);
+									$ratio=round($totalstd/$urban_building[$w]['rooms'],2);
 									$sheet->cell('D'.$count,function($cell)use($ratio) {
 			    					$cell->setValue($ratio);
 			    					$cell->setFontSize(18);

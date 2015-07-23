@@ -40,7 +40,7 @@ class PercentGirlLevelController extends Controller
 
 		try
 		{
-			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."' OR ''='".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."' OR ''='".$academic_year."')  ORDER BY sort_code,school_id ASC"));
+			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."')  ORDER BY sort_code,school_id ASC"));
 
 		foreach ($dtSchool as $class) {
 			
@@ -49,16 +49,16 @@ class PercentGirlLevelController extends Controller
 		}
 		$schools_id = "'".implode("','", $school_id)."'";
 		if(Input::get('school_level')=="Primary"){
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
 		}			
 		elseif (Input::get('school_level')=="Middle") {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
 		}
 		elseif (Input::get('school_level')=="High") {
-		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='10' OR grade='11') GROUP BY school_id"));
+		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') and (grade='10' OR grade='11') GROUP BY school_id"));
 		 }
 		 else {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') GROUP BY school_id"));
 		}
 		return view('gross.percent_girls_levels',compact('region','dtSchool','tStudents','school_level','state','academic'));
 		}
@@ -94,7 +94,7 @@ class PercentGirlLevelController extends Controller
 		$region = DB::select(DB::raw($q));
 				try
 		{
-			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."' OR ''='".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."' OR ''='".$academic_year."')  ORDER BY sort_code,school_id ASC"));
+			$dtSchool = DB::select(DB::raw("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."' OR ''='".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."')  ORDER BY sort_code,school_id ASC"));
 
 		foreach ($dtSchool as $class) {
 			
@@ -103,16 +103,16 @@ class PercentGirlLevelController extends Controller
 		}
 		$schools_id = "'".implode("','", $school_id)."'";
 		if(Input::get('school_level')=="Primary"){
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' ) and (grade='01' OR grade='02' OR grade='03' OR grade='04' OR grade='05')  GROUP BY school_id"));
 		}			
 		elseif (Input::get('school_level')=="Middle") {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') and (grade='06' OR grade='07' OR grade='08' OR grade='09') GROUP BY school_id"));
 		}
 		elseif (Input::get('school_level')=="High") {
-		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') and (grade='10' OR grade='11') GROUP BY school_id"));
+		 	$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') and (grade='10' OR grade='11') GROUP BY school_id"));
 		 }
 		 else {
-			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."' OR ''='".$academic_year."') GROUP BY school_id"));
+			$tStudents=DB::select(DB::raw("SELECT sum(total_boy) AS total_boy,sum(total_girl) AS total_girl FROM `student_intake` WHERE school_id IN ({$schools_id}) AND (school_year='".$academic_year."') GROUP BY school_id"));
 
 		}
 		foreach ($dtSchool as $School) {
@@ -241,7 +241,7 @@ class PercentGirlLevelController extends Controller
 							{
 								$percentages[]= "0%";
 							}
-		    				$cell->setValue($percentages[0]);
+		    				$cell->setValue(round($percentages[0],2));
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -305,7 +305,7 @@ class PercentGirlLevelController extends Controller
 							{
 								$percentages[]= "0%";
 							}
-		    				$cell->setValue($percentages[0]);
+		    				$cell->setValue(round($percentages[0],2));
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');

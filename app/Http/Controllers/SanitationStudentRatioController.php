@@ -35,7 +35,7 @@ class SanitationStudentRatioController extends Controller
 
 		$region = DB::select(DB::raw($q));
 
-		//try{
+		try{
 
 			$dtSchool = DB::select("SELECT school_id,location,school_level,school_no,school_name FROM v_school WHERE  (state_divsion_id = '".$state_id."' OR ''='".$state_id."') AND (township_id ='".$township_id."' OR ''='".$township_id."') AND (school_year='".$academic_year."' OR ''='".$academic_year."')  ORDER BY sort_code,school_id ASC");
 
@@ -46,19 +46,24 @@ class SanitationStudentRatioController extends Controller
 
 			}
 			
-			$schools_id = "'".implode("','", $school_id)."'";		
-			
-			
+			if(isset($school_id)) {
+				
+				$schools_id = "'".implode("','", $school_id)."'";		
+
 			$tStudents=DB::select(DB::raw("SELECT total_boy+total_girl AS total_students from student_intake WHERE school_id IN ({$schools_id}) GROUP BY school_id"));
 			
 			$tLatrine=DB::select(DB::raw("SELECT  latrine_totalboy,latrine_totalgirl,latrine_totalboth,latrine_repair_boy,latrine_repair_girl,latrine_repair_both,enough_whole_year,enough_other_use,main_water_safety AS safe_to_drink,main_water_source AS quality FROM school_infrastructure WHERE school_id IN ({$schools_id}) AND school_year='".$academic_year."'"));
 				
 			return view('students.sanitation',compact('region','dtSchool','tStudents','tLatrine'));
-		/*}
+
+			} else {
+				return view('students.sanitation');
+			}
+		}
 		catch(Exception $ex){
 			$record="Please check for searching again.";
 			return view('students.sanitation',compact('region','record'));
-		}*/
+		}
 		
 		
 	}

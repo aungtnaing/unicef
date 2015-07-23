@@ -15,29 +15,12 @@ class PromotionRateGradeController extends Controller
 
 	public function search()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-			$pre_year=Session::get('previous_year');
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			$pre_year=Session::get('previous_year');	
-		}
-		/*$state=Input::get('state_id');
-		$town=Input::get('township_id');
-		$year=Input::get('academic_year');*/
-		//$pre_year=Input::get('previous_year');
-		/*$grade=Input::get('grade_id');*/
-		//$pre_grade=Input::get('grade_id')-1;
-		//$pre_grade="0".$pre_grade;
 		
-
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+		$pre_year= Input::get('previous_year');	
+		
 		if(isset($township_id)) {
 
 			$q = "SELECT *";
@@ -51,11 +34,11 @@ class PromotionRateGradeController extends Controller
 		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 		$region = DB::select(DB::raw($q));
 		try{
-			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$academic_year."' OR ''='".$academic_year."') AND student_intake.grade!='01' GROUP BY student_intake.grade,v_school.location"));
+			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."'AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$academic_year."' AND student_intake.grade!='01' GROUP BY student_intake.grade"));
 
-		$pre_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade,v_school.location FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id WHERE (v_school.state_divsion_id ='".$state_id."' OR ''='".$state_id."') AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND (student_intake.school_year='".$pre_year."' OR ''='".$pre_year."') AND student_intake.grade!='11' GROUP BY student_intake.grade,v_school.location"));		
-		 
-		return view('flow.promotion_rate_grade',compact('region','new_total','pre_total'));		
+			$pre_total=DB::select(DB::raw("SELECT SUM(total_boy)+SUM(total_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."' AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$pre_year."' AND student_intake.grade!='11' GROUP BY student_intake.grade"));
+
+			return view('flow.promotion_rate_grade',compact('region','new_total','pre_total'));		
 		}
 		catch(Exception $ex)
 		{
@@ -67,22 +50,12 @@ class PromotionRateGradeController extends Controller
 
 	public function show()
 	{
-		if (((Session::get('state_id')) && Session::get('academic_year')) || Session::get('township_id') || Session::get('previous_year'))
-		{
-			$state_id = Session::get('state_id');
-			$township_id = Session::get('township_id');
-			$academic_year = Session::get('academic_year');
-			$pre_year=Session::get('previous_year');
-		}
-		else
-		{
-			$state_id = Input::get('state_id');
-			$township_id = Input::get('township_id');
-			$academic_year = Input::get('academic_year');
-			$pre_year=Session::get('previous_year');	
-		}
 		
-
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+		$pre_year=Session::get('previous_year');	
+		
 		if(Input::get('township_id')) {
 
 			$q = "SELECT state_division, township_name";

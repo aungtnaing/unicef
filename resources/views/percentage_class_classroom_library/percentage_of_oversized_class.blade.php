@@ -10,11 +10,11 @@
 
         </li>
 
-        <div class="box-icon" style='margin-top:-4px;'>
+   <!--      <div class="box-icon" style='margin-top:-4px;'>
 			<a href="#" class="btn btn-setting btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-minimize btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-close btn-round"><i class=" icon-download-alt"></i></a>
-		</div>
+		</div> -->
 
     </ul>
 
@@ -25,9 +25,11 @@
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('percentage_of_oversized_classes') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.level_form')
-			@include('students.search_form')&nbsp;
+			@include('students.search_form')&nbsp;<br/><br/>
+			<div style="float:right;">
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('percentage_of_oversized_classes') }}'" />
-			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
+			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" />
+			</div>
 		</form>
 	</div><br/>
 
@@ -43,7 +45,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -99,8 +101,6 @@
 		<tr>
 			<th>School No.</th>
 			<th>School Name</th>
-			<th>Grade</th>
-			<th>Class</th>
 			<th><p>Number Of</p><p>Oversized Classes</p></th>
 			<th><p>Total Number Of</p><p>Classes or Sections</p></th>
 			<th><p>Percentage of</p><p>Oversized Classes</p></th>
@@ -110,26 +110,24 @@
 			for($c = 0; $c < count($sc); $c++) {
 				for ($p=0; $p < count($se) ; $p++) {
 					if($sc[$c]->location == "Rural" && $se[$p]->location == "Rural" && $sc[$c]->school_level == $rural_levels[$k]) {
-						//if($sc[$c]->school_id == $se[$p]->school_id) {
+						if($sc[$c]->school_id == $se[$p]->school_id) {
 		?>
 
 			<tr>
 				
 				<td><?php echo $sc[$c]->school_no; ?></td>
 				<td><?php echo $sc[$c]->school_name; ?></td>
-				<td><?php echo $sc[$c]->grade; ?></td>
-				<td><?php echo $sc[$c]->class; ?></td>
-				<td><?php echo $sc[$c]->total_std; ?></td>
+				<td><?php echo $sc[$c]->oversize_class; ?></td>
 				<td><?php echo $se[$p]->total_class; ?></td>
 				<td>
 					<?php
-						echo ($sc[$c]->total_std/$se[$p]->total_class) * 100;
+						echo round(($sc[$c]->oversize_class/$se[$p]->total_class) * 100, 2) . "%";
 					?>
 				</td>
 						
 			</tr>	
 	<?php 
-		}}} //} 
+		}}} } 
 	?> 
 </table>
 <?php }} ?>
@@ -156,8 +154,6 @@
 		<tr>
 			<th>School No.</th>
 			<th>School Name</th>
-			<th>Grade</th>
-			<th>Class</th>
 			<th><p>Number Of</p><p>Oversized Classes</p></th>
 			<th><p>Total Number Of</p><p>Classes or Sections</p></th>
 			<th><p>Percentage of</p><p>Oversized Classes</p></th>
@@ -167,26 +163,24 @@
 			for($c = 0; $c < count($sc); $c++) {
 				for ($p=0; $p < count($se) ; $p++) {
 					if($sc[$c]->location == "Urban" && $se[$p]->location == "Urban" && $sc[$c]->school_level == $urban_levels[$l]) {
-						//if($sc[$c]->school_id == $se[$p]->school_id) {
+						if($sc[$c]->school_id == $se[$p]->school_id) {
 		?>
 
 			<tr>
 				
 				<td><?php echo $sc[$c]->school_no; ?></td>
 				<td><?php echo $sc[$c]->school_name; ?></td>
-				<td><?php echo $sc[$c]->grade; ?></td>
-				<td><?php echo $sc[$c]->class; ?></td>
-				<td><?php echo $sc[$c]->total_std; ?></td>
+				<td><?php echo $sc[$c]->oversize_class; ?></td>
 				<td><?php echo $se[$p]->total_class; ?></td>
 				<td>
 					<?php
-						echo ($sc[$c]->total_std/$se[$p]->total_class) * 100;
+						echo round(($sc[$c]->oversize_class/$se[$p]->total_class) * 100, 2) . "%";
 					?>
 				</td>
 						
 			</tr>	
 	<?php 
-		}}}//} 
+		}}}} 
 	?> 
 </table>
 

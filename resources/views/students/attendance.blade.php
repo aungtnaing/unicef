@@ -10,11 +10,11 @@
 
         </li>
 
-        <div class="box-icon" style='margin-top:-4px;'>
+       <!--  <div class="box-icon" style='margin-top:-4px;'>
 			<a href="#" class="btn btn-setting btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-minimize btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-close btn-round"><i class=" icon-download-alt"></i></a>
-		</div>
+		</div> -->
 
     </ul>
 
@@ -33,7 +33,7 @@
 	</div><br/>
 
 
-<?php try{ //if(Input::get('btn_search')) { ?>
+<?php try { if(Input::get('btn_search')) { ?>
 
 	<table class="table table-bordered">
 		<tr>
@@ -155,7 +155,7 @@
 	else {
 		echo "<h4>There is no Data Record!</h4>";
 	}
-	//}
+	}
 }
 catch(\Exception $e)
 {

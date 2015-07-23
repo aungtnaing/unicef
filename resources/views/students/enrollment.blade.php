@@ -22,14 +22,14 @@
 		<form action="{{ URL::route('ExportStdEnrollment') }}" method="post" class="form-horizontal">
 			@include('students.search_form')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchStdEnrollment') }}'" />
-			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
+			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" />
 		</form>	
 	</div>
 
-	<?php //try{ 
-		if(isset($region)) { ?>
-
-	<table class="table table-bordered">
+	<?php 
+		try{ 
+		 if(isset($region)) { ?>
+			<table class="table table-bordered">
 		<tr>
 			<th colspan="2" ><center>Township Education Management System</center></th>
 		</tr>
@@ -90,14 +90,16 @@
 	@for($i=0;$i<count($dtSchool);$i++)
 	<?php if($dtSchool[$i]->school_level == $rural_levels[$row] && $dtSchool[$i]->location=="Rural") { ?>
 		<tr>
+			
 			<td>
-				{{ $dtSchool[$i]->school_no}}
+				{{ $dtSchool[$i]->school_no }}
 			</td>
 			<td>
 				{{ $dtSchool[$i]->school_name}}
 			</td>
 			<td>
 				<?php 
+
 					if($dtSchool[$i]->grade=='01')
 					{
 						echo $dtSchool[$i]->total_students;
@@ -109,31 +111,31 @@
 					$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='02') {
 						$g2=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='03') {
 						$g3=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='04') {
 						$g4=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if ($dtSchool[$i]->grade=='05') {
 						$g5=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -146,25 +148,25 @@
 					$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='07') {
 						$g7=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='08') {
 						$g8=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='09') {
 						$g9=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -178,13 +180,13 @@
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='11') {
 						$g11=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -241,7 +243,8 @@
 				{{ $dtSchool[$i]->school_name}}
 			</td>
 			<td>
-				<?php 
+				<?php
+					
 					if($dtSchool[$i]->grade=='01')
 					{
 						echo $dtSchool[$i]->total_students;
@@ -253,34 +256,37 @@
 					$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='02') {
 						$g2=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='03') {
 						$g3=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='04') {
 						$g4=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if ($dtSchool[$i]->grade=='05') {
 						$g5=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
+
 						}
+
 					}
+					
 					echo $total5=$g1+$g2+$g3+$g4+$g5;
 				?>
 				
@@ -290,25 +296,25 @@
 					$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='07') {
 						$g7=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='08') {
 						$g8=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='09') {
 						$g9=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -322,13 +328,13 @@
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='11') {
 						$g11=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -347,16 +353,14 @@
 		<?php } ?>
 		@endif
 	</table>
-	<?php //}
-		/*if (isset($record)) {
-			echo $record;
+		<?php	
 		}
 	}
-	catch(\Exception $ex){
+		catch(Exception $ex)
+		{
+			echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
+		}?>
 
-		echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-	}*/
-	 }?>
 	
 </div>
 

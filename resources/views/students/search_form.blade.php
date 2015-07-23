@@ -1,19 +1,15 @@
 	<?php 
 		if(Input::get('btn_search')) {
 
-			Session::forget('state_id');
-			Session::forget('township_id');
-			Session::forget('academic_year');
-			
 			Session::put('state_id', Input::get('state_id'));
 			Session::put('township_id', Input::get('township_id'));
 			Session::put('academic_year', Input::get('academic_year'));
-
 		} 
+
+		//dd(Session::all());
 	?>
 		
-
-		State/Region&nbsp;
+	State/Region&nbsp;
 			<select name="state_id" id='region_id' style="width:20%;">
 			
 			<?php if(Session::has('state_id')) { ?>
@@ -48,6 +44,8 @@
 		Township&nbsp;
 			<select name="township_id" id='township_id' style="width:20%;">
 
+			<option value="">--- Select One ---</option>
+
 			<?php if(Session::has('township_id')) { ?>
 
 				@foreach($town as $t)
@@ -68,10 +66,6 @@
 				    	@endif
 				@endforeach			 				
 			
-			<?php } else { ?>
-				
-				<option value="">--- Select One ---</option>
-
 			<?php } ?>
 				
 			</select>
@@ -95,5 +89,5 @@
 
 			    @endforeach
 		
-		   </select>	    	
+		   </select>   	
 			

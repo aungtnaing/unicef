@@ -137,6 +137,7 @@ return [
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -195,9 +196,9 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-        'Form'      => 'Illuminate\Html\FormFacade',
-        'HTML'      => 'Illuminate\Html\HtmlFacade',
-        'Excel'		=> 'Maatwebsite\Excel\Facades\Excel',
+	      'Form'      => 'Illuminate\Html\FormFacade',
+	      'HTML'      => 'Illuminate\Html\HtmlFacade',
+	      'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 	],
 
 ];

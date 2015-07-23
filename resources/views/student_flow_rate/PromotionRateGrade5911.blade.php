@@ -10,11 +10,11 @@
 
         </li>
 
-        <div class="box-icon" style='margin-top:-4px;'>
+    <!--     <div class="box-icon" style='margin-top:-4px;'>
 			<a href="#" class="btn btn-setting btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-minimize btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-close btn-round"><i class=" icon-download-alt"></i></a>
-		</div>
+		</div> -->
 
     </ul>
 
@@ -24,17 +24,20 @@
 
 	<div class="row" style='margin:15px auto;'>
 		<form action="{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list_exports') }}" method="post" style="display:inline;" class="form-horizontal">
+
 			Grade&nbsp;
-			<select name = "grade" style="width:9%;">
-				<option value="05">Grade 5</option>
-				<option value="09">Grade 9</option>
-				<option value="11">Grade 11</option>
+			<select name = "grade" id="grade" style="width:9%;">
+				<option value="05" <?php echo 05 == Input::get('grade') ? ' selected="selected"' : ''; ?>>Grade 5</option>
+				<option value="09" <?php echo 09 == Input::get('grade') ? ' selected="selected"' : ''; ?>>Grade 9</option>
+				<option value="11" <?php echo 11 == Input::get('grade') ? ' selected="selected"' : ''; ?>>Grade 11</option>
 			</select>
-			@include('students.search_form')&nbsp;<br/><br/>
+			<input type = "hidden" name = "previous_year" value="<?php echo Input::get('previous_year'); ?>" id = "previous_year" />
+
+			@include('students.search_prev')&nbsp;<br/><br/>
 			
 			<div class="row" align="right">
 				<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('promotion_rate_for_grade_5_or_9_or_11_list') }}'" />
-				<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+				<input type="submit" class="btn btn-default" id="btnExport" value="Export" />
 			</div>
 				
 		</form>
@@ -53,7 +56,7 @@
 	@foreach($region as $r)
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -131,7 +134,7 @@
 				<td>
 					<?php
 						if ($sc[$c]->successful_completers!=0 && $se[$p]->students_enrollment!=0) {
-							echo ($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100;
+							echo round(($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100, 2) . "%";
 						}
 						else {
 							echo "-";
@@ -189,7 +192,7 @@
 				<td><?php echo $se[$p]->students_enrollment; ?></td>
 				<td>
 					<?php
-						echo ($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100;
+						echo round(($sc[$c]->successful_completers/$se[$p]->students_enrollment) * 100, 2) . "%";
 					?>
 				</td>
 						

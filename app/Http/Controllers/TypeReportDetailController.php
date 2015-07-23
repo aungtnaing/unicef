@@ -24,26 +24,21 @@ class TypeReportDetailController extends Controller {
 		$township_id = Input::get('township_id');
 		$academic_year = Input::get('academic_year');
 			
-		
-		if($state_id && $township_id &&	$academic_year) {
-			
-			if($township_id) {
+		if($township_id) {
 
-				$q = "SELECT *";
+			$q = "SELECT *";
 			
-			} else {
-			
-				$q = "SELECT state_id, state_division";
-			
-			}
+		} else {
 		
-			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			$q = "SELECT state_id, state_division";
 			
-			$region = DB::select(DB::raw($q));
+		}
+		
+		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
+		$region = DB::select(DB::raw($q));
 
-			$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
-			
-			}
+		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
 		
 		return view('students.type_report_detail', compact('type_report_detail', 'region'));
 	

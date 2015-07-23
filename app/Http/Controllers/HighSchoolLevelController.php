@@ -29,9 +29,9 @@ class HighSchoolLevelController extends Controller {
 
 			$region = DB::select(DB::raw($q));
 
-			$current_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS current_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$current_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS current_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
-			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('previous_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".Input::get('previous_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
 			return view('retention_rate.high_school_level', compact('current_year','previous_year','region'));
 
@@ -91,9 +91,9 @@ class HighSchoolLevelController extends Controller {
 
 			$region = DB::select(DB::raw($q));
 
-			$current_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS current_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$current_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS current_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".Input::get('academic_year')."' and a.grade='11' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
-			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, s.location, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('previous_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
+			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".Input::get('previous_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
 			foreach ($current_year as $current) 
 			{
@@ -147,21 +147,21 @@ class HighSchoolLevelController extends Controller {
 	    			$cell->setValignment('middle');
 	    		});
 	    		
-	    		$count=$sheet->getHighestRow()+1;
+	    		/*$count=$sheet->getHighestRow()+1;
 				$sheet->appendRow(array('Location : Rural'))->mergeCells('A'.$count.':D'.$count,function($cell){
 					$cell->setFontWeight('bold');
 		    		$cell->setFontSize(18);
 		    		$cell->setAlignment('left');
 		    		$cell->setValignment('middle');
-				});
+				});*/
 
 				$sheet->appendRow(array('Township Name','Enrolment in Grade 10 in previous year','Enrolment in Grade 11 in current school-year','Retention Rate'));
 	    	for($c = 0; $c < count($current_years); $c++) 
 	    	{
 				for ($p=0; $p < count($previous_years) ; $p++)
 				 {
-					if($current_years[$c]['location'] == "Rural" && $previous_years[$p]['location'] == "Rural")
-						{
+					/*if($current_years[$c]['location'] == "Rural" && $previous_years[$p]['location'] == "Rural")
+						{*/
 							$count=$sheet->getHighestRow()+1;
 							if($current_years[$c]['id'] == $previous_years[$p]['id']) {
 							$count=$sheet->getHighestRow()+1;
@@ -185,13 +185,13 @@ class HighSchoolLevelController extends Controller {
 				    			$cell->setValignment('middle');
 				    		});
 				    		$sheet->cell('D'.$count,function($cell) use($current_years,$previous_years,$p,$c){
-		    					$cell->setValue($current_years[$c]['current_total_std']/$previous_years[$p]['previous_total_std'] * 100);
+		    					$cell->setValue(round($current_years[$c]['current_total_std']/$previous_years[$p]['previous_total_std'] * 100,2));
 				    			$cell->setFontSize(12);
 				    			$cell->setAlignment('left');
 				    			$cell->setValignment('middle');
 				    		});
 					
-						}
+						//}
 					}
 				}	
 			}
@@ -199,7 +199,7 @@ class HighSchoolLevelController extends Controller {
 			
 
 			//Start Urban
-			$count=$sheet->getHighestRow()+1;
+			/*$count=$sheet->getHighestRow()+1;
 				$sheet->appendRow(array('Location : Urban'))->mergeCells('A'.$count.':D'.$count,function($cell){
 					$cell->setFontWeight('bold');
 		    		$cell->setFontSize(18);
@@ -245,7 +245,7 @@ class HighSchoolLevelController extends Controller {
 						}
 					}
 				}	
-			}
+			}*/
 			
 			$sheet->setBorder('A1'.':D'.$sheet->getHighestRow(), 'thin');
 

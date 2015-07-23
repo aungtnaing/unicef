@@ -22,12 +22,12 @@
 		<form action="" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchStdSanitation') }}'" />
-			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
+			<input disabled="true" type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" />
 		</form>&nbsp;
 	</div><br/>
 
 
-	<?php //try {
+	<?php try {
 		if(isset($region)) { ?>
 	<table class="table table-bordered">
 		<tr>
@@ -41,7 +41,7 @@
 
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -119,8 +119,8 @@
 				<td>{{ $total_latrine }}</td>
 				<td>{{ $total_good_latrine }}</td>
 				<td>{{ $tStudents[$row]->total_students }}</td>
-				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? $tStudents[$row]->total_students / $total_latrine :'0' }}</td>
-				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? $tStudents[$row]->total_students / $total_good_latrine : '0' }} </td>
+				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? round($tStudents[$row]->total_students / $total_latrine,2) :'0' }}</td>
+				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? round($tStudents[$row]->total_students / $total_good_latrine,2) : '0' }} </td>
 				<td>-</td>
 				<td>
 					<?php
@@ -212,8 +212,8 @@
 				<td>{{ $total_latrine }}</td>
 				<td>{{ $total_good_latrine }}</td>
 				<td>{{ $tStudents[$j]->total_students }}</td>
-				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? $tStudents[$j]->total_students / $total_latrine :'0' }}</td>
-				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? $tStudents[$j]->total_students / $total_good_latrine : '0' }} </td>
+				<td style="backgroun-color:#ededed">{{ ($total_latrine!=0 )? round($tStudents[$j]->total_students / $total_latrine,2) :'0' }}</td>
+				<td style="backgroun-color:#ededed">{{ ($total_good_latrine)? round($tStudents[$j]->total_students / $total_good_latrine,2) : '0' }} </td>
 				<td>-</td>
 				<td>
 					<?php
@@ -265,10 +265,10 @@
 		}
 	}
 }
-/*}
+}
 	catch (Exception $e) {
-		echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-	}*/
+		echo "<br /><div style='color:red;font-size:20px;font-weight:bold;'>There is no more data.Please Check Searching!</div>";
+	}
 	?>
 </div>
 

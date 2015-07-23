@@ -18,7 +18,15 @@ class PromotionRateGrade5911Controller extends Controller {
 		$state_id = Input::get('state_id');
 		$township_id = Input::get('township_id');
 		$academic_year = Input::get('academic_year');
-		$pre_year=Session::get('previous_year');	
+		$pre_year= Input::get('previous_year');
+	
+		if(Input::get('grade') == '05') {
+			$prev_grade = '04';
+		} elseif (Input::get('grade') == '09') {
+			$prev_grade = '08';
+		} else {
+			$prev_grade = '10';
+		}
 		
 		try {
 			
@@ -36,9 +44,9 @@ class PromotionRateGrade5911Controller extends Controller {
 
 			$region = DB::select(DB::raw($q));
 
-			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.boy_pass + a.girl_pass) AS successful_completers FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.new_boy + a.new_girl) AS successful_completers FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND a.school_year = s.school_year INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
-			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND a.school_year = s.school_year INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$pre_year."' AND a.grade= '".$prev_grade."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
 			return view('student_flow_rate.PromotionRateGrade5911', compact('sc','se','region'));
 
@@ -84,25 +92,39 @@ class PromotionRateGrade5911Controller extends Controller {
 	 */
 	public function show()
 	{
-		//try {
-			
-			if(Input::get('township_id')) {
 
-				$q = "SELECT state_division, township_name";
+		$state_id = Input::get('state_id');
+		$township_id = Input::get('township_id');
+		$academic_year = Input::get('academic_year');
+		$pre_year= Input::get('previous_year');
+	
+		if(Input::get('grade') == '05') {
+			$prev_grade = '04';
+		} elseif (Input::get('grade') == '09') {
+			$prev_grade = '08';
+		} else {
+			$prev_grade = '10';
+		}
+		
+		try {
+			
+			if(isset($township_id)) {
+
+				$q = "SELECT *";
 			
 			} else {
 			
-				$q = "SELECT state_division";
+				$q = "SELECT state_id, state_division";
 			
 			}
 
-			$q .= " FROM v_state_township WHERE state_id = ".Input::get('state_id')." AND (township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY state_id";
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 
 			$region = DB::select(DB::raw($q));
 
-			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.boy_pass + a.girl_pass) AS successful_completers FROM student_learning_achievement AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$sc = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.new_boy + a.new_girl) AS successful_completers FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND a.school_year = s.school_year INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$academic_year."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
-			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".Input::get('academic_year')."' AND a.grade= '".Input::get('grade')."' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
+			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND a.school_year = s.school_year INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$pre_year."' AND a.grade= '".$prev_grade."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
 			foreach ($sc as $sc_post) 
 			{
@@ -245,13 +267,13 @@ class PromotionRateGrade5911Controller extends Controller {
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($se_posts,$p,$sc_posts,$c){
 							if ($sc_posts[$c]['successful_completers']!=0 && $se_posts[$p]['students_enrollment']!=0) {
-								$ratio=($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100;
+								$ratio=round(($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100, 2);
 							}
 							else
 							{
 								$ratio="-";
 							}
-		    				$cell->setValue($ratio[0]);
+		    				$cell->setValue($ratio);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -322,13 +344,13 @@ class PromotionRateGrade5911Controller extends Controller {
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($se_posts,$p,$sc_posts,$c){
 							if($sc_posts[$c]['successful_completers']!=0 && $se_posts[$p]['students_enrollment']!=0){
-								$ratio=($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100;
+								$ratio=round(($sc_posts[$c]['successful_completers']/$se_posts[$p]['students_enrollment']) * 100,2);
 							}
 							else
 							{
 								$ratio='-';
 							}
-		    				$cell->setValue($ratio[0]);
+		    				$cell->setValue($ratio);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
 				    		$cell->setValignment('middle');
@@ -346,16 +368,14 @@ class PromotionRateGrade5911Controller extends Controller {
 	    	});
 
 			 })->download('xlsx');
-				
 
 
-/*
 		} catch (Exception $e) {
 			
 			$record = "There is no data.";
 			return view('student_flow_rate.PromotionRateGrade5911', compact('record','region'));
 			 
-		}*/
+		}
 	}
 
 

@@ -18,8 +18,8 @@ class StudentEnrollmentController extends Controller
 
 	public function search()
 	{
-		/*try
-		{*/
+		try
+		{
 		
 		$state_id = Input::get('state_id');
 		$township_id = Input::get('township_id');
@@ -43,20 +43,21 @@ class StudentEnrollmentController extends Controller
 
 		
 		return view('students.enrollment',compact('region','dtSchool'));
-		/*}
+		}
 		catch(\Exception $ex)
 		{
 			$record="There is no data record.Please check Searching!";
 			return view('students.enrollment',compact('region','record'));
 
-		}*/
+		}
 		
 	}
 
 	public function export()
 	{
-		
-		$state_id = Input::get('state_id');
+		try
+		{
+			$state_id = Input::get('state_id');
 		$township_id = Input::get('township_id');
 		$academic_year = Input::get('academic_year');
 			
@@ -435,6 +436,13 @@ class StudentEnrollmentController extends Controller
     	});
 
 		})->download('xlsx');
+		}
+		catch(Exception $ex)
+		{
+			$record="There is no data record.Please check Searching!";
+			return view('students.enrollment',compact('region','record'));
+		}
+		
 	}
 }
  

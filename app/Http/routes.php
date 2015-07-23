@@ -119,10 +119,13 @@ Route::post('enrollmentfrm_excel',array('as' => 'ExportStdEnrollment', 'uses' =>
 
 /** get township **/
 Route::post('townships', 'SearchFormController@index');
-/** Teacher Ratio **/
-Route::get('teacher_ratio', array('as' => 'TeacherRatio', 'uses' => 'TeacherRatioCpntroller@create'));
 
-Route::post('teacher_ratio', array('as' => 'TeacherRatioSearch', 'uses' => 'TeacherRatioCpntroller@Search'));
+/** Teacher Ratio **/
+Route::get('teacher_ratio', array('as' => 'TeacherRatio', 'uses' => 'TeacherRatioController@create'));
+
+Route::post('teacher_ratio', array('as' => 'TeacherRatioSearch', 'uses' => 'TeacherRatioController@Search'));
+
+Route::post('teacher_ratio_export', array('as' => 'TeacherRatioExport', 'uses' => 'TeacherRatioController@show'));
 
 /** Teacher Ratio By Township **/
 Route::get('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownship', 'uses' => 'TeacherRatioByTownshipController@create'));
@@ -157,6 +160,70 @@ Route::post('promotion_rate', array('as' => 'PromotionRateGrade','uses' => 'Prom
 
 Route::post('promotion_rate_export', array('as' => 'PromotionRateGradeExport','uses' => 'PromotionRateGradeController@show'));
 
+
+/** Sanitation Facilities **/
+Route::get('sanitation_facilities', array('as' => 'sanitation_facilities','uses' => 'SanitationFacilitiesController@create'));
+
+Route::post('sanitation_facilities_list', array('as' => 'sanitation_facilities_list','uses' => 'SanitationFacilitiesController@index'));
+
+/** Repetition Rate **/
+Route::get('repetition_rate', array('as' => 'repetition_rate', 'uses' => 'RepetitionRateController@create'));
+
+Route::post('repetition_rate', array('as' => 'repetition_rate_list', 'uses' => 'RepetitionRateController@index'));
+
+/** Dropout Rate **/
+Route::get('dropout_rate', array('as' => 'dropout_rate', 'uses' => 'DropoutRateController@create'));
+
+Route::post('dropout_rate_list', array('as' => 'dropout_rate_list', 'uses' => 'DropoutRateController@index'));
+
+/** Percentage of Schools with Library **/
+Route::get('percentage_school_library', array('as' => 'percentage_school_library', 'uses' => 'PercentageSchoolLibraryController@create'));
+
+Route::post('percentage_school_library_list', array('as' => 'percentage_school_library_list', 'uses' => 'PercentageSchoolLibraryController@index'));
+
+Route::get('lavachart_test', array('as' => 'lavachart_test', 'uses' => 'ChartController@create'));
+
+/*** Permenant Temporary Classroom Chart ***/
+Route::get('classroom_chart', array('as' => 'classroom_chart', 'uses' => 'PermenantTemporaryChartController@create'));
+
+Route::post('classroom_chart_list', array('as' => 'classroom_chart_list', 'uses' => 'PermenantTemporaryChartController@index'));
+
+
+
+/*** Net Intake Rate **/
+
 Route::get('net_intake_rate', array('as' => 'NetIntakeRate','uses' => 'NetIntakeRateController@create'));
 
 Route::post('net_intake_rate', array('as' => 'NetIntakeRateNIR','uses' => 'NetIntakeRateController@search'));
+
+Route::post('net_intake_rate_export', array('as' => 'NetIntakeRateExport','uses' => 'NetIntakeRateController@export'));
+
+
+///sanitation facilities
+Route::post('sanitation_facilities_export', array('as' => 'sanitation_facilities_export_excel','uses' => 'SanitationFacilitiesController@show'));
+///school library
+Route::post('percentage_school_library_export', array('as' => 'percentage_school_library_export', 'uses' => 'PercentageSchoolLibraryController@show'));
+/// Repetition Rate
+Route::post('repetition_rate_export', array('as' => 'repetition_rate_export', 'uses' => 'RepetitionRateController@show'));
+//Combined Enrollment Ratio
+
+Route::get('combined_enrollment_ratio', array('as' => 'CombinedGrossEnrollmentRatio','uses' => 'CombinedEnrollmentRatioController@create'));
+
+Route::post('combined_enrollment_ratio', array('as' => 'CombinedGrossEnrollmentRatioLevels','uses' => 'CombinedEnrollmentRatioController@search'));
+
+Route::post('combined_enrollment_ratio_export', array('as' => 'CombinedGrossEnrollmentRatioLevelsExport','uses' => 'CombinedEnrollmentRatioController@export'));
+
+
+//Gross Entrollemnt Ratio
+Route::get('gross_enrollment_ratio', array('as' => 'GrossEnrollmentRation','uses' => 'GrossEntrollmentRationLevelsController@create'));
+
+Route::post('gross_enrollment_ratio', array('as' => 'GrossEnrollmentRationLevels','uses' => 'GrossEntrollmentRationLevelsController@search'));
+
+Route::post('gross_enrollment_ratio_export', array('as' => 'GrossEnrollmentRationLevelsExport','uses' => 'GrossEntrollmentRationLevelsController@export'));
+
+/** Teacher Ratio By Township **/
+Route::get('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownship', 'uses' => 'TeacherRatioByTownshipController@create'));
+
+Route::post('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownshipSearch', 'uses' => 'TeacherRatioByTownshipController@Search'));
+
+Route::post('teacher_ratio_by_township_export', array('as' => 'TeacherRatioByTownshipExport', 'uses' => 'TeacherRatioByTownshipController@export'));

@@ -19,12 +19,13 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('GrossEnrollmentRationLevelsExport') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
-			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportList') }}'" />
-			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />
+			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('GrossEnrollmentRationLevels') }}'" />
+			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" />
 		</form>&nbsp;<!-- <a href="#">View All</a> -->
 	</div><br/>
+	
 
 
 
@@ -41,7 +42,7 @@
 
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -51,88 +52,82 @@
 	@endif
 
 	@if(isset($total_intake_pri) && count($total_intake_pri)>0)
-	<?php
-
-		$total = ""; 
-
-		for($i = 0; $i < count($total_intake_pri); $i++) {
-
-			if($total_intake_pri[$i]->location == "Rural" && $total_intake_mid[$i]->location=="Rural" && $total_intake_high[$i]->location=="Rural") {
-				$pri_rural[]=($total_intake_pri[$i]->total_students_pri/$total_populations_pri[$i]->total_population_pri)*100;
-				$mid_rural[]=($total_intake_mid[$i]->total_students_mid/$total_populations_mid[$i]->total_populations_mid)*100;
-				$high_rural[]=($total_intake_high[$i]->total_students_high/$total_populations_high[$i]->total_populations_high)*100;
-			}
-
-			if($total_intake_pri[$i]->location == "Urban" && $total_intake_mid[$i]->location=="Urban" && $total_intake_high[$i]->location=="Urban") {
-				$pri_urban[]=($total_intake_pri[$i]->total_students_pri/$total_populations_pri[$i]->total_population_pri)*100;
-				$mid_urban[]=($total_intake_mid[$i]->total_students_mid/$total_populations_mid[$i]->total_populations_mid)*100;
-				$high_urban[]=($total_intake_high[$i]->total_students_high/$total_populations_high[$i]->total_populations_high)*100;
-				
-			}
-		}
-		
-		
-	?>
-
-<!-- Stat Rural -->
-	<table class="table table-bordered">
-		<tr style="background:#DFF0D8;">
-			<th><center>Location: Rural</center></th>
-		</tr>
-	</table>	
+	
 	
 	<table class="table table-bordered">
 		<tr>
 			<th>School Levels</th>
-			<th>Gross Enrolment Rate</th>
+			<th>Total Students</th>
+			<th>Population</th>
+			<th>Gross Enrollment Ratio</th>
 		</tr>
 		<tr>
-			<td>Primary Level</td>
-			<td>{{ $pri_rural[0]."%" }}</td>
+			<td>Primary Level<br>(Grade 1 to Grade 5)</td>
+			<td>{{ ($total_intake_pri[0]->total_students_pri>0)? $total_intake_pri[0]->total_students_pri:'-' }}</td>
+			<td>{{($total_populations[0]->total5_9!='')? $total_populations[0]->total5_9:'-'}}(age5 - 9)</td>
+			<td>
+				<?php
+					if ($total_populations[0]->total5_9>0 && $total_intake_pri[0]->total_students_pri>0) {
+						$pri_ratio=$total_intake_pri[0]->total_students_pri/$total_populations[0]->total5_9 *100;
+						echo round($pri_ratio,2)."%";
+					}
+					elseif ($total_intake_pri[0]->total_students_pri==0) {
+						echo "There is no student for primary level.";
+					}
+					else
+					{
+						echo "There is no population record(age5-9)";
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
-			<td>Middle Level</td>
-			<td>{{ $mid_rural[0] ."%"}}</td>
+			<td>Middle Level<br>(Grade 6 to Grade 9)</td>
+			<td>{{ $total_intake_mid[0]->total_students_mid }}</td>
+			<td>{{($total_populations[0]->total10_13>0)? $total_populations[0]->total10_13:'-'}}(age10 - 13)</td>
+			<td>
+				<?php
+					if ($total_populations[0]->total10_13>0 && $total_intake_mid[0]->total_students_mid > 0) {
+						$pri_ratio=$total_intake_mid[0]->total_students_mid/$total_populations[0]->total10_13 *100;
+						echo round($pri_ratio,2)."%";
+					}
+					elseif ($total_intake_mid[0]->total_students_mid==0) {
+						echo "There is no student for Middle Level.";
+					}
+					else
+					{
+						echo "There is no population record(age10-13)";
+					}
+				?>
+			</td>
 		</tr>
 		<tr>
-			<td>High Level</td>
-			<td>{{ $high_rural[0] ."%"}}</td>
+			<td>High Level<br>(Grade 10 to Grade 11)</td>
+			<td>{{ $total_intake_high[0]->total_students_high }}</td>
+			<td>{{($total_populations[0]->total14_15>0)? $total_populations[0]->total14_15:'-'}}(age14 - 15)</td>
+			<td>
+				<?php
+					if ($total_populations[0]->total14_15>0 && $total_intake_high[0]->total_students_high>0) {
+						$pri_ratio=$total_intake_high[0]->total_students_high/$total_populations[0]->total14_15 *100;
+						echo round($pri_ratio,2)."%";
+					}
+					elseif ($total_intake_high[0]->total_students_high==0) {
+						echo "There is no student for High level.";
+					}
+					else
+					{
+						echo "There is no population record(age14-15)";
+					}
+				?>
+			</td>
 		</tr>
+		
 		
 	</table>
 
 
-<!-- Stat Urban -->
-	<table class="table table-bordered">
-		<tr style="background:#DFF0D8;">
-			<th><center>Location: Urban</center></th>
-		</tr>
-	</table>	
-	
-	<table class="table table-bordered">
-		<tr>
-			<th>School Levels</th>
-			<th>Gross Enrolment Rate</th>
-		</tr>
-		<tr>
-			<td>Primary Level</td>
-			<td>{{ $pri_urban[0] ."%"}}</td>
-		</tr>
-		<tr>
-			<td>Middle Level</td>
-			<td>{{ $mid_urban[0] ."%"}}</td>
-		</tr>
-		<tr>
-			<td>High Level</td>
-			<td>{{ $high_urban[0] ."%"}}</td>
-		</tr>
-	</table>
-	@else
-		@if(isset($record))
-		{{ $record }}
-		@endif
-	@endif	
-	
+@endif	
+
 
 </div>
 

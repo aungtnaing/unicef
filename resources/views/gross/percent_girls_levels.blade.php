@@ -20,7 +20,7 @@
 			
 			@include('students.search_form')&nbsp;
 
-			School Levels&nbsp;
+			Levels&nbsp;
 				<select name="school_level"  style='width:80px;'>
 					<option value="All">--All--</option>
 					<option value="Primary">Primary</option>
@@ -30,7 +30,7 @@
 			
 		<div class="row" align="right">		
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchPercentGrilLevel') }}'" />
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" class="btn btn-default" id="btnExport" value="Excel" />
 		</div>
 		
 	</form>
@@ -49,7 +49,7 @@
 
 		<tr>
 			<th>Division:&nbsp;{{ $r->state_division }}</th>
-			<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+			<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 		</tr>
 		<tr>
 			<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -113,7 +113,7 @@
 					if($total_girl!=0)
 					{
 						$percent=($total_girl/$total) * 100;
-						echo $percent." %";
+						echo round($percent,2)." %";
 					}
 					else
 					{
@@ -167,7 +167,7 @@
 					if($total_girl!=0)
 					{
 						$percent=($total_girl/$total) * 100;
-						echo $percent." %";
+						echo round($percent,2)." %";
 					}
 					else
 					{

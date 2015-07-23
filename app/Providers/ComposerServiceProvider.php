@@ -25,6 +25,28 @@ class ComposerServiceProvider extends ServiceProvider {
 			$view->with(compact('state', 'academic', 'town'));
 		
 		});
+
+		View::composer('students.search_prev', function($view) {
+
+			$state = DB::select('select * from state_division');
+			
+			$town = DB::select('select * from township');
+			
+			$academic = DB::select('select * from academicyear');
+
+			$view->with(compact('state', 'academic', 'town'));
+		
+		});
+
+		View::composer('students.search', function($view) {
+
+			$state = DB::select('select * from state_division');
+			
+			$academic = DB::select('select * from academicyear');
+
+			$view->with(compact('state', 'academic'));
+		
+		});
 		
 		View::composer('students.level_form', function($view) {
 

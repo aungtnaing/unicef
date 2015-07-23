@@ -10,11 +10,11 @@
 
         </li>
 
-        <div class="box-icon" style='margin-top:-4px;'>
+<!--         <div class="box-icon" style='margin-top:-4px;'>
 			<a href="#" class="btn btn-setting btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-minimize btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-close btn-round"><i class=" icon-download-alt"></i></a>
-		</div>
+		</div> -->
 
     </ul>
 
@@ -26,7 +26,7 @@
 		<form action="{{ URL::route('calssroom_detail_export') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('calssroom_detail_list') }}'" />
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export" />
 
 		</form>
 	</div><br/>
@@ -45,7 +45,7 @@
 		@foreach($region as $r)
 			<tr>
 				<th>Division:&nbsp;{{ $r->state_division }}</th>
-				<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+				<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 			</tr>
 			<tr>
 				<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -108,7 +108,7 @@
 				<td>@if($c->class) {{ $c->class }} @else {{ "-" }} @endif</td>
 				<td>
 					@if($c->class)	
-						{{ floor($totalstd/$c->class) }}
+						{{ round($totalstd/$c->class, 2) }}
 					@else {{ "-" }} @endif	
 				</td>
 						
@@ -155,7 +155,7 @@
 				<td>@if($c->class) {{ $c->class }} @else {{ "-" }} @endif</td>
 				<td>
 					@if($c->class)	
-						{{ floor($totalstd/$c->class) }}
+						{{ round($totalstd/$c->class, 2) }}
 					@else {{ "-" }} @endif	
 				</td>
 			

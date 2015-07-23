@@ -10,11 +10,11 @@
 
         </li>
 
-        <div class="box-icon" style='margin-top:-4px;'>
+       <!--  <div class="box-icon" style='margin-top:-4px;'>
 			<a href="#" class="btn btn-setting btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-minimize btn-round"><i class="icon-print"></i></a>
 			<a href="#" class="btn btn-close btn-round"><i class=" icon-download-alt"></i></a>
-		</div>
+		</div> -->
 
     </ul>
 
@@ -26,7 +26,7 @@
 		<form action="{{ URL::route('TypeReportDetailListExport') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('TypeReportDetailList') }}'" />
-			<input type="submit" class="btn btn-default" id="btnExport" value="Export Excel" />
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export" />
 		</form>
 	</div><br/>
 
@@ -139,8 +139,6 @@
 
 	</table>
 		
-		
-
 <?php }}
 	else{
 
