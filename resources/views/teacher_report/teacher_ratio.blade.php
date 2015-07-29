@@ -26,8 +26,7 @@
 		</form>	
 	</div>
 	<?php
-		try
-		{
+		
 			if(isset($region)) { ?>
 
 	<table class="table table-bordered">
@@ -111,31 +110,31 @@
 					$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='02') {
 						$g2=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='03') {
 						$g3=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='04') {
 						$g4=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if ($dtSchool[$i]->grade=='05') {
 						$g5=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -160,25 +159,25 @@
 					$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='07') {
 						$g7=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='08') {
 						$g8=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='09') {
 						$g9=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -205,13 +204,13 @@
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='11') {
 						$g11=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -293,31 +292,31 @@
 					$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='02') {
 						$g2=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='03') {
 						$g3=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='04') {
 						$g4=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if ($dtSchool[$i]->grade=='05') {
 						$g5=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -342,25 +341,25 @@
 					$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='07') {
 						$g7=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='08') {
 						$g8=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='09') {
 						$g9=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -387,13 +386,13 @@
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
 					if($dtSchool[$i]->grade=='11') {
 						$g11=$dtSchool[$i]->total_students;
-						if ($i!=count($dtSchool)-1) {
+						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;
 						}
 					}
@@ -424,11 +423,12 @@
 		<?php } ?>
 		@endif
 	</table>
-		<?php }}
-		catch(Exception $ex)
-		{
-			echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-		}
+		<?php 
+
+		
+	}
+	
+		if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 
 	?>
 	

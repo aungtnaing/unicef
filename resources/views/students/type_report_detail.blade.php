@@ -39,11 +39,12 @@
 		<tr>
 			<th colspan='2' ><center>No of School by School Type, Urban/Rual Detail Report</center></th>
 		</tr>
+
 	<?php if(is_array($region)) { ?>
 		@foreach($region as $r)
 			<tr>
 				<th>Division:&nbsp;{{ $r->state_division }}</th>
-				<th align='right'>Academic Year:&nbsp;<?php echo (Session::get('academic_year'))? Session::get('academic_year'):Input::get('academic_year'); ?></th>
+				<th align='right'>Academic Year:&nbsp;<?php echo Input::get('academic_year'); ?></th>
 			</tr>
 			<tr>
 				<th colspan='2'>Township:&nbsp;<?php if(isset($r->township_name)) { ?> {{ $r->township_name }} <?php } ?></th>
@@ -139,13 +140,11 @@
 
 	</table>
 		
-<?php }}
-	else{
+<?php 
+}}} 
 
-		echo "<h4> There is no data record.</h4>";
-	}
-
-} ?>
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
+?>
 
 </div>	
 

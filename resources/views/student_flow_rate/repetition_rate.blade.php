@@ -90,7 +90,7 @@
 	}
 }
 
-	if(isset($record)) echo $record;	
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 ?>
 
 </div>	

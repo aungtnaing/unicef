@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Input;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class HighSchoolLevelController extends Controller {
 	/**
@@ -33,13 +34,25 @@ class HighSchoolLevelController extends Controller {
 
 			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".Input::get('previous_year')."' and a.grade='10' AND s.state_divsion_id = ".Input::get('state_id')." AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') GROUP BY s.township_id"));
 
-			return view('retention_rate.high_school_level', compact('current_year','previous_year','region'));
+			if(count($current_year) && count($previous_year)) {
+				
+				return view('retention_rate.high_school_level', compact('current_year','previous_year','region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('retention_rate.high_school_level', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
 
 		} catch (Exception $e) {
-			
-			$record = "There is no data.Please check searching!";
-			return view('retention_rate.high_school_level', compact('record','region'));
-			
+
+			$error = "There is no data.";
+			return view('retention_rate.high_school_level', compact('error'));
+
 		}
 		
 	}
@@ -253,11 +266,14 @@ class HighSchoolLevelController extends Controller {
 
 			 })->download('xlsx');
 		
+			$err = "There is no data.";
+			throw new Exception($err);
+
 		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.high_school_level_completion_rate', compact('record','region')); 
-					
+
+			$error = "There is no data.";
+			return view('retention_rate.high_school_level', compact('error'));
+
 		}
 	}
 

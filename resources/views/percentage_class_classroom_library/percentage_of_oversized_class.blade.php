@@ -23,24 +23,22 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="{{ URL::route('percentage_of_oversized_classes') }}" method="post" style="display:inline;" class="form-horizontal">
-			@include('students.level_form')
-			@include('students.search_form')&nbsp;<br/><br/>
-			<div style="float:right;">
+		<form action="{{ URL::route('percentage_of_oversized_classes_list_export') }}" method="post" style="display:inline;" class="form-horizontal">
+			<!-- @include('students.level_form') -->
+			@include('students.search_form')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('percentage_of_oversized_classes') }}'" />
 			<input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" />
-			</div>
 		</form>
 	</div><br/>
 
-<?php if(Input::get('btn_search')) { ?>
+<?php if(isset($sc) && isset($se)) { ?>
 
 	<table class="table table-bordered">
 		<tr>
 			<th colspan="2" ><center>Township Education Management System</center></th>
 		</tr>
 		<tr>
-			<th colspan='2' ><center>No of School by School Type, Urban/Rual Report</center></th>
+			<th colspan='2' ><center>Percentage of Oversized Classes Report</center></th>
 		</tr>
 	@foreach($region as $r)
 		<tr>
@@ -185,9 +183,9 @@
 </table>
 
 <?php 
-	}} 
-		if(isset($record)) echo $record;
-	} 
+	}}}
+
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; } 
 ?>
 </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Input;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class TransitionRatePrimaryToMiddleController extends Controller {
 	/**
@@ -36,12 +37,26 @@ class TransitionRatePrimaryToMiddleController extends Controller {
 
 			return view('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region','acaedmic'));
 
-		} catch (Exception $e) {
+			if(count($current_year) && count($previous_year)) {
+				
+			return view('student_flow_rate.transition_rate_primary_to_middle', compact('current_year','previous_year','region','acaedmic'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('student_flow_rate.transition_rate_primary_to_middle', compact('error'));
 			
-			$record = "There is no data.";
-			return view('student_flow_rate.transition_rate_primary_to_middle', compact('record','region'));
-			 
-		}
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('student_flow_rate.transition_rate_primary_to_middle', compact('error'));
+
+		}	
 		
 	
 	}
@@ -248,12 +263,15 @@ class TransitionRatePrimaryToMiddleController extends Controller {
 
 			 })->download('xlsx');
 		
+		$err = "There is no data.";
+			throw new Exception($err);
+
 		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.high_school_level_completion_rate', compact('record','region')); 
-					
-		}
+
+			$error = "There is no data.";
+			return view('student_flow_rate.transition_rate_primary_to_middle', compact('error'));
+
+		}	
 	}
 	
 

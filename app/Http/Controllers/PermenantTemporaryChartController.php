@@ -7,6 +7,7 @@ use Lava;
 use Input;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class PermenantTemporaryChartController extends Controller {
 
@@ -18,9 +19,11 @@ class PermenantTemporaryChartController extends Controller {
 	public function index()
 	{
 
-		$state_id = Input::get('state_id');
-		$township_id = Input::get('township_id');
-		$academic_year = Input::get('academic_year');
+		try {
+
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
 			
 			if(isset($township_id)) {
 
@@ -36,121 +39,74 @@ class PermenantTemporaryChartController extends Controller {
 			
 			$region = DB::select(DB::raw($q));
 			
-			$classroom = DB::select(DB::raw("SELECT s.location, s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year WHERE (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level, s.location ORDER BY s.sort_code ASC"));
+			$classroom = DB::select(DB::raw("SELECT s.school_level, s.school_level_id, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year WHERE (s.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' GROUP BY s.school_level ORDER BY s.sort_code ASC"));
 
 			foreach ($classroom as $class) {
 				
-				if($class->location == "Rural") {
-					$rural_level_id[] = $class->school_level_id;
-				}
-
-				if($class->location == "Urban") {
-					$urban_level_id[] = $class->school_level_id;
-				}
+				$level_id[] = $class->school_level_id;
+				
 			}
 			
-			$rural_levels_id = "'".implode("','", $rural_level_id)."'";
-			$urban_levels_id = "'".implode("','", $urban_level_id)."'";
-			
-			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$rural_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			$levels_id = "'".implode("','", $level_id)."'";
+						
+			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$levels_id}) AND (v.state_divsion_id = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 
-			$urban_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$urban_levels_id}) AND (v.state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
-
-/** ------------------- **/
-		
-		for($i = 0; $i < count($classroom); $i++) {
-
-			if($classroom[$i]->location == "Rural") {
-				$rural_level[] = $classroom[$i]->school_level;
-			}
-
-			if($classroom[$i]->location == "Urban") {
-				$urban_level[] = $classroom[$i]->school_level;
-			}
-
-		}
-
-		$rural_levels = array_values(array_unique($rural_level));
-		$urban_levels = array_values(array_unique($urban_level));
-
-
-/**----- start rural -----**/
+/** -------------------------------------- **/
 
 		$classrooms = Lava::DataTable();
 
 		$classrooms->addStringColumn('School Level')
             	   ->addNumberColumn('Classroom Ratio');
 
-		for($k = 0; $k < count($rural_levels); $k++) {	
-			foreach($classroom as $c) {
-				if($c->location == "Rural" && $c->school_level == $rural_levels[$k]) {
-
-					$totalstd = $c->boys + $c->girls;
+				foreach($classroom as $c) {
+			
+				$totalstd = $c->boys + $c->girls;
 						
 					foreach($rural_walls as $w) {
 						if($w->school_level_id == $c->school_level_id) {
 							if($w->rooms) {	
 									
-								$classratio[] = round(($totalstd/$w->rooms), 2);
+								$classratio = round(($totalstd/$w->rooms), 2);
 					
 							} else {
-								$classratio[] = 0;
+								$classratio = 0;
 							}	
 						}		
 					}
-				}}
 				
 				$rowData = array(
-				     			$rural_levels[$k], $classratio[$k]
+				     			$c->school_level, $classratio
 				   			);
 
 				$classrooms->addRow($rowData);
-			}	
+		}	
 
 		$RuralChart = Lava::ColumnChart('Classes');
 		$RuralChart->datatable($classrooms)
 					->colors(array('#0066ff'))
 					->fontSize(14);
 
-/**----- start urban -----**/
-
-		$urbanclassrooms = Lava::DataTable();
-
-		$urbanclassrooms->addStringColumn('School Level')
-            	   ->addNumberColumn('Classroom Ratio');
-
-		for($l = 0; $l < count($urban_levels); $l++) {	
-			foreach($classroom as $c) {
-				if($c->location == "Urban" && $c->school_level == $urban_levels[$l]) {
-
-					$totalstd = $c->boys + $c->girls;
-						
-					foreach($urban_walls as $w) {
-						if($w->school_level_id == $c->school_level_id) {
-							if($w->rooms) {	
-									
-								$classratio[] = round(($totalstd/$w->rooms), 2);
-					
-							} else {
-								$classratio[] = 0;
-							}	
-						}		
-					}
-				}}
+		
+			if(count($classroom)) {
 				
-				$rowData = array(
-				     			$urban_levels[$l], $classratio[$l]
-				   			);
+				return view('students.ClassroomChart', compact('RuralChart', 'UrbanChart'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('students.ClassroomChart', compact('error'));
+			
+			}
 
-				$urbanclassrooms->addRow($rowData);
-			}	
+			$err = "There is no data.";
+			throw new Exception($err);
 
-		$UrbanChart = Lava::ColumnChart('UrbanClasses');
-		$UrbanChart->datatable($urbanclassrooms)
-					->colors(array('#0066ff'))
-					->fontSize(14);			
+		} catch (Exception $e) {
 
-		return view('students.ClassroomChart', compact('RuralChart', 'UrbanChart'));
+			$error = "There is no data.";
+			return view('students.ClassroomChart', compact('error'));
+
+		}
 	}
 
 	/**

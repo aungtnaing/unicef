@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class TypeReportsController extends Controller {
 	/**
@@ -17,29 +18,48 @@ class TypeReportsController extends Controller {
 	 */
 	public function index()
 	{
-		
-		$state_id = Input::get('state_id');
-		$township_id = Input::get('township_id');
-		$academic_year = Input::get('academic_year');
+		try {
+
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
 			
-		if($township_id) {
+			if($township_id) {
 
-			$q = "SELECT *";
+				$q = "SELECT *";
+			
+			} else {
+			
+				$q = "SELECT state_id, state_division";
+			
+			}
 		
-		} else {
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
+			$region = DB::select(DB::raw($q));
+
+			$type_report = DB::select(DB::raw("SELECT location, school_level, count(school_level) AS TotalSchools FROM v_school WHERE state_divsion_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' GROUP BY location, school_level ORDER BY location, sort_code"));
 		
-			$q = "SELECT state_id, state_division";
-		
+			if(count($type_report)) {
+				
+				return view('students.type_report', compact('type_report', 'region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('students.type_report', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('students.type_report', compact('error'));
+
 		}
-	
-		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
-		
-		$region = DB::select(DB::raw($q));
-
-		$type_report = DB::select(DB::raw("SELECT location, school_level, count(school_level) AS TotalSchools FROM v_school WHERE state_divsion_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' GROUP BY location, school_level ORDER BY location, sort_code"));
-	
-		return view('students.type_report', compact('type_report', 'region'));
-	
 	}
 
 	/**
@@ -191,10 +211,14 @@ class TypeReportsController extends Controller {
 
 	})->export('xlsx');
 		 
-	}
-		catch(\Exception $ex) {
-			echo "<script type='text/javascript'>alert('Please Choose State/Division At First')</script>";
-			return Redirect::route('TypeReport');
+		$err = "There is no data.";
+		throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('students.type_report', compact('error'));
+
 		}
 	}
 

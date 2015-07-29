@@ -6,7 +6,7 @@
 
         <li>
 
-        	<a href="javascript:void(0);">Perminent/Temporary Classroom With Chart</a>
+        	<a href="javascript:void(0);">Perminent/Temporary Classroom by Chart</a>
 
         </li>
 
@@ -31,34 +31,15 @@
 
 <?php if(isset($RuralChart)) { ?>
 
-<!-- Stat Rural -->
-<table class="table table-bordered">
-    <tr style="background:#DFF0D8;">
-        <th><center>Location: Rural</center></th>
-    </tr>
-</table>
-
 <div id="RuralChart"></div>
 
     @columnchart('Classes', 'RuralChart') 
 
-<?php } ?>
-<br/><br/>
+<?php 
+} 
 
-<?php if(isset($UrbanChart)) { ?>
-
-<!-- Stat Urban -->
-<table class="table table-bordered">
-    <tr style="background:#DFF0D8;">
-        <th><center>Location: Urban</center></th>
-    </tr>
-</table>
-
-<div id="UrbanChart"></div>
-
-    @columnchart('UrbanClasses', 'UrbanChart') 
-
-<?php } ?>
+if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
+?>
 
 </div>
 <script type="text/javascript" src="assets/js/backend_script.js"></script>

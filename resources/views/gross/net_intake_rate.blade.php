@@ -49,7 +49,7 @@
 	@endforeach
 	</table>
 	@endif
-	<?php try { if(Input::get('btn_search')){ 
+	<?php if(isset($total_intake_one)) { 
 		
 		?>
 	<table class="table table-bordered">
@@ -87,10 +87,7 @@
 	
 
 <?php 		}
-	}
-		catch (Exception $e) {
-		echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-	}
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 	?>
 			
 </div>

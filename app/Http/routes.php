@@ -37,7 +37,7 @@ Route::get('school_information_detail', array('as' => 'TypeReportDetail', 'uses'
 
 Route::post('school_information_detail', array('as' => 'TypeReportDetailList', 'uses' => 'TypeReportDetailController@index'));
 
-Route::post('school_information_detail_export', array('as' => 'TypeReportDetailListExport', 'uses' => 'TypeReportDetailController@show'));
+Route::post('school_information_detail_export', array('as' => 'TypeReportDetailListExport', 'uses' => 'TypeReportDetailController@export'));
 
 /** Perminent/Temporary Classroom **/
 Route::get('perminent_temporary_classroom', array('as' => 'calssroom', 'uses' => 'PermenantTemporaryController@create'));
@@ -103,6 +103,8 @@ Route::get('percentage_of_oversized_classes', array('as' => 'percentage_of_overs
 
 Route::post('percentage_of_oversized_classes', array('as' => 'percentage_of_oversized_classes_list', 'uses' => 'PercentageOfOversizedClassController@index'));
 
+Route::post('percentage_of_oversized_classes_export', array('as' => 'percentage_of_oversized_classes_list_export', 'uses' => 'PercentageOfOversizedClassController@show'));
+
 /** Student Sanitation **/
 Route::get('sanitationfrm', array('as' => 'StdSanitation', 'uses' => 'SanitationStudentRatioController@create'));
 
@@ -130,7 +132,10 @@ Route::post('teacher_ratio_export', array('as' => 'TeacherRatioExport', 'uses' =
 /** Teacher Ratio By Township **/
 Route::get('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownship', 'uses' => 'TeacherRatioByTownshipController@create'));
 
-Route::post('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownshipSearch', 'uses' => 'TeacherRatioByTownshipCpntroller@Search'));
+Route::post('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownshipSearch', 'uses' => 'TeacherRatioByTownshipController@Search'));
+
+Route::post('teacher_ratio_by_township_export', array('as' => 'TeacherRatioByTownshipExport', 'uses' => 'TeacherRatioByTownshipController@show'));
+
 /** Gross Enrollment Ratio **/
 Route::get('grade_one_per',array('as' => 'GradeOnePer','uses' => 'PercentGradeOneIntakeController@create'));
 
@@ -176,12 +181,14 @@ Route::get('dropout_rate', array('as' => 'dropout_rate', 'uses' => 'DropoutRateC
 
 Route::post('dropout_rate_list', array('as' => 'dropout_rate_list', 'uses' => 'DropoutRateController@index'));
 
+Route::post('dropout_rate_export', array('as' => 'dropout_rate_list_export', 'uses' => 'DropoutRateController@show'));
+
 /** Percentage of Schools with Library **/
 Route::get('percentage_school_library', array('as' => 'percentage_school_library', 'uses' => 'PercentageSchoolLibraryController@create'));
 
 Route::post('percentage_school_library_list', array('as' => 'percentage_school_library_list', 'uses' => 'PercentageSchoolLibraryController@index'));
 
-Route::get('lavachart_test', array('as' => 'lavachart_test', 'uses' => 'ChartController@create'));
+Route::get('lavachart_test', array('as' => 'lavachart_test', 'uses' => 'ChartController@index'));
 
 /*** Permenant Temporary Classroom Chart ***/
 Route::get('classroom_chart', array('as' => 'classroom_chart', 'uses' => 'PermenantTemporaryChartController@create'));
@@ -221,9 +228,24 @@ Route::post('gross_enrollment_ratio', array('as' => 'GrossEnrollmentRationLevels
 
 Route::post('gross_enrollment_ratio_export', array('as' => 'GrossEnrollmentRationLevelsExport','uses' => 'GrossEntrollmentRationLevelsController@export'));
 
-/** Teacher Ratio By Township **/
-Route::get('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownship', 'uses' => 'TeacherRatioByTownshipController@create'));
+/*** Pupil/Teacher Ratio by chart ***/
+Route::get('teacher_chart_report', array('as' => 'teacher_chart_report', 'uses' => 'TeacherRatioChartController@create'));
 
-Route::post('teacher_ratio_by_township', array('as' => 'TeacherRatioByTownshipSearch', 'uses' => 'TeacherRatioByTownshipController@Search'));
+Route::post('TeacherRatioChartList', array('as' => 'TeacherRatioChartList', 'uses' => 'TeacherRatioChartController@index'));
 
-Route::post('teacher_ratio_by_township_export', array('as' => 'TeacherRatioByTownshipExport', 'uses' => 'TeacherRatioByTownshipController@export'));
+/*** Pupil/Teacher Ratio by chart ***/
+Route::get('oversize_class_chart', array('as' => 'oversize_class_chart', 'uses' => 'OversizeClassChartController@create'));
+
+Route::post('oversize_class_chart_list', array('as' => 'oversize_class_chart_list', 'uses' => 'OversizeClassChartController@index'));
+
+/*** Attendance < 75% chart ***/
+Route::get('StdAttendanceChart', array('as' => 'StdAttendanceChart', 'uses' => 'StudentAttendanceChartController@create'));
+
+Route::post('StdAttendanceChartList', array('as' => 'StdAttendanceChartList', 'uses' => 'StudentAttendanceChartController@index'));
+
+Route::post('attendancelist_export', array('as' => 'StdAttendanceList_export', 'uses' => 'StudentAttendanceController@show'));
+
+/*** % of Grade 1 Intake ***/
+Route::get('grade_one_intake', array('as' => 'grade_one_intake', 'uses' => 'PercentageGradeOneIntakeChartController@create'));
+
+Route::post('grade_one_intake_list', array('as' => 'grade_one_intake_list', 'uses' => 'PercentageGradeOneIntakeChartController@index'));

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Redirect;
 use Input;
 use Session;
+use Exception;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -19,34 +20,56 @@ class TypeReportDetailController extends Controller {
 	 */
 	public function index()
 	{
-		
-		$state_id = Input::get('state_id');
-		$township_id = Input::get('township_id');
-		$academic_year = Input::get('academic_year');
-			
-		if($township_id) {
 
-			$q = "SELECT *";
+		try {
 			
-		} else {
-		
-			$q = "SELECT state_id, state_division";
-			
-		}
-		
-		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
-			
-		$region = DB::select(DB::raw($q));
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+				
+			if($township_id) {
 
-		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
-		
-		return view('students.type_report_detail', compact('type_report_detail', 'region'));
-	
+				$q = "SELECT *";
+				
+			} else {
+			
+				$q = "SELECT state_id, state_division";
+				
+			}
+			
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+				
+			$region = DB::select(DB::raw($q));
+
+			$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE state_divsion_id = '".$state_id."' AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
+			
+			if(count($type_report_detail)) {
+				
+				return view('students.type_report_detail', compact('type_report_detail', 'region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('students.type_report_detail', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('students.type_report_detail', compact('error'));
+
+		}	
 	}
 
 	public function export()
 	{
-		
+		try{
+
+
 		$state_id=Input::get('state_id');
 		$township_id=Input::get('township_id');
 		$academic_year=Input::get('academic_year');
@@ -72,9 +95,9 @@ class TypeReportDetailController extends Controller {
 			$region = "";
 		}
 
-		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."' OR '' = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
-		
-		foreach ($type_report_detail as $report) {
+		$type_report_detail = DB::select(DB::raw("SELECT location, school_level, school_no, school_name FROM v_school WHERE (state_divsion_id = '".$state_id."') AND (township_id = '".$township_id."' OR '' = '".$township_id."') AND school_year = '".$academic_year."' ORDER BY location, sort_code"));
+		if (count($type_report_detail)) {
+			foreach ($type_report_detail as $report) {
 			$post[]=get_object_vars($report);
 		}
 		$state_naem=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
@@ -192,12 +215,19 @@ class TypeReportDetailController extends Controller {
     	});
 
 		 })->export('xls');
+		}
+		else
+		{
+			$error = "There is no data in this State or Townshiip.";
+			return view('students.type_report_detail', compact('error'));
 		
-		//}
-		/*catch(\Exception $ex){
-			echo "<script type='text/javascript'>alert('Please Choose State/Division At First')</script>";
-			return Redirect::route('TypeReportDetail');
-		}*/	
+		}
+		
+		}
+		catch(\Exception $ex){
+			$error= "There is no data in this state or township.";
+			return view('students.type_report_detail', compact('error'));
+		}	
 	}
 
 	/**

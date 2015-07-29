@@ -52,7 +52,7 @@
 	<?php 
 
 		 if(isset($tStudents)) { 
-		 	try{
+		 	
 		 		for($i = 0; $i < count($tStudents); $i++) {
 
 			if($tStudents[$i]->location == "Rural") {
@@ -177,17 +177,9 @@
 
 <?php } 
 
-	}
-		 	catch(Exception $ex){
-		 		if(isset($record))
-	{
-		echo $record;
-	}
-	else
-	{
-		echo "<h4>There is no Data Records!</h4>";
-	} }
+	
 		 	}
+		 	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 ?>
 
 

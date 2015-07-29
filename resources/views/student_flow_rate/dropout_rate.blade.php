@@ -23,7 +23,7 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('dropout_rate_list_export') }}" method="post" style="display:inline;" class="form-horizontal">
 			<input type = "hidden" name = "previous_year" value="<?php echo Input::get('previous_year'); ?>" id = "previous_year" />
 			@include('students.search_prev')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('dropout_rate_list') }}'" />
@@ -31,7 +31,7 @@
 		</form>
 	</div><br/>
 
-<?php try{
+<?php
 
  if(isset($new_total)) { ?>
 
@@ -79,11 +79,9 @@
 
 
 
-<?php }} catch(Exception $e) {
-	echo "<h2 style='color:#FF0000;'>There is no data. Please select academic year.</h2>";
-}
-	
-	if(isset($record)) echo $record;
+<?php }
+
+if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 ?>
 </div>	
 

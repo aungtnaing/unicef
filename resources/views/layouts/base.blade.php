@@ -209,10 +209,17 @@
 				
 						<li><a class="ajax-link" href="{{ URL::route('percentage_school_library') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Percentage of Schools with Library</span></a></li>
 
-						<!-- <li><a class="ajax-link" href="{{ URL::route('lavachart_test') }}"><i class="icon icon-green icon-document"></i><span class="hidden-tablet"> Lavacharts</span></a></li> -->
-
 						<li class="nav-header hidden-tablet">Reports by charts</li> 
+						
 						<li><a href="{{ URL::route('classroom_chart') }}">Permenent/Temporary Classrooms</a></li>
+						
+						<li><a href="{{ URL::route('teacher_chart_report') }}">Pupil/Teacher Ratio</a></li>
+						
+						<li><a href="{{ URL::route('oversize_class_chart') }}">Percentage of Oversized Classes (Sections with Over 40 Pupils)</a></li>
+
+						<li><a href="{{ URL::route('StdAttendanceChart') }}">Attendance < 75%</a></li>
+
+						<li><a href="{{ URL::route('grade_one_intake') }}"> % of Grade 1 intakes With Preschool Experiences</a></li>
 		</ul>
 	</div><!--/.well -->
 </div><!--/span-->
@@ -227,7 +234,7 @@
 		<hr>
 		<footer>
 			<p class="pull-left">&copy; <a href="#" target="_blank">Unicef</a></p>
-			<p class="pull-right">Powered by Bangoo Technology</p>
+			<p class="pull-right">Powered by info link IT Solution</p>
 		</footer>
 		
 	</div><!--/.fluid-container-->

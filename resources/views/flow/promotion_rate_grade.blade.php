@@ -53,26 +53,7 @@
 	@endif
 
 	@if(isset($new_total) && count($new_total)>0)
-	<?php
-
-		try{
-			/*for($i = 0; $i < count($new_total); $i++) {
-
-			if($new_total[$i]->location == "Rural" && $pre_total[$i]->location=="Rural") {
-				$grade_rural[]=$new_total[$i]->grade;
-				$percent_rural[]=($new_total[$i]->total_students/$pre_total[$i]->total_students)*100;
-			}
-
-			if($new_total[$i]->location == "Urban" && $pre_total[$i]->location=="Urban") {
-				$grade_urban[]=$new_total[$i]->grade;
-				$percent_urban[]=($new_total[$i]->total_students/$pre_total[$i]->total_students)*100;
-			}
-		}*/
-		
-		
-	?>
-
-
+	
 	<table class="table table-bordered">
 		<tr>
 			<th>Grade</th>
@@ -91,13 +72,11 @@
 		@endfor
 	</table>
 
+
+@endif
 <?php	
-	}
-	catch(Exception $ex){
-		echo "<h4>There is no Data Records. Please Check Searching!</h4>";
-	} 
-?>	
-@endif	
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; } 
+?>		
 </div>
 
 <script src="assets/js/backend_script.js"></script>

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-//use Redirect;
 use Input;
 use Request;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-//use Illuminate\Http\Request;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class NetIntakeRateController extends Controller
@@ -20,8 +19,8 @@ class NetIntakeRateController extends Controller
 	public function search()
 	{
 
-		/*try
-		{*/
+		try
+		{
 			$state=Request::input('state_id');
 			$town=Request::input('township_id');
 			$year=Request::input('academic_year');
@@ -45,19 +44,32 @@ class NetIntakeRateController extends Controller
 				
 			$total_populations_5=DB::select(DB::raw("SELECT SUM(age5boy+age5girl) AS total_pop FROM population WHERE (townshipid ='".$town."' OR ''='".$town."') AND (academic_year='".$year."')"));
 			
-			return view('gross.net_intake_rate',compact('region','total_intake_one','total_populations_5'));	
-		/*}
-		catch(\Exception $ex)
-		{
-			$record="There is no data record.";
-			return view('gross.net_intake_rate',compact('region','record'));
-		}*/
+			if(count($total_intake_one) && count($total_populations_5)) {
+				
+				return view('gross.net_intake_rate',compact('region','total_intake_one','total_populations_5'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('gross.net_intake_rate', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('gross.net_intake_rate', compact('error'));
+
+		}	
 		
 	}
 
 	public function export()
 	{
-		//echo "export";
+
 		try
 		{
 			$state=Request::input('state_id');
@@ -89,7 +101,6 @@ class NetIntakeRateController extends Controller
 			foreach ($total_populations_5 as $pop_5) {
 				$pop[]=get_object_vars($pop_5);
 			}
-			if(count($one)>0 && count($pop)>0){
 			
 			
 			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
@@ -178,13 +189,15 @@ class NetIntakeRateController extends Controller
 	    	});
 
 			 })->download('xlsx');
-			}
-			
-		}
-		catch(\Exception $ex)
-		{
-			$record="There is no data record.";
-			return view('gross.net_intake_rate',compact('region','record'));
+						
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('gross.net_intake_rate', compact('error'));
+
 		}
 	}
 

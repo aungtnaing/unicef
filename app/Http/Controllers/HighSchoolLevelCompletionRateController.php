@@ -4,6 +4,7 @@ use Input;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 
 class HighSchoolLevelCompletionRateController extends Controller {
@@ -40,15 +41,27 @@ class HighSchoolLevelCompletionRateController extends Controller {
 			
 			$previous_year = DB::select(DB::raw("SELECT SUM(a.total_boy + a.total_girl) AS previous_total_std, t.township_name, t.id FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND s.school_year = a.school_year INNER JOIN township AS t ON t.id = s.township_id WHERE a.school_year = '".$pre_year."' AND a.grade='10' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.township_id"));
 
-			return view('student_flow_rate.high_school_level_completion_rate', compact('current_year','previous_year','region'));
-		
-		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.high_school_level_completion_rate', compact('record','region')); 
 					
+		if(count($current_year) && count($previous_year)) {
+				
+				return view('student_flow_rate.high_school_level_completion_rate', compact('current_year','previous_year','region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('student_flow_rate.high_school_level_completion_rate', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('student_flow_rate.high_school_level_completion_rate', compact('error'));
+
 		}
-		
 	}
 
 
@@ -216,11 +229,14 @@ class HighSchoolLevelCompletionRateController extends Controller {
 
 			 })->download('xlsx');
 		
+		$err = "There is no data.";
+			throw new Exception($err);
+
 		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.high_school_level_completion_rate', compact('record','region')); 
-					
+
+			$error = "There is no data.";
+			return view('student_flow_rate.high_school_level_completion_rate', compact('error'));
+
 		}
 	}
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Input;
 use Redirect;
 use Session;
+use Exception;
 use View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,29 +18,48 @@ class PerminentTemporaryDetailController extends Controller {
 	 */
 	public function index()
 	{
-		
-		$state_id = Input::get('state_id');
-		$township_id = Input::get('township_id');
-		$academic_year = Input::get('academic_year');
+		try {
 			
-		if($township_id) {
+			$state_id = Input::get('state_id');
+			$township_id = Input::get('township_id');
+			$academic_year = Input::get('academic_year');
+				
+			if($township_id) {
 
-			$q = "SELECT *";
+				$q = "SELECT *";
+			
+			} else {
+			
+				$q = "SELECT state_id, state_division";
+			
+			}
 		
-		} else {
-		
-			$q = "SELECT state_id, state_division";
-		
-		}
-	
-		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
-		
-		$region = DB::select(DB::raw($q));
+			$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
+			
+			$region = DB::select(DB::raw($q));
 
-		$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls, (b.permanent_wall + b.temporary_wall) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
+			$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls, (b.permanent_wall + b.temporary_wall) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
 
-		return View::make('students.classroom_detail', compact('classroom_detail', 'region'));
-	
+			if(count($classroom_detail)) {
+				
+				return View::make('students.classroom_detail', compact('classroom_detail', 'region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('students.classroom_detail', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data";
+			return view('students.classroom_detail', compact('error'));
+
+		}	
 	}
 
 
@@ -75,7 +95,9 @@ class PerminentTemporaryDetailController extends Controller {
 	 */
 	public function show()
 	{
-		
+		try{
+			
+
 		$state_id = Input::get('state_id');
 		$township_id = Input::get('township_id');
 		$academic_year = Input::get('academic_year');
@@ -230,7 +252,7 @@ class PerminentTemporaryDetailController extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($detail,$c){
-							if (isset($detail[$c]['class'])) {
+							if ($detail[$c]['class']) {
 								$ratio[]=round(($detail[$c]['boys']+$detail[$c]['girls'])/$detail[$c]['class'],2);
 							}
 							else
@@ -304,7 +326,7 @@ class PerminentTemporaryDetailController extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($detail,$c){
-							if (isset($detail[$c]['class'])) {
+							if ($detail[$c]['class']) {
 								$ratio[]=round(($detail[$c]['boys']+$detail[$c]['girls'])/$detail[$c]['class'],2);
 							}
 							else
@@ -329,6 +351,17 @@ class PerminentTemporaryDetailController extends Controller {
 	    	});
 
 			 })->download('xlsx');
+			
+			$err = "There is no data.";
+			throw new Exception($err);
+		}
+		catch(Exception $e)
+		{
+
+			$error = "There is no data.";
+			return view('students.classroom_detail', compact('error'));
+		}
+		
 	}
 
 

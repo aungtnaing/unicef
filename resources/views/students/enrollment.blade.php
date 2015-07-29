@@ -27,7 +27,7 @@
 	</div>
 
 	<?php 
-		try{ 
+		
 		 if(isset($region)) { ?>
 			<table class="table table-bordered">
 		<tr>
@@ -355,11 +355,7 @@
 	</table>
 		<?php	
 		}
-	}
-		catch(Exception $ex)
-		{
-			echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-		}?>
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }?>
 
 	
 </div>

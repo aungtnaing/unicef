@@ -33,7 +33,7 @@
 		</form>
 	</div><br/>
 
-<?php if(Input::get('btn_search')) { ?>
+<?php if(isset($current_year)) { ?>
 
 	<table class="table table-bordered">
 		<tr>
@@ -108,10 +108,9 @@
 	
 
 <?php 
+} 
 
-		if(isset($record)) echo $record;
-	} 
-
+if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
 ?>
 </div>	
 

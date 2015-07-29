@@ -25,15 +25,15 @@
 <div class="box inner-content">
 
 	<div class="row" style='margin:15px auto;'>
-		<form action="" method="post" style="display:inline;" class="form-horizontal">
+		<form action="{{ URL::route('StdAttendanceList_export') }}" method="post" style="display:inline;" class="form-horizontal">
 			@include('students.search_form')&nbsp;
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('StdAttendanceList') }}'" />
-			<!--  <input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export Excel" />  -->
+			 <input type="submit" class="btn btn-close btn-round" id="btnExport" value="Export" /> 
 		</form>
 	</div><br/>
 
 
-<?php try { if(Input::get('btn_search')) { ?>
+<?php if(isset($attendance)) { ?>
 
 	<table class="table table-bordered">
 		<tr>
@@ -156,11 +156,8 @@
 		echo "<h4>There is no Data Record!</h4>";
 	}
 	}
-}
-catch(\Exception $e)
-{
-	echo "<br /><table><tr><td style='color:red;font-size:20px;font-weight:bold;'>Please Check Searching!</td></tr></table>";
-}
+	
+	if(isset($error)) { echo "<p style='color:#ff0000;font-size:14px;'><b>". $error ."</b></p>"; }
  ?>
 
 

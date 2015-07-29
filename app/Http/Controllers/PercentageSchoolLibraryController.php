@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class PercentageSchoolLibraryController extends Controller {
 
@@ -37,13 +38,26 @@ class PercentageSchoolLibraryController extends Controller {
 
 			$total_std = DB::select(DB::raw("SELECT s.location, s.school_level, count(infra.school_id) AS total_school FROM school_infrastructure AS infra INNER JOIN v_school AS s ON s.school_id = infra.school_id AND s.school_year = infra.school_year WHERE (s.state_divsion_id = '".Input::get('state_id')."') AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND s.school_year = '".Input::get('academic_year')."' GROUP BY s.school_level_id, s.location"));
 
-			return view('general_rate_report.percentage_school_library',compact('region','library','total_std'));
+			if(count($library) && count($total_std)) {
+				
+				return view('general_rate_report.percentage_school_library',compact('region','library','total_std'));
 
-		}
-		catch(Exception $ex)
-		{
-			$record="<h4>There is no Data Records.Please Check in Searching.</h4>";
-			return view('general_rate_report.percentage_school_library',compact('region','record'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('general_rate_report.percentage_school_library', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
+
+		} catch (Exception $e) {
+
+			$error = "There is no data.";
+			return view('general_rate_report.percentage_school_library', compact('error'));
+
 		}
 	}
 
@@ -101,8 +115,7 @@ class PercentageSchoolLibraryController extends Controller {
 			foreach ($total_std as $stds) {
 				$school_stds[]=get_object_vars($stds);
 			}
-			if(count($school_library)>0 && count($school_stds)>0){
-			
+	
 			
 			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
 
@@ -116,31 +129,32 @@ class PercentageSchoolLibraryController extends Controller {
 	    	$excel->sheet('School library Percentage', function($sheet) use($school_library,$school_stds,$request_input){
 
 	    		//$sheet->fromArray($post[0]);
-	    		$sheet->prependRow(array('Township Education Management Information System'))->mergeCells('A1:C1',function($cells){
+
+	    		$sheet->prependRow(array('Township Education Management Information System'))->mergeCells('A1:D1',function($cells){
 	    				$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('center');
 	    				 $cells->setValignment('middle');
 	    			});
-	    		$sheet->appendRow(array('Percentage of Schools with library'))->mergeCells('A2:C2',function($cells){
+	    		$sheet->appendRow(array('Percentage of Schools with library'))->mergeCells('A2:D2',function($cells){
 	    				$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('center');
 	    				 $cells->setValignment('middle');
 	    			});
-	    		$sheet->appendRow(array('Division : '.$request_input[0]))->mergeCells('A3:C3',function($cells){
+	    		$sheet->appendRow(array('Division : '.$request_input[0]))->mergeCells('A3:D3',function($cells){
 	    			$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('left');
 	    				 $cells->setValignment('middle');
 	    		});
-	    		$sheet->appendRow(array('Township : '.$request_input[1]))->mergeCells('A4:C4',function($cell){
+	    		$sheet->appendRow(array('Township : '.$request_input[1]))->mergeCells('A4:D4',function($cell){
 	    			$cell->setFontWeight('bold');
 	    				$cell->setFontSize(11);
 	    				$cell->setAlignment('right');
 	    				 $cell->setValignment('middle');
 	    		});
-	    		$sheet->appendRow(array('Academic Year :'.$request_input[2]))->mergeCells('A5:C5',function($cell){
+	    		$sheet->appendRow(array('Academic Year :'.$request_input[2]))->mergeCells('A5:D5',function($cell){
 	    			$cell->setFontWeight('bold');
 	    			$cell->setFontSize(18);
 	    			$cell->setAlignment('left');
@@ -166,24 +180,17 @@ class PercentageSchoolLibraryController extends Controller {
 
 ///	Stat Rural
 		$count=$sheet->getHighestRow()+1;
-		$sheet->appendRow(array('Location : Rural'))->mergeCells('A'.$count.':C'.$count,function($cell){
+		$sheet->appendRow(array('Location : Rural'))->mergeCells('A'.$count.':D'.$count,function($cell){
 			$cell->setFontWeight('bold');
 			$cell->setFontSize(18);
 			$cell->setAlignment('left');
 			$cell->setValignment('middle');
 		});
 				
-	
-	for($k = 0; $k < count($rural_levels); $k++) { 
-		$count=$sheet->getHighestRow()+1;
-				$sheet->appendRow(array('School Level :'.$rural_levels[$k]))->mergeCells('A'.$count.':C'.$count,function($cell){
-				$cell->setFontWeight('bold');
-	    		$cell->setFontSize(18);
-	    		$cell->setAlignment('left');
-	    		$cell->setValignment('middle');
-			});
+	$sheet->appendRow(array('School Level','No. of schools with library','Total schools','Percentage of schools with library'));
 
-			$sheet->appendRow(array('No. of schools with library','Total schools','Percentage of schools with library'));
+	for($k = 0; $k < count($rural_levels); $k++) { 
+		
 			for($s=0;$s<count($school_stds);$s++){
 				for($l=0;$l<count($school_library);$l++){
 					
@@ -191,20 +198,27 @@ class PercentageSchoolLibraryController extends Controller {
 						if($school_stds[$s]['school_level'] == $school_library[$l]['school_level']) 
 						{	
 					$count=$sheet->getHighestRow()+1;
-					$sheet->cell('A'.$count,function($cell) use($school_library,$l){
+					$sheet->cell('A'.$count,function($cell) use($rural_levels,$k){
+	    				$cell->setValue($rural_levels[$k]);
+			    		$cell->setFontSize(12);
+			    		$cell->setAlignment('left');
+			    		$cell->setValignment('middle');
+			    	});
+
+					$sheet->cell('B'.$count,function($cell) use($school_library,$l){
 	    				$cell->setValue($school_library[$l]['school_library']);
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
 			    		$cell->setValignment('middle');
 			    	});
-			    	$sheet->cell('B'.$count,function($cell) use($school_stds,$s){
+			    	$sheet->cell('C'.$count,function($cell) use($school_stds,$s){
 	    				$cell->setValue($school_stds[$s]['total_school']);
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
 			    		$cell->setValignment('middle');
 			    	});
-			    	$sheet->cell('C'.$count,function($cell) use($school_library,$school_stds,$l,$s){
-		   				$cell->setValue(round(($school_library[$l]['school_library']/$school_stds[$s]['total_school']) * 100),2);
+			    	$sheet->cell('D'.$count,function($cell) use($school_library,$school_stds,$l,$s){
+		   				$cell->setValue(round(($school_library[$l]['school_library']/$school_stds[$s]['total_school']) * 100,2));
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
 			    		$cell->setValignment('middle');
@@ -217,23 +231,17 @@ class PercentageSchoolLibraryController extends Controller {
 
 /// Stat Urban 
 	$count=$sheet->getHighestRow()+1;
-		$sheet->appendRow(array('Location : Urban'))->mergeCells('A'.$count.':C'.$count,function($cell){
+		$sheet->appendRow(array('Location : Urban'))->mergeCells('A'.$count.':D'.$count,function($cell){
 			$cell->setFontWeight('bold');
 			$cell->setFontSize(18);
 			$cell->setAlignment('left');
 			$cell->setValignment('middle');
 		});	
-	
-	for($l = 0; $l < count($urban_levels); $l++) { 
-		$count=$sheet->getHighestRow()+1;
-				$sheet->appendRow(array('School Level :'.$urban_levels[$l]))->mergeCells('A'.$count.':C'.$count,function($cell){
-				$cell->setFontWeight('bold');
-	    		$cell->setFontSize(18);
-	    		$cell->setAlignment('left');
-	    		$cell->setValignment('middle');
-			});
+		$sheet->appendRow(array('School Level','No. of schools with library','Total schools','Percentage of schools with library'));
 
-			$sheet->appendRow(array('No. of schools with Library','Total schools','Percentage of schools with Library'));
+	for($l = 0; $l < count($urban_levels); $l++) { 
+		
+
 			for($st=0;$st<count($school_stds);$st++){
 				for($lt=0;$lt<count($school_library);$lt++){
 					
@@ -241,19 +249,25 @@ class PercentageSchoolLibraryController extends Controller {
 						if($school_stds[$st]['school_level'] == $school_library[$lt]['school_level']) 
 						{	
 					$count=$sheet->getHighestRow()+1;
-					$sheet->cell('A'.$count,function($cell) use($school_library,$lt){
+					$sheet->cell('A'.$count,function($cell) use($urban_levels,$l){
+	    				$cell->setValue($urban_levels[$l]);
+			    		$cell->setFontSize(12);
+			    		$cell->setAlignment('left');
+			    		$cell->setValignment('middle');
+			    	});
+					$sheet->cell('B'.$count,function($cell) use($school_library,$lt){
 	    				$cell->setValue($school_library[$lt]['school_library']);
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
 			    		$cell->setValignment('middle');
 			    	});
-			    	$sheet->cell('B'.$count,function($cell) use($school_stds,$st){
+			    	$sheet->cell('C'.$count,function($cell) use($school_stds,$st){
 	    				$cell->setValue($school_stds[$st]['total_school']);
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
 			    		$cell->setValignment('middle');
 			    	});
-			    	$sheet->cell('C'.$count,function($cell) use($school_library,$school_stds,$lt,$st){
+			    	$sheet->cell('D'.$count,function($cell) use($school_library,$school_stds,$lt,$st){
 		   				$cell->setValue(round(($school_library[$lt]['school_library']/$school_stds[$st]['total_school']) * 100,2));
 			    		$cell->setFontSize(12);
 			    		$cell->setAlignment('left');
@@ -266,20 +280,21 @@ class PercentageSchoolLibraryController extends Controller {
 	}	}
 	
 										
-			$sheet->setBorder('A1'.':C'.$sheet->getHighestRow(), 'thin');
+			$sheet->setBorder('A1'.':D'.$sheet->getHighestRow(), 'thin');
 
 	    	});
 
 			 })->download('xlsx');
-			}
 			
+			$err = "There is no data.";
+			throw new Exception($err);
 
-		}
-		catch(Exception $ex)
-		{
-			$record="<h4>There is no Data Records.Please Check in Searching.</h4>";
-			return view('general_rate_report.percentage_school_library',compact('region','record'));
-		}
+			} catch (Exception $e) {
+
+				$error = "There is no data.";
+				return view('general_rate_report.percentage_school_library', compact('error'));
+
+			}
 	}
 
 	/**

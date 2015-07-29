@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class RepetitionRateController extends Controller {
 
@@ -37,14 +38,26 @@ class RepetitionRateController extends Controller {
 
 			$total_std = DB::select(DB::raw("SELECT intake.grade, (SUM(total_boy) + SUM(total_girl)) AS students FROM student_intake AS intake INNER JOIN v_school AS s ON intake.school_id = s.school_id AND s.school_year = intake.school_year WHERE (s.state_divsion_id = '".Input::get('state_id')."' OR '' = '".Input::get('state_id')."') AND (s.township_id = '".Input::get('township_id')."' OR '' = '".Input::get('township_id')."') AND s.school_year = '".Input::get('previous_year')."' GROUP BY intake.grade"));
 
-			return view('student_flow_rate.repetition_rate',compact('region','repeater','total_std'));
+				if(count($repeater) && count($total_std)) {
+					
+					return view('student_flow_rate.repetition_rate',compact('region','repeater','total_std'));
+					
+				} else {
+					
+					$error = "There is no data in this State or Townshiip.";
+					return view('student_flow_rate.repetition_rate', compact('error'));
+				
+				}
 
-		}
-		catch(Exception $ex)
-		{
-			$record="<h4>There is no Data Records.Please Check in Searching.</h4>";
-			return view('student_flow_rate.repetition_rate',compact('region','record'));
-		}
+				$err = "There is no data.";
+				throw new Exception($err);
+
+			} catch (Exception $e) {
+
+				$error = "There is no data.";
+				return view('student_flow_rate.repetition_rate', compact('error'));
+
+			}
 	}
 
 	/**
@@ -101,8 +114,7 @@ class RepetitionRateController extends Controller {
 			foreach ($total_std as $total_stds) {
 				$total[]=get_object_vars($total_stds);
 			}
-			if(count($repeater)>0 && count($total_std)>0){
-			
+		
 			
 			$state_name=DB::select(DB::raw("SELECT state_division FROM state_division WHERE id=".Input::get('state_id')));
 
@@ -191,15 +203,16 @@ class RepetitionRateController extends Controller {
 	    	});
 
 			 })->download('xlsx');
-			}
-			//return view('student_flow_rate.repetition_rate',compact('region','repeater','total_std'));
+			
+			$err = "There is no data.";
+				throw new Exception($err);
 
-		}
-		catch(Exception $ex)
-		{
-			$record="<h4>There is no Data Records.Please Check in Searching.</h4>";
-			return view('student_flow_rate.repetition_rate',compact('region','record'));
-		}
+			} catch (Exception $e) {
+
+				$error = "There is no data.";
+				return view('student_flow_rate.repetition_rate', compact('error'));
+
+			}
 	}
 
 	/**

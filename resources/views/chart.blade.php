@@ -34,6 +34,15 @@
 
 ?>
 
-@columnchart('myFancyChart', 'myStocks') 
+@columnchart('Finances', 'myStocks') 
+
+<?php if(isset($piechart)) { ?>
+
+<div id="ChartView"></div>
+
+    @piechart('IMDB', 'ChartView') 
+
+<?php } ?>
+
 </div>	
 @stop	

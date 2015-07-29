@@ -5,6 +5,7 @@ use Input;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class PromotionRateGrade5911Controller extends Controller {
 	/**
@@ -48,15 +49,26 @@ class PromotionRateGrade5911Controller extends Controller {
 
 			$se = DB::select(DB::raw("SELECT s.school_id, s.school_no, s.school_name, s.school_level, s.location, SUM(a.total_boy + a.total_girl) AS students_enrollment FROM student_intake AS a INNER JOIN v_school AS s ON s.school_id = a.school_id AND a.school_year = s.school_year INNER JOIN township AS t ON t.id = s.township_id AND a.school_year = '".$pre_year."' AND a.grade= '".$prev_grade."' AND s.state_divsion_id = ".$state_id." AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY s.school_id ORDER BY s.sort_code ASC"));
 
-			return view('student_flow_rate.PromotionRateGrade5911', compact('sc','se','region'));
+			if(count($sc) && count($se)) {
+				
+				return view('student_flow_rate.PromotionRateGrade5911', compact('sc','se','region'));
+				
+			} else {
+				
+				$error = "There is no data in this State or Townshiip.";
+				return view('student_flow_rate.PromotionRateGrade5911', compact('error'));
+			
+			}
+
+			$err = "There is no data.";
+			throw new Exception($err);
 
 		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.PromotionRateGrade5911', compact('record','region'));
-			 
-		}
 
+			$error = "There is no data.";
+			return view('student_flow_rate.PromotionRateGrade5911', compact('error'));
+
+		}
 	}
 
 
@@ -370,11 +382,14 @@ class PromotionRateGrade5911Controller extends Controller {
 			 })->download('xlsx');
 
 
+			$err = "There is no data.";
+			throw new Exception($err);
+
 		} catch (Exception $e) {
-			
-			$record = "There is no data.";
-			return view('student_flow_rate.PromotionRateGrade5911', compact('record','region'));
-			 
+
+			$error = "There is no data.";
+			return view('student_flow_rate.PromotionRateGrade5911', compact('error'));
+
 		}
 	}
 
