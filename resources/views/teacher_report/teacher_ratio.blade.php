@@ -94,20 +94,10 @@
 		
 		
 	@for($i=0;$i<count($dtSchool);$i++)
-	<?php if($dtSchool[$i]->school_level == $rural_levels[$row] && $dtSchool[$i]->location=="Rural") { $j=$i;$total5="";$total9="";$total11="";$pri_ratio="";$mid_ratio="";$high_ratio="";?>
-		<tr>
-			<td>
-				{{ $dtSchool[$i]->school_no}}
-			</td>
-			<td>
-				{{ $dtSchool[$i]->school_name}}
-			</td>
-			<td>
-				{{ $dtSchool[$j]->head_no }}
-			</td>	
-			<td>
-				<?php 
-					$g1="";$g2="";$g3="";$g4="";$g5="";
+	<?php if($dtSchool[$i]->school_level == $rural_levels[$row] && $dtSchool[$i]->location=="Rural") { $j=$i;$total5="";$total9="";$total11="";$pri_ratio="";$mid_ratio="";$high_ratio="";
+
+		/////for primary
+				$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
 						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
@@ -138,25 +128,10 @@
 							$i+=1;
 						}
 					}
-					echo $total5=$g1+$g2+$g3+$g4+$g5;
-				?>
-				
-			</td>
-			<td>
-				<?php echo $dtSchool[$j]->primary_no; ?>
-			</td>
-			<td> 
-				<?php
-					if ($dtSchool[$j]->primary_no!=0 && $dtSchool[$j]->primary_no!='' && $total5!=0) {
-						$pri_ratio=$total5/$dtSchool[$j]->primary_no+$dtSchool[$j]->head_no;
-						echo round($pri_ratio,2);
-					}
+					$total5=$g1+$g2+$g3+$g4+$g5;
 
-				?>
-			</td>
-			<td>
-				<?php 
-					$g6="";$g7="";$g8="";$g9="";
+		///for middle
+				$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
 						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
@@ -181,26 +156,9 @@
 							$i+=1;
 						}
 					}
-					
-					echo $total9=$g6+$g7+$g8+$g9;
-				?>
-				
-			</td>
-			<td>
-				<?php echo $dtSchool[$j]->jat_no; ?>
-			</td>
-			<td> 
-				<?php
+					$total9=$g6+$g7+$g8+$g9;
 
-					if ($dtSchool[$j]->jat_no!=0 && $dtSchool[$j]->jat_no!='' && $total9!=0) {
-						$mid_ratio=$total9/$dtSchool[$j]->jat_no+$dtSchool[$j]->sat_no;
-						echo round($pri_ratio+$mid_ratio,2);
-					}
-					
-				?>
-			</td>
-			<td>
-				<?php 
+					/////for high
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
@@ -214,6 +172,89 @@
 							$i+=1;
 						}
 					}
+					$total11=$g10+$g11;
+
+	?>
+		<tr>
+			<td>
+				{{ $dtSchool[$i]->school_no}}
+			</td>
+			<td>
+				{{ $dtSchool[$i]->school_name}}
+			</td>
+			<td>
+				{{ $dtSchool[$j]->head_no }}
+			</td>	
+			<td>
+				<?php 
+					
+					echo $total5=$g1+$g2+$g3+$g4+$g5;
+				?>
+				
+			</td>
+			<td>
+				<?php echo $dtSchool[$j]->primary_no; ?>
+			</td>
+			<td> 
+				<?php
+					
+					if($total5!=0)
+					{
+						$pri_teacher=$dtSchool[$j]->primary_no;
+						
+						if ($total9==0) {
+							$pri_teacher=$pri_teacher+$dtSchool[$j]->jat_no;
+						}
+						if ($total11==0) {
+							$pri_teacher=$pri_teacher+$dtSchool[$j]->sat_no+$dtSchool[$j]->head_no;
+						}
+						if($pri_teacher!=0)
+						{
+							echo round(($total5/$pri_teacher),2);
+						}
+						
+					}
+				?>
+			</td>
+			<td>
+				<?php 
+					
+					
+					echo $total9=$g6+$g7+$g8+$g9;
+				?>
+				
+			</td>
+			<td>
+				<?php echo $dtSchool[$j]->jat_no; ?>
+			</td>
+			<td> 
+				<?php
+					
+					if ($total9!=0)
+					 {
+						$mid_teacher=$dtSchool[$j]->jat_no;
+						if ($total11==0)
+						{
+							$mid_teacher=$mid_teacher+$dtSchool[$j]->sat_no;
+						}
+						if($mid_teacher!=0)
+						{
+							//$mid_teacher=$mid_teacher+$dtSchool[$j]->head_no;
+							echo round(($total9/$mid_teacher),2);
+						}
+						else
+						{
+							if($dtSchool[$j]->head_no!=0)
+							{
+								echo round(($total9/$dtSchool[$j]->head_no),2);
+							}
+						}
+					}
+				?>
+			</td>
+			<td>
+				<?php 
+					
 									
 					echo $total11=$g10+$g11;
 				?>
@@ -224,11 +265,22 @@
 			</td>
 			<td> 
 				<?php
-
-					if ($dtSchool[$j]->sat_no!=0 && $dtSchool[$j]->sat_no!='' && $total11!=0) {
-						$high_ratio=$total11/$dtSchool[$j]->sat_no+$dtSchool[$j]->sat_no;
-						echo round($pri_ratio+$mid_ratio+$high_ratio,2);
+					
+					if ($total11!=0)
+					{
+						
+						if ($dtSchool[$j]->sat_no!=0) 
+						{
+							echo round(($total11/$dtSchool[$j]->sat_no),2);
+						}
+						else
+						{
+							if ($dtSchool[$j]->head_no!=0) {
+								echo round(($total11/$dtSchool[$j]->head_no),2);
+							}
+						}
 					}
+					
 				?>	
 			</td>
 		</tr>
@@ -275,21 +327,11 @@
 		
 		
 	@for($i=0;$i<count($dtSchool);$i++)
-	<?php if($dtSchool[$i]->school_level == $urban_levels[$row] && $dtSchool[$i]->location=="Urban") { $j=$i;$total5="";$total9="";$total11="";$pri_ratio="";$mid_ratio="";$high_ratio="";?>
-		<tr>
-			
-			<td>
-				{{ $dtSchool[$i]->school_no}}
-			</td>
-			<td>
-				{{ $dtSchool[$i]->school_name}}
-			</td>
-			<td>
-				{{ $dtSchool[$j]->head_no }}
-			</td>
-			<td>
-				<?php 
-					$g1="";$g2="";$g3="";$g4="";$g5="";
+	<?php if($dtSchool[$i]->school_level == $urban_levels[$row] && $dtSchool[$i]->location=="Urban") { $j=$i;$total5="";$total9="";$total11="";$pri_ratio="";$mid_ratio="";$high_ratio="";
+
+
+			//for primary level
+			$g1="";$g2="";$g3="";$g4="";$g5="";
 					if($dtSchool[$i]->grade=='01') {
 						$g1=$dtSchool[$i]->total_students;
 						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
@@ -320,24 +362,10 @@
 							$i+=1;
 						}
 					}
-					echo $total5=$g1+$g2+$g3+$g4+$g5;
-				?>
-				
-			</td>
-			<td>
-			<?php echo $dtSchool[$j]->primary_no; ?>
-			</td>
-			<td> 
-				<?php
-					if ($dtSchool[$j]->primary_no!=0 && $dtSchool[$j]->primary_no!='' && $total5!=0) {
-						$pri_ratio=$total5/$dtSchool[$j]->primary_no+$dtSchool[$j]->head_no;
-						echo round($pri_ratio,2);
-					}
+					$total5=$g1+$g2+$g3+$g4+$g5;
 
-				?>
-			</td>
-			<td>
-				<?php 
+					//for middle level
+
 					$g6="";$g7="";$g8="";$g9="";
 					if($dtSchool[$i]->grade=='06') {
 						$g6=$dtSchool[$i]->total_students;
@@ -363,26 +391,9 @@
 							$i+=1;
 						}
 					}
-					
-					echo $total9=$g6+$g7+$g8+$g9;
-				?>
-				
-			</td>
-			<td>
-			<?php echo ($dtSchool[$j]->jat_no)? $dtSchool[$j]->jat_no:'-'; ?>
-			</td>
-			<td> 
-				<?php
+					 $total9=$g6+$g7+$g8+$g9;
 
-					if ($dtSchool[$j]->jat_no!=0 && $dtSchool[$j]->jat_no!='' && $total9!=0) {
-						$mid_ratio=$total9/$dtSchool[$j]->jat_no+$dtSchool[$j]->sat_no;
-						echo round($pri_ratio+$mid_ratio,2);
-					}
-					
-				?>
-			</td>
-			<td>
-				<?php 
+					////for high level
 					$g10="";$g11="";
 					if($dtSchool[$i]->grade=='10') {
 						$g10=$dtSchool[$i]->total_students;
@@ -396,8 +407,90 @@
 							$i+=1;
 						}
 					}
+					$total11=$g10+$g11;
+	?>
+		<tr>
+			
+			<td>
+				{{ $dtSchool[$i]->school_no}}
+			</td>
+			<td>
+				{{ $dtSchool[$i]->school_name}}
+			</td>
+			<td>
+				{{ $dtSchool[$j]->head_no }}
+			</td>
+			<td>
+				<?php 
+					
+					echo $total5;
+				?>
+				
+			</td>
+			<td>
+			<?php echo $dtSchool[$j]->primary_no; ?>
+			</td>
+			<td> 
+				<?php
+					
+					if($total5!=0)
+					{
+						$pri_teacher=$dtSchool[$j]->primary_no;
+						
+						if ($total9==0) {
+							$pri_teacher=$pri_teacher+$dtSchool[$j]->jat_no;
+						}
+						if ($total11==0) {
+							$pri_teacher=$pri_teacher+$dtSchool[$j]->sat_no+$dtSchool[$j]->head_no;
+						}
+						if($pri_teacher!=0)
+						{
+							echo round(($total5/$pri_teacher),2);
+						}
+					}
+				?>
+			</td>
+			<td>
+				<?php 
+					
+					
+					echo $total9;
+				?>
+				
+			</td>
+			<td>
+			<?php echo ($dtSchool[$j]->jat_no)? $dtSchool[$j]->jat_no:'-'; ?>
+			</td>
+			<td> 
+				<?php
+					
+					if ($total9!=0)
+					 {
+					 	$mid_teacher=$dtSchool[$j]->jat_no;
+						if ($total11==0)
+						{
+							$mid_teacher=$mid_teacher+$dtSchool[$j]->sat_no;
+						}
+						if($mid_teacher!=0)
+						{
+							echo round(($total9/$mid_teacher),2);
+						}
+						else
+						{
+							if($dtSchool[$j]->head_no!=0)
+							{
+								echo round(($total9/$dtSchool[$j]->head_no),2);
+							}
+							
+						}
+					}
+				?>
+			</td>
+			<td>
+				<?php 
+					
 									
-					echo $total11=$g10+$g11;
+					echo $total11;
 				?>
 				
 			</td>
@@ -407,11 +500,26 @@
 			<td>
 				<?php
 
-					if ($dtSchool[$j]->sat_no!=0 && $dtSchool[$j]->sat_no!='' && $total11!=0) {
-						$high_ratio=$total11/$dtSchool[$j]->sat_no+$dtSchool[$j]->sat_no;
-						echo round($pri_ratio+$mid_ratio+$high_ratio,2);
+					if ($total11!=0)
+					{
+						$high_teacher= $dtSchool[$j]->sat_no;
+						if ($dtSchool[$j]->sat_no!=0) 
+						{
+							echo round(($total11/$dtSchool[$j]->sat_no),2);
+							
+						}
+						else
+						{
+							if($dtSchool[$j]->head_no!=0)
+							{
+								echo round(($total11/$dtSchool[$j]->head_no),2);
+							}
+							
+						}
 					}
-				?>	
+					
+				?>
+				
 			</td>
 		</tr>
 		<?php } ?>

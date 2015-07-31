@@ -51,6 +51,7 @@ class TeacherRatioController extends Controller {
 			$region = DB::select(DB::raw($q));
 
 			$dtSchool=DB::select("SELECT SUM(student_intake.total_boy)+SUM(student_intake.total_girl) AS total_students,student_intake.grade,v_school.school_no,v_school.school_name,v_school.location,v_school.school_level,teacher_count.primary_no,teacher_count.jat_no,teacher_count.sat_no,teacher_count.head_no,teacher_count.office_staff_no FROM v_school LEFT JOIN student_intake ON v_school.school_id=student_intake.school_id and v_school.school_year=student_intake.school_year LEFT JOIN teacher_count ON v_school.school_id=teacher_count.school_id AND v_school.school_year=teacher_count.school_year WHERE v_school.state_divsion_id = '".$state_id."' AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$academic_year."' GROUP BY v_school.school_no,student_intake.grade ");
+			//print_r($dtSchool);
 
 
 			if(count($dtSchool)) {
@@ -123,7 +124,8 @@ class TeacherRatioController extends Controller {
 				$school_level=$dtSchool[$a]->school_level;
 
 				$head_master=$dtSchool[$j]->head_no;
-				$g1="";$g2="";$g3="";$g4="";$g5="";
+					////total primary students
+						$g1="";$g2="";$g3="";$g4="";$g5="";
 						if($dtSchool[$a]->grade=='01') {
 							$g1=$dtSchool[$a]->total_students;
 							if ($a!=count($dtSchool)-1 && $dtSchool[$a+1]->school_no==$dtSchool[$a]->school_no) {
@@ -158,15 +160,7 @@ class TeacherRatioController extends Controller {
 						}						
 						$total5=$g1+$g2+$g3+$g4+$g5;
 
-						$pri_no=$dtSchool[$j]->primary_no;
-						
-						if ($dtSchool[$j]->primary_no!=0 && $dtSchool[$j]->primary_no!='' && $total5!=0)
-						{
-							$pri_ratio=$total5/$dtSchool[$j]->primary_no+$dtSchool[$j]->head_no;
-							$primary_ratio= round($pri_ratio,2);//primary ratio
-						}
-
-						//middle students
+						/////total middle students
 						$g6="";$g7="";$g8="";$g9="";
 						if($dtSchool[$a]->grade=='06') {
 							$g6=$dtSchool[$a]->total_students;
@@ -194,14 +188,8 @@ class TeacherRatioController extends Controller {
 						}
 						
 						$total9=$g6+$g7+$g8+$g9;
-						$mid_no=$dtSchool[$j]->jat_no;
-						if ($dtSchool[$j]->jat_no!=0 && $dtSchool[$j]->jat_no!='' && $total9!=0)
-						{
-							$mid_ratio=$total9/$dtSchool[$j]->jat_no+$dtSchool[$j]->sat_no;
-							$middle_ratio= round($pri_ratio+$mid_ratio,2);
-						}
 
-						//high ratio
+						/// total high students
 						$g10="";$g11="";
 						if($dtSchool[$a]->grade=='10') {
 							$g10=$dtSchool[$a]->total_students;
@@ -217,11 +205,140 @@ class TeacherRatioController extends Controller {
 						}
 										
 						$total11=$g10+$g11;
+
+
+						///primary ratio
+							if($total5!=0)
+						{
+							$pri_teacher=$dtSchool[$j]->primary_no;
+							
+							if ($total9==0) {
+								$pri_teacher=$pri_teacher+$dtSchool[$j]->jat_no;
+							}
+							if ($total11==0) {
+								$pri_teacher=$pri_teacher+$dtSchool[$j]->sat_no+$dtSchool[$j]->head_no;
+							}
+							if($pri_teacher!=0)
+							{
+								$primary_ratio= round(($total5/$pri_teacher),2);
+							}
+							
+						}
+
+						$pri_no=$dtSchool[$j]->primary_no;
+
+						/*if($dtSchool[$j]->primary_no!=0)
+						{
+							if ($dtSchool[$j]->primary_no!=0 && $dtSchool[$j]->primary_no!='' && $total5!=0)
+							{
+								$pri_ratio=$total5/$dtSchool[$j]->primary_no;
+								$primary_ratio= round($pri_ratio,2);
+							}
+						}
+						else
+						{
+							if ($total5!=0 && $dtSchool[$j]->head_no!=0)
+							{
+								$pri_ratio=$total5/$dtSchool[$j]->head_no;
+								$primary_ratio= round($pri_ratio,2);
+							}
+						}*/
+
+						/*if ($dtSchool[$j]->primary_no!=0 && $dtSchool[$j]->primary_no!='' && $total5!=0)
+						{
+							$pri_ratio=$total5/$dtSchool[$j]->primary_no+$dtSchool[$j]->head_no;
+							$primary_ratio= round($pri_ratio,2);//primary ratio
+						}*/
+
+						/// end primary ratio
+
+
+
+						//middle students
+						if ($total9!=0)
+						{
+							$mid_teacher=$dtSchool[$j]->jat_no;
+							if ($total11==0)
+							{
+								$mid_teacher=$mid_teacher+$dtSchool[$j]->sat_no;
+							}
+							if($mid_teacher!=0)
+							{
+								//$mid_teacher=$mid_teacher+$dtSchool[$j]->head_no;
+								$middle_ratio= round(($total9/$mid_teacher),2);
+							}
+							else
+							{
+								if($dtSchool[$j]->head_no!=0)
+								{
+									$middle_ratio=round(($total9/$dtSchool[$j]->head_no),2);
+								}
+								
+							}
+						}
+
+
+						$mid_no=$dtSchool[$j]->jat_no;
+						/*if($dtSchool[$j]->jat_no!=0)
+						{
+							if ($dtSchool[$j]->jat_no!=0 && $dtSchool[$j]->jat_no!='' && $total9!=0) 
+							{
+								$mid_ratio=$total9/$dtSchool[$j]->jat_no;
+								$middle_ratio= round($mid_ratio,2);
+							}
+						}
+						else
+						{
+							if ($total9!=0 && $dtSchool[$j]->head_no!=0)
+							{
+								$mid_ratio=$total9/$dtSchool[$j]->head_no;
+								$middle_ratio= round($mid_ratio,2);
+							}
+						}*/
+						/*if ($dtSchool[$j]->jat_no!=0 && $dtSchool[$j]->jat_no!='' && $total9!=0)
+						{
+							$mid_ratio=$total9/$dtSchool[$j]->jat_no+$dtSchool[$j]->sat_no;
+							$middle_ratio= round($pri_ratio+$mid_ratio,2);
+						}*/
+						///////end middle ratio
+						//high ratio
+						if ($total11!=0)
+						{
+							
+							if ($dtSchool[$j]->sat_no!=0) 
+							{
+								$high_ratios= round(($total11/$dtSchool[$j]->sat_no),2);
+							}
+							else
+							{
+								if ($dtSchool[$j]->head_no!=0) {
+									$high_ratios=round(($total11/$dtSchool[$j]->head_no),2);
+								}
+							}
+						}
 						$high_no=$dtSchool[$j]->sat_no;
-						if ($dtSchool[$j]->sat_no!=0 && $dtSchool[$j]->sat_no!='' && $total11!=0) {
-						$high_ratio=$total11/$dtSchool[$j]->sat_no+$dtSchool[$j]->sat_no;
-						$high_ratios= round($primary_ratio+$middle_ratio+$high_ratio,2);
-					}
+						/*if($dtSchool[$j]->sat_no!=0)
+						{
+							if ($dtSchool[$j]->sat_no!=0 && $dtSchool[$j]->sat_no!='' && $total11!=0) 
+							{
+								$high_ratio=$total11/$dtSchool[$j]->sat_no;
+								$high_ratios= round($high_ratio,2);
+							}
+						}
+						else
+						{
+							if ($total11!=0 && $dtSchool[$j]->head_no!=0)
+							{
+								$high_ratio=$total11/$dtSchool[$j]->head_no;
+								$high_ratios= round($high_ratio,2);
+							}
+						}
+*/
+						/*if ($dtSchool[$j]->sat_no!=0 && $dtSchool[$j]->sat_no!='' && $total11!=0)
+						{
+							$high_ratio=$total11/$dtSchool[$j]->sat_no+$dtSchool[$j]->sat_no;
+							$high_ratios= round($primary_ratio+$middle_ratio+$high_ratio,2);
+						}*/
 
 						$Arr_school[]=array(
 								'school_no'=>$school_no,
