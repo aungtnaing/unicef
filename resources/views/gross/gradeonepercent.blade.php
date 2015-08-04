@@ -77,7 +77,6 @@
 			<th><center>Location: Rural</center></th>
 		</tr>
 	</table>	
-	
 	<?php for($k = 0; $k < count($rural_levels); $k++) { ?>	
 	
 	<table class="table table-bordered">	
@@ -91,6 +90,8 @@
 		<tr>
 			<th>School No.</th>
 			<th>School Name</th>
+			<th><div>Total No. of</div><div>Grade 1 Students</div></th>
+			<th><div>No of student</div><div>from ppeg program</div></th>
 			<th>Percentage</th>
 		</tr>
 
@@ -99,6 +100,8 @@
 			<tr>
 				<td>{{ $tStudents[$row]->school_no }}</td>
 				<td>{{ $tStudents[$row]->school_name }}</td>
+				<td>{{$total=$tStudents[$row]->total_boy+$tStudents[$row]->total_girl}}</td>
+				<td>{{$total_ppeg=$tStudents[$row]->ppeg1_boy+$tStudents[$row]->ppeg1_girl}}</td>
 				<td style="backgroun-color:#ededed">
 				<?php
 					$total=$tStudents[$row]->total_boy+$tStudents[$row]->total_girl;
@@ -144,6 +147,8 @@
 		<tr>
 			<th>School No.</th>
 			<th>School Name</th>
+			<th><div>Total No. of</div><div>Grade 1 Students</div></th>
+			<th><div>No of student</div><div>from ppeg program</div></th>
 			<th>Percentage</th>
 			
 		</tr>
@@ -153,6 +158,8 @@
 			<tr>
 				<td>{{ $tStudents[$j]->school_no }}</td>
 				<td>{{ $tStudents[$j]->school_name }}</td>
+				<td>{{ $total=$tStudents[$j]->total_boy+$tStudents[$j]->total_girl }}</td>
+				<td>{{ $total_ppeg=$tStudents[$j]->ppeg1_boy+$tStudents[$j]->ppeg1_girl }}</td>
 				<td>
 				<?php
 					$total=$tStudents[$j]->total_boy+$tStudents[$j]->total_girl;

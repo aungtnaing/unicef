@@ -30,7 +30,7 @@
 			
 		<div class="row" align="right">		
 			<input type="submit" id="btnSearch" value="Search" name="btn_search" class="btn btn-success" onclick = "this.form.action='{{ URL::route('SearchPercentGrilLevel') }}'" />
-			<input type="submit" class="btn btn-default" id="btnExport" value="Excel" />
+			<input type="submit" class="btn btn-default" id="btnExport" value="Export" />
 		</div>
 		
 	</form>

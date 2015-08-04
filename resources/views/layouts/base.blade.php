@@ -234,7 +234,7 @@
 		<hr>
 		<footer>
 			<p class="pull-left">&copy; <a href="#" target="_blank">Unicef</a></p>
-			<p class="pull-right">Powered by info link IT Solution</p>
+			<p class="pull-right">Powered by Bangoo Technology</p>
 		</footer>
 		
 	</div><!--/.fluid-container-->

@@ -106,31 +106,31 @@ class PercentGradeOneIntakeController extends Controller
 	    	$excel->sheet('PercentageGradeOne', function($sheet) use($detail,$request_input){
 
     		//$sheet->fromArray($post[0]);
-	    		$sheet->prependRow(array('Township Education Management Information System'))->mergeCells('A1:C1',function($cells){
+	    		$sheet->prependRow(array('Township Education Management Information System'))->mergeCells('A1:E1',function($cells){
 	    				$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('center');
 	    				 $cells->setValignment('middle');
 	    			});
-	    		$sheet->appendRow(array('Percentage of Grade One Intake with Preprimary/Preschool(ECCE) Experiences Report'))->mergeCells('A2:C2',function($cells){
+	    		$sheet->appendRow(array('Percentage of Grade One Intake with Preprimary/Preschool(ECCE) Experiences Report'))->mergeCells('A2:E2',function($cells){
 	    				$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('center');
 	    				 $cells->setValignment('middle');
 	    			});
-	    		$sheet->appendRow(array('Division : '.$request_input[0]))->mergeCells('A3:C3',function($cells){
+	    		$sheet->appendRow(array('Division : '.$request_input[0]))->mergeCells('A3:E3',function($cells){
 	    			$cells->setFontWeight('bold');
 	    				$cells->setFontSize(18);
 	    				$cells->setAlignment('left');
 	    				 $cells->setValignment('middle');
 	    		});
-	    		$sheet->appendRow(array('Township : '.$request_input[1]))->mergeCells('A4:C4',function($cell){
+	    		$sheet->appendRow(array('Township : '.$request_input[1]))->mergeCells('A4:E4',function($cell){
 	    			$cell->setFontWeight('bold');
 	    				$cell->setFontSize(11);
 	    				$cell->setAlignment('right');
 	    				 $cell->setValignment('middle');
 	    		});
-	    		$sheet->appendRow(array('Academic Year :'.$request_input[2]))->mergeCells('A5:C5',function($cell){
+	    		$sheet->appendRow(array('Academic Year :'.$request_input[2]))->mergeCells('A5:E5',function($cell){
 	    			$cell->setFontWeight('bold');
 	    			$cell->setFontSize(18);
 	    			$cell->setAlignment('left');
@@ -159,7 +159,7 @@ class PercentGradeOneIntakeController extends Controller
 				}
 
 			$count=$sheet->getHighestRow()+1;
-				$sheet->appendRow(array('Location : Rural'))->mergeCells('A'.$count.':C'.$count,function($cell){
+				$sheet->appendRow(array('Location : Rural'))->mergeCells('A'.$count.':E'.$count,function($cell){
 				$cell->setFontWeight('bold');
 	    		$cell->setFontSize(18);
 	    		$cell->setAlignment('left');
@@ -176,14 +176,14 @@ class PercentGradeOneIntakeController extends Controller
 			{ 
 		
 			$count=$sheet->getHighestRow()+1;
-				$sheet->appendRow(array('School Level :'.$rural_levels[$k]))->mergeCells('A'.$count.':C'.$count,function($cell){
+				$sheet->appendRow(array('School Level :'.$rural_levels[$k]))->mergeCells('A'.$count.':E'.$count,function($cell){
 				$cell->setFontWeight('bold');
 	    		$cell->setFontSize(18);
 	    		$cell->setAlignment('left');
 	    		$cell->setValignment('middle');
 			});
 
-		$sheet->appendRow(array('School No','School Name','Percentage'));
+		$sheet->appendRow(array('School No','School Name','Total No. of Grade 1 Students','No of student from ppeg program','Percentage'));
 
 	
 		for($c = 0; $c < count($detail); $c++)
@@ -205,6 +205,18 @@ class PercentGradeOneIntakeController extends Controller
 				    		$cell->setValignment('middle');
 				    	});
 				    	$sheet->cell('C'.$count,function($cell) use($detail,$c){
+		    				$cell->setValue($detail[$c]['total_boy']+$detail[$c]['total_girl']);
+				    		$cell->setFontSize(12);
+				    		$cell->setAlignment('left');
+				    		$cell->setValignment('middle');
+				    	});
+				    	$sheet->cell('D'.$count,function($cell) use($detail,$c){
+		    				$cell->setValue($detail[$c]['ppeg1_boy']+$detail[$c]['ppeg1_girl']);
+				    		$cell->setFontSize(12);
+				    		$cell->setAlignment('left');
+				    		$cell->setValignment('middle');
+				    	});
+				    	$sheet->cell('E'.$count,function($cell) use($detail,$c){
 				    		$total=$detail[$c]['total_boy']+$detail[$c]['total_girl'];
 							$total_ppeg=$detail[$c]['ppeg1_boy']+$detail[$c]['ppeg1_girl'];
 							if($total_ppeg!=0)
@@ -230,7 +242,7 @@ class PercentGradeOneIntakeController extends Controller
 
 	// Start Urban
 	$count=$sheet->getHighestRow()+1;
-	$sheet->appendRow(array('Location : Urban'))->mergeCells('A'.$count.':C'.$count,function($cell){
+	$sheet->appendRow(array('Location : Urban'))->mergeCells('A'.$count.':E'.$count,function($cell){
 		$cell->setFontWeight('bold');
 		$cell->setFontSize(18);
 		$cell->setAlignment('left');
@@ -242,14 +254,14 @@ class PercentGradeOneIntakeController extends Controller
 		for($l = 0; $l < count($urban_levels); $l++)
 		{ 
 			$count=$sheet->getHighestRow()+1;
-				$sheet->appendRow(array('School Level :'.$urban_levels[$l]))->mergeCells('A'.$count.':C'.$count,function($cell){
+				$sheet->appendRow(array('School Level :'.$urban_levels[$l]))->mergeCells('A'.$count.':E'.$count,function($cell){
 				$cell->setFontWeight('bold');
 	    		$cell->setFontSize(18);
 	    		$cell->setAlignment('left');
 	    		$cell->setValignment('middle');
 			});
 
-		$sheet->appendRow(array('School No','School Name','Percentage'));
+		$sheet->appendRow(array('School No','School Name','Total No. of Grade 1 Students','No of student from ppeg program','Percentage'));
 
 		for($c = 0; $c < count($detail); $c++) 
 		{
@@ -269,6 +281,18 @@ class PercentGradeOneIntakeController extends Controller
 				    		$cell->setValignment('middle');
 				    	});
 				    	$sheet->cell('C'.$count,function($cell) use($detail,$c){
+		    				$cell->setValue($detail[$c]['total_boy']+$detail[$c]['total_girl']);
+				    		$cell->setFontSize(12);
+				    		$cell->setAlignment('left');
+				    		$cell->setValignment('middle');
+				    	});
+				    	$sheet->cell('D'.$count,function($cell) use($detail,$c){
+		    				$cell->setValue($detail[$c]['ppeg1_boy']+$detail[$c]['ppeg1_girl']);
+				    		$cell->setFontSize(12);
+				    		$cell->setAlignment('left');
+				    		$cell->setValignment('middle');
+				    	});
+				    	$sheet->cell('E'.$count,function($cell) use($detail,$c){
 				    		$total=$detail[$c]['total_boy']+$detail[$c]['total_girl'];
 							$total_ppeg=$detail[$c]['ppeg1_boy']+$detail[$c]['ppeg1_girl'];
 							if($total_ppeg!=0)
@@ -292,7 +316,7 @@ class PercentGradeOneIntakeController extends Controller
 
 		}
 	}
-			$sheet->setBorder('A1'.':C'.$sheet->getHighestRow(), 'thin');
+			$sheet->setBorder('A1'.':E'.$sheet->getHighestRow(), 'thin');
 
 	    	});
 

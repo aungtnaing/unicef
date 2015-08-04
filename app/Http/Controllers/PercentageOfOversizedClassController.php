@@ -89,7 +89,7 @@ class PercentageOfOversizedClassController extends Controller {
 	 */
 	public function show()
 	{
-		try {
+		/*try {*/
 			
 			if(Request::input('township_id')) {
 
@@ -241,7 +241,13 @@ class PercentageOfOversizedClassController extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($arr_sc,$c,$arr_se,$p){
-							$rural_ratio=round($arr_sc[$c]['oversize_class']/$arr_se[$p]['total_class'] * 100, 2) . "%";
+							if($arr_sc[$c]['oversize_class'] && $arr_se[$p]['total_class']) {
+								$rural_ratio=round($arr_sc[$c]['oversize_class']/$arr_se[$p]['total_class'] * 100, 2) . "%";
+							}
+							else
+							{
+								$rural_ratio='-';
+							}
 		    				$cell->setValue($rural_ratio);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
@@ -313,7 +319,14 @@ class PercentageOfOversizedClassController extends Controller {
 				    		$cell->setValignment('middle');
 				    	});
 						$sheet->cell('E'.$count,function($cell) use($arr_sc,$c,$arr_se,$p){
-							$urban_ratio=round($arr_sc[$c]['oversize_class']/$arr_se[$p]['total_class'] * 100, 2) . "%";
+							if($arr_sc[$c]['oversize_class'] && $arr_se[$p]['total_class']) {
+								$urban_ratio=round($arr_sc[$c]['oversize_class']/$arr_se[$p]['total_class'] * 100, 2) . "%";
+							}
+							else
+							{
+								$urban_ratio='-';
+							}
+							
 		    				$cell->setValue($urban_ratio);
 				    		$cell->setFontSize(12);
 				    		$cell->setAlignment('left');
@@ -336,12 +349,12 @@ class PercentageOfOversizedClassController extends Controller {
 			throw new Exception($err);
 
 
-		} catch (Exception $e) {
+		/*} catch (Exception $e) {
 			
 			$record = "There is no data.";
 			return view('percentage_class_classroom_library.percentage_of_oversized_class', compact('record','region'));
 			 
-		}
+		}*/
 
 	}
 

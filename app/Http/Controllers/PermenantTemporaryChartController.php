@@ -49,7 +49,7 @@ class PermenantTemporaryChartController extends Controller {
 			
 			$levels_id = "'".implode("','", $level_id)."'";
 						
-			$rural_walls = DB::select(DB::raw("SELECT (SUM(b.permanent_wall) + SUM(b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$levels_id}) AND (v.state_divsion_id = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
+			$rural_walls = DB::select(DB::raw("SELECT (SUM(DISTINCT b.permanent_wall) + SUM(DISTINCT b.temporary_wall)) AS rooms, v.school_level_id FROM school_building AS b INNER JOIN v_school AS v ON v.school_id = b.school_id AND v.school_year = b.school_year WHERE v.school_level_id IN ({$levels_id}) AND (v.state_divsion_id = '".$state_id."') AND (v.township_id = '".$township_id."' OR '' = '".$township_id."') AND v.school_year = '".$academic_year."' GROUP BY v.school_level_id"));
 
 /** -------------------------------------- **/
 

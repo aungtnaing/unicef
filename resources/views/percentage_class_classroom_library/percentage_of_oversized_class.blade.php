@@ -117,11 +117,16 @@
 				<td><?php echo $sc[$c]->school_name; ?></td>
 				<td><?php echo $sc[$c]->oversize_class; ?></td>
 				<td><?php echo $se[$p]->total_class; ?></td>
+
+				<?php if($sc[$c]->oversize_class && $se[$p]->total_class) { ?>
 				<td>
 					<?php
 						echo round(($sc[$c]->oversize_class/$se[$p]->total_class) * 100, 2) . "%";
 					?>
 				</td>
+				<?php } else { ?>
+					<td>-</td>
+				<?php } ?>
 						
 			</tr>	
 	<?php 
@@ -170,11 +175,16 @@
 				<td><?php echo $sc[$c]->school_name; ?></td>
 				<td><?php echo $sc[$c]->oversize_class; ?></td>
 				<td><?php echo $se[$p]->total_class; ?></td>
+
+				<?php if($sc[$c]->oversize_class && $se[$p]->total_class) { ?>
 				<td>
 					<?php
 						echo round(($sc[$c]->oversize_class/$se[$p]->total_class) * 100, 2) . "%";
 					?>
 				</td>
+				<?php } else { ?>
+					<td>-</td>
+				<?php } ?>
 						
 			</tr>	
 	<?php 

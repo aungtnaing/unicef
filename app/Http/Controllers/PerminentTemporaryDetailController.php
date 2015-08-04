@@ -38,7 +38,7 @@ class PerminentTemporaryDetailController extends Controller {
 			
 			$region = DB::select(DB::raw($q));
 
-			$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls, (b.permanent_wall + b.temporary_wall) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
+			$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls, (SUM(DISTINCT b.permanent_wall) + SUM(DISTINCT b.temporary_wall)) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
 
 			if(count($classroom_detail)) {
 				
@@ -116,7 +116,7 @@ class PerminentTemporaryDetailController extends Controller {
 		
 		$region = DB::select(DB::raw($q));
 
-		$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(st.total_boy) AS boys, SUM(st.total_girl) AS girls, (b.permanent_wall + b.temporary_wall) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
+		$classroom_detail = DB::select(DB::raw("SELECT s.school_id, s.location, s.school_level, s.school_no, s.school_name, SUM(DISTINCT st.total_boy) AS boys, SUM(DISTINCT st.total_girl) AS girls, (SUM(DISTINCT b.permanent_wall) + SUM(DISTINCT b.temporary_wall)) AS class FROM v_school AS s INNER JOIN student_intake AS st ON s.school_id = st.school_id AND s.school_year = st.school_year AND s.state_divsion_id = '".$state_id."' AND (s.township_id = '".$township_id."' OR '' = '".$township_id."') AND s.school_year = '".$academic_year."' LEFT JOIN school_building AS b ON b.school_id = st.school_id AND b.school_year = st.school_year GROUP BY s.school_no ORDER BY s.sort_code, s.school_id ASC"));
 
 		foreach ($classroom_detail as $room_detail) 
 		{

@@ -37,11 +37,11 @@ class PromotionRateGradeController extends Controller
 		$q .= " FROM v_state_township WHERE state_id = ".$state_id." AND (township_id = '".$township_id."' OR '' = '".$township_id."') GROUP BY state_id";
 		$region = DB::select(DB::raw($q));
 		
-			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."'AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$academic_year."' AND student_intake.grade!='01' GROUP BY student_intake.grade"));
+			$new_total=DB::select(DB::raw("SELECT SUM(new_boy)+SUM(new_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."'AND (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$academic_year."' AND student_intake.grade<>'01' GROUP BY student_intake.grade ORDER BY student_intake.grade ASC"));
 
-			$pre_total=DB::select(DB::raw("SELECT SUM(total_boy)+SUM(total_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."' AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$pre_year."' AND student_intake.grade!='11' GROUP BY student_intake.grade"));
+			$pre_total=DB::select(DB::raw("SELECT SUM(total_boy)+SUM(total_girl) AS total_students,student_intake.grade FROM `student_intake` INNER JOIN v_school ON v_school.school_id=student_intake.school_id AND v_school.school_year = student_intake.school_year WHERE v_school.state_divsion_id ='".$state_id."' AND  (v_school.township_id ='".$township_id."' OR ''='".$township_id."') AND student_intake.school_year='".$pre_year."' AND student_intake.grade<>'11' GROUP BY student_intake.grade ORDER BY student_intake.grade ASC"));
 
-					
+
 			if(count($new_total) && count($pre_total)) {
 				
 				return view('flow.promotion_rate_grade',compact('region','new_total','pre_total'));	

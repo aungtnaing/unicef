@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use Exception;
 use Redirect;
 use Input;
 use App\Http\Requests;
@@ -8,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class SanitationFacilitiesController extends Controller {
 
@@ -48,16 +48,12 @@ class SanitationFacilitiesController extends Controller {
 				$error = "There is no data in this State or Townshiip.";
 				return view('students.sanitation_facilities', compact('error'));
 			}
-		
-			$err = "There is no data.";
-			throw new Exception($err);
-
-		} catch (Exception $e) {
-
-			$error = "There is no data";
-			return view('students.sanitation_facilities', compact('error'));
-
-		}		
+		}
+		catch(Exception $ex)
+		{
+			$record="<h4>There is no Data Records.</h4>";
+			return view('students.sanitation_facilities',compact('region','record'));
+		}	
 
 	}
 
@@ -291,7 +287,7 @@ class SanitationFacilitiesController extends Controller {
 			$error = "There is no data";
 			return view('students.sanitation_facilities', compact('error'));
 
-		}		
+		}
 
 	}
 

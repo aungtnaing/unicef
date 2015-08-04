@@ -21,9 +21,9 @@ class NetIntakeRateController extends Controller
 
 		try
 		{
-			$state=Request::input('state_id');
-			$town=Request::input('township_id');
-			$year=Request::input('academic_year');
+			$state = Request::input('state_id');
+			$town = Request::input('township_id');
+			$year = Request::input('academic_year');
 
 			if(Request::input('township_id')) {
 
@@ -41,9 +41,9 @@ class NetIntakeRateController extends Controller
 
 			
 			$total_intake_one=DB::select(DB::raw("SELECT SUM(detail.boy_5years+detail.girl_5years) AS total_grade_one,v_school.sort_code,v_school.school_level FROM `student_enrollment_detail` AS detail INNER JOIN student_enrollment AS enrollment ON enrollment.id=detail.student_enrollment_id INNER JOIN v_school ON v_school.school_id=enrollment.school_id AND v_school.school_year=enrollment.school_year  WHERE detail.grade='01' AND (enrollment.school_year ='".$year."') AND (v_school.state_divsion_id ='".$state."') AND  (v_school.township_id ='".$town."' OR ''='".$town."') GROUP BY v_school.school_level  order by v_school.sort_code ASC"));
-				
+
 			$total_populations_5=DB::select(DB::raw("SELECT SUM(age5boy+age5girl) AS total_pop FROM population WHERE (townshipid ='".$town."' OR ''='".$town."') AND (academic_year='".$year."')"));
-			
+
 			if(count($total_intake_one) && count($total_populations_5)) {
 				
 				return view('gross.net_intake_rate',compact('region','total_intake_one','total_populations_5'));
@@ -92,8 +92,10 @@ class NetIntakeRateController extends Controller
 
 			
 			$total_intake_one=DB::select(DB::raw("SELECT SUM(detail.boy_5years+detail.girl_5years) AS total_grade_one,v_school.sort_code,v_school.school_level FROM `student_enrollment_detail` AS detail INNER JOIN student_enrollment AS enrollment ON enrollment.id=detail.student_enrollment_id INNER JOIN v_school ON v_school.school_id=enrollment.school_id AND v_school.school_year=enrollment.school_year  WHERE detail.grade='01' AND (enrollment.school_year ='".$year."') AND (v_school.state_divsion_id ='".$state."') AND  (v_school.township_id ='".$town."' OR ''='".$town."') GROUP BY v_school.school_level  order by v_school.sort_code ASC"));
+
+			
 				
-			$total_populations_5=DB::select(DB::raw("SELECT SUM(age5boy+age5girl) AS total_pop FROM population WHERE (townshipid ='".$town."' OR ''='".$town."') AND (academic_year='".$year."' OR ''='".$year."')"));
+			$total_populations_5=DB::select(DB::raw("SELECT SUM(age5boy+age5girl) AS total_pop FROM population WHERE (townshipid ='".$town."' OR ''='".$town."') AND (academic_year='".$year."')"));
 			
 			foreach ($total_intake_one as $intake_one) {
 				$one[]=get_object_vars($intake_one);

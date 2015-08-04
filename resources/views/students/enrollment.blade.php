@@ -241,7 +241,7 @@
 			</td>
 			<td>
 				{{ $dtSchool[$i]->school_name}}
-			</td>
+			</td>	
 			<td>
 				<?php
 					
@@ -254,7 +254,7 @@
 			<td>
 				<?php 
 					$g1="";$g2="";$g3="";$g4="";$g5="";
-					if($dtSchool[$i]->grade=='01') {
+					if($dtSchool[$i]->grade=='1') {
 						$g1=$dtSchool[$i]->total_students;
 						if ($i!=count($dtSchool)-1 && $dtSchool[$i+1]->school_no==$dtSchool[$i]->school_no) {
 							$i+=1;

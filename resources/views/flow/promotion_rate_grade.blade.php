@@ -63,12 +63,16 @@
 		</tr>
 
 		@for($i = 0; $i < count($new_total); $i++)
+			@if($new_total[$i]->total_students && $pre_total[$i]->total_students)
+
 			<tr>
 				<td><?php echo "Grade&nbsp;".$new_total[$i]->grade; ?></td>
 				<td><?php echo $new_total[$i]->total_students; ?></td>
 				<td><?php echo $pre_total[$i]->total_students; ?></td>
 				<td><?php echo round(($new_total[$i]->total_students/$pre_total[$i]->total_students)*100, 2); ?></td>
 			</tr>
+		
+			@endif
 		@endfor
 	</table>
 

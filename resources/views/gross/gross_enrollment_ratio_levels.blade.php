@@ -89,7 +89,7 @@
 				<?php
 					if ($total_populations[0]->total10_13>0 && $total_intake_mid[0]->total_students_mid > 0) {
 						$pri_ratio=$total_intake_mid[0]->total_students_mid/$total_populations[0]->total10_13 *100;
-						echo round($pri_ratio,2)."%";
+						echo round($pri_ratio,2);
 					}
 					elseif ($total_intake_mid[0]->total_students_mid==0) {
 						echo "There is no student for Middle Level.";
@@ -109,7 +109,7 @@
 				<?php
 					if ($total_populations[0]->total14_15>0 && $total_intake_high[0]->total_students_high>0) {
 						$pri_ratio=$total_intake_high[0]->total_students_high/$total_populations[0]->total14_15 *100;
-						echo round($pri_ratio,2)."%";
+						echo round($pri_ratio,2);
 					}
 					elseif ($total_intake_high[0]->total_students_high==0) {
 						echo "There is no student for High level.";
